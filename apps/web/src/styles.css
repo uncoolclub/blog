@@ -8,8 +8,8 @@
   --border: #0a0a0a;
   --border-soft: #d8d8d4;
   --hover: rgba(10, 10, 10, 0.06);
-  --accent: #1d1dff;
-  --accent-soft: rgba(29, 29, 255, 0.08);
+  --accent: #2722e8;
+  --accent-soft: rgba(39, 34, 232, 0.08);
   --danger: #d70015;
   --code-bg: #f7f7f5;
 
@@ -209,117 +209,83 @@ button.danger:hover {
   color: var(--text-3);
 }
 
-/* ── 홈 히어로: 대형 타이포 사이에 이미지 칩 ── */
+/* ── 홈 히어로: 풀블리드 양끝 맞춤 타이포 + 채움 이미지 칩 ── */
 .hero {
-  padding: 64px 0 16px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: 56px clamp(20px, 4.5vw, 72px) 8px;
 }
 
 .hero-lines {
   display: flex;
   flex-direction: column;
-  gap: 0.07em;
-  font-size: clamp(44px, 10.4vw, 92px);
+  gap: 0.09em;
+  font-size: clamp(44px, 10.8vw, 148px);
   font-weight: 700;
-  line-height: 0.94;
-  letter-spacing: -0.05em;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
   text-transform: uppercase;
 }
 
+/* 여는 따옴표 광학 정렬 */
+.oq {
+  margin-left: -0.09em;
+}
+
+/* 한 줄 = 왼끝~오른끝을 글자와 이미지가 꽉 채우는 유닛 */
 .hl {
   display: flex;
   align-items: center;
-  gap: 0.22em;
+  justify-content: space-between;
+  gap: 0.18em;
+  width: 100%;
   min-width: 0;
 }
 
-/* 시작 기준선은 두 개만: 0 / 0.6em 교차 */
-.hl--alt {
-  margin-left: 0.6em;
+.hl-push {
+  margin-left: auto;
 }
 
-/* 연결어는 낮은 체급 + accent */
-.amp {
-  font-size: 0.62em;
-  color: var(--accent);
+/* 남는 폭을 이미지가 단어처럼 채운다 */
+.chip--fill {
+  flex: 1 1 0;
+  min-width: 0.9em;
+  height: 0.76em;
+  object-fit: cover;
+  border-radius: 0.09em;
 }
 
-/* 서명 줄: 낮은 체급 */
-.hl--sig {
-  font-size: 0.48em;
-  letter-spacing: -0.03em;
-  margin-top: 0.3em;
-}
-
-/* 오브젝트 + 주석 번호를 한 단위로 */
-.obj {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  flex: none;
-}
-
-.obj sup,
-.hero-pencil sup {
-  position: absolute;
-  top: -1em;
-  right: -0.4ch;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--text-3);
-}
-
-.hero-pencil sup {
-  position: static;
-}
-
-.hero-legend {
-  margin-top: 10px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-  color: var(--text-3);
-}
-
-.chip {
-  flex: none;
-  transition: transform 0.25s ease;
-}
-
-.hl:hover .chip {
-  transform: rotate(0deg) scale(1.05);
-}
-
-/* 실물 오브젝트 */
 .chip--mac {
-  height: 1.15em;
-  width: auto;
-  transform: rotate(-6deg);
-  filter: drop-shadow(0 0.04em 0.1em rgba(0, 0, 0, 0.25));
+  /* 컷아웃을 블루 지면 위에 올린다 */
+  object-fit: contain;
+  object-position: 50% 45%;
+  padding: 0.05em 0;
+  background: var(--accent);
+  max-width: 3.2em;
 }
 
 .chip--type {
-  height: 0.88em;
-  width: 1.16em;
-  object-fit: cover;
-  border-radius: 0.12em;
-  transform: rotate(2.5deg);
+  /* 빨간 몸통·키 클로즈업 */
+  object-position: 50% 62%;
+  filter: saturate(1.05);
+  max-width: 4em;
 }
 
-/* 미니 브라우저 와이어프레임 */
-.chip--frame {
-  height: 0.72em;
-  width: auto;
-  aspect-ratio: 1.9;
-  color: var(--text);
+.chip--pencil {
+  object-position: 50% 31%;
+  height: 0.42em;
+  align-self: center;
+  filter: saturate(1.05);
+  border-radius: 999px;
+  max-width: none;
 }
 
 .chip--star {
-  width: 0.6em;
-  height: 0.6em;
+  width: 0.62em;
+  height: 0.62em;
+  flex: none;
   color: #17a24a;
-  animation: star-spin 14s linear infinite;
+  animation: star-spin 16s linear infinite;
 }
 
 @keyframes star-spin {
@@ -334,57 +300,53 @@ button.danger:hover {
   }
 }
 
-/* 연필: 한 줄을 통째로 차지하는 견본 */
-.hero-pencil {
-  display: flex;
-  gap: 8px;
-  margin-top: 26px;
-}
-
-.hero-pencil img {
-  width: min(420px, 70%);
-  height: 30px;
-  object-fit: cover;
-  object-position: 50% 31%;
-  border-radius: 999px;
-  filter: saturate(1.2) contrast(1.05);
-}
-
-.hero-pencil sup {
-  font-size: 11px;
-  margin-top: 0;
-}
-
-.hero-foot {
+/* ── 히어로 하단: 양끝 맞춤 행들 ── */
+.hero-rows {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
   margin-top: 30px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
 }
 
-.hero-meta {
+.hero-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hero-row--slogan {
+  font-size: clamp(18px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.squiggle {
+  flex: 1;
+  min-width: 40px;
+  height: 14px;
+  color: var(--text);
+}
+
+.hero-row--meta {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.03em;
   color: var(--text-2);
 }
 
-.pill-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
 .pill {
   display: inline-block;
-  padding: 3px 14px;
+  padding: 4px 0;
+  flex: 1;
+  text-align: center;
   border: 1px solid var(--border);
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.03em;
   color: var(--text);
 }

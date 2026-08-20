@@ -58,75 +58,68 @@ function Hero() {
     >
       <h1 className="hero-lines" aria-hidden>
         <span className="hl">
-          Screens
-          <span className="obj">
-            <img className="chip chip--mac" src="/hero/mac.png" alt="" />
-            <sup>1)</sup>
-          </span>
-        </span>
-        <span className="hl hl--alt">
-          Systems
-          <span className="obj">
-            <FrameChip />
-            <sup>2)</sup>
-          </span>
+          <span>Screens</span>
+          <img
+            className="chip chip--fill chip--mac"
+            src="/hero/mac.png"
+            alt=""
+          />
         </span>
         <span className="hl">
-          <span className="amp">&amp;</span>
-          Sentences
-          <span className="obj">
-            <img className="chip chip--type" src="/hero/typewriter.jpg" alt="" />
-            <sup>3)</sup>
-          </span>
-        </span>
-        <span className="hl hl--alt hl--sig">
-          양수빈
           <Star />
-          Seoul
+          <span>Systems</span>
+          <span className="hl-push">&amp;</span>
+        </span>
+        <span className="hl">
+          <span className="oq">‘Sentences’</span>
+          <img
+            className="chip chip--fill chip--type"
+            src="/hero/typewriter.jpg"
+            alt=""
+          />
+          <span>by</span>
+        </span>
+        <span className="hl">
+          <span>양수빈</span>
+          <img
+            className="chip chip--fill chip--pencil"
+            src="/hero/pencil.jpg"
+            alt=""
+          />
+          <span>Seoul</span>
         </span>
       </h1>
-      <div className="hero-pencil" aria-hidden>
-        <img src="/hero/pencil.jpg" alt="" />
-        <sup>4)</sup>
-      </div>
-      <p className="hero-legend" aria-hidden>
-        1) macintosh 128k, 1984 · 2) a screen · 3) silver-reed sr200 · 4)
-        연필, hb
-      </p>
-      <div className="hero-foot">
-        <div className="pill-row">
+      <div className="hero-rows">
+        <div className="hero-row hero-row--pills">
           <span className="pill">frontend</span>
           <span className="pill">design system</span>
           <span className="pill">react native</span>
         </div>
-        <div className="hero-meta">
-          <span>양수빈 · frontend / ux engineer</span>
-          <span>seoul kr ● 37.5665, 126.9780</span>
+        <div className="hero-row hero-row--slogan">
+          <span>Write</span>
+          <Squiggle />
+          <span>Publish</span>
+          <Squiggle />
+          <span>Live</span>
+        </div>
+        <div className="hero-row hero-row--meta">
+          <span>kr ● seoul, 양수빈</span>
+          <span>37.5665, 126.9780</span>
         </div>
       </div>
     </section>
   )
 }
 
-// 미니 브라우저 와이어프레임
-function FrameChip() {
+function Squiggle() {
   return (
-    <svg className="chip chip--frame" viewBox="0 0 76 40" aria-hidden>
-      <rect
-        x="1"
-        y="1"
-        width="74"
-        height="38"
-        rx="5"
+    <svg className="squiggle" viewBox="0 0 200 16" preserveAspectRatio="none">
+      <path
+        d="M0 8 Q 12.5 0 25 8 T 50 8 T 75 8 T 100 8 T 125 8 T 150 8 T 175 8 T 200 8"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="2.5"
       />
-      <line x1="1" y1="11" x2="75" y2="11" stroke="currentColor" strokeWidth="2" />
-      <circle cx="8" cy="6.5" r="1.6" fill="currentColor" />
-      <circle cx="14" cy="6.5" r="1.6" fill="currentColor" />
-      <rect x="8" y="17" width="26" height="5" rx="2.5" fill="currentColor" />
-      <rect x="8" y="27" width="42" height="5" rx="2.5" fill="var(--accent)" />
     </svg>
   )
 }
