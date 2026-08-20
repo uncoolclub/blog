@@ -45,20 +45,29 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   )
 }
 
+const TICKER = 'yang-meli.tech ● write → publish → live ● no pipeline ● '
+
 function RootLayout() {
   return (
-    <div className="layout">
+    <>
+      <div className="ticker" aria-hidden>
+        <div className="ticker-track">
+          <span>{TICKER.repeat(4)}</span>
+          <span>{TICKER.repeat(4)}</span>
+        </div>
+      </div>
       <header className="site-header">
         <Link to="/" className="site-title">
           yang-meli.tech
         </Link>
         <nav className="site-nav">
+          <Link to="/">Index</Link>
           <Link to="/about">About</Link>
         </nav>
       </header>
-      <main>
+      <main className="layout">
         <Outlet />
       </main>
-    </div>
+    </>
   )
 }

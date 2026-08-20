@@ -56,5 +56,11 @@ posts(id, slug UNIQUE, title, content /* Tiptap JSON */, status draft|published,
 
 ## 디자인
 
-Apple Developer 톤. 시스템 폰트 스택, 계조 + accent 1색(#0066cc / 다크 #2997ff),
-라이트•다크는 `prefers-color-scheme`. 토큰은 `apps/web/src/styles.css`의 CSS 변수 20여 개.
+에디토리얼 브루탈리즘 (2026-08-20, Apple Dev 톤에서 피벗). 레퍼런스: Us By Night,
+Entkunstung, Alec Figuracion 류의 페스티벌•아카이브 사이트.
+
+- 지면: 화이트 + 블랙 1px 룰(보더가 곧 레이아웃), 일렉트릭 블루(#1d1dff / 다크 #6b6bff) 1색
+- 타이포: Helvetica 계열 + 모노스페이스 메타 라벨(대문자, letter-spacing)
+- 시그니처: 상단 티커(마키), 홈 히어로(도트 웨이브 그래픽 블록 + 대형 타이포 + 필 태그 +
+  물결선 + 좌표), 넘버 칩 인덱스 목록, 스퀘어 버튼(호버 반전)
+- 라이트•다크는 `prefers-color-scheme`. 토큰은 `apps/web/src/styles.css`의 CSS 변수

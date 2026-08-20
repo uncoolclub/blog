@@ -27,9 +27,14 @@ function PostPage() {
     <article className="post">
       <header className="post-header">
         <h1>{post.title}</h1>
-        {post.publishedAt && (
-          <time dateTime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-        )}
+        <div className="post-meta">
+          {post.publishedAt && (
+            <time dateTime={post.publishedAt}>
+              {formatDate(post.publishedAt)}
+            </time>
+          )}
+          <span>{post.slug}</span>
+        </div>
       </header>
       <div
         ref={articleRef}

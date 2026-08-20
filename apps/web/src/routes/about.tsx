@@ -12,6 +12,10 @@ function About() {
     <article className="post">
       <header className="post-header">
         <h1>About</h1>
+        <div className="post-meta">
+          <span>양수빈</span>
+          <span>Frontend / UX Engineer</span>
+        </div>
       </header>
       <div className="prose">
         <p>
@@ -25,22 +29,25 @@ function About() {
           블로그도 그 연장선에서 직접 만들었다. 에디터로 쓰고 버튼 한 번으로
           발행되는, 빌드 파이프라인이 글쓰기에 끼어들지 않는 구조다.
         </p>
-        <ul>
-          <li>
-            GitHub:{' '}
-            <a
-              href="https://github.com/uncoolclub"
-              target="_blank"
-              rel="noreferrer"
-            >
-              @uncoolclub
-            </a>
-          </li>
-          <li>
-            Contact: <a href="mailto:marry@laftel.net">marry@laftel.net</a>
-          </li>
-        </ul>
       </div>
+      <ul className="about-links">
+        <li>
+          <a
+            href="https://github.com/uncoolclub"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>↗ GitHub</span>
+            <span className="dim">@uncoolclub</span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:marry@laftel.net">
+            <span>↗ Email</span>
+            <span className="dim">marry@laftel.net</span>
+          </a>
+        </li>
+      </ul>
     </article>
   )
 }
