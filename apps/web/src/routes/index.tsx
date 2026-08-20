@@ -61,7 +61,7 @@ function Hero() {
   return (
     <section
       className="hero"
-      aria-label="small currents shape the shore — 양수빈, seoul"
+      aria-label="small currents shape the shore — slowly, surely."
     >
       <h1 className="hero-comp" aria-hidden>
         <span className="hc-row">
@@ -71,15 +71,16 @@ function Hero() {
         </span>
         <span className="hc-row">
           <span className="t-90 hc-arrow">→</span>
-          <img className="water-strip" src="/hero/sea.jpg" alt="" />
           <span className="t-90">Shape</span>
+          <img className="water-strip" src="/hero/sea.jpg" alt="" />
+          <span className="t-100">The Shore</span>
         </span>
         <span className="hc-row">
-          <span className="t-90">The</span>
+          <span className="t-90">Slowly,</span>
           <span className="mac-pill">
             <img src="/hero/mac.png" alt="" />
           </span>
-          <span className="t-100">‘Shore.’</span>
+          <span className="t-100">Surely.</span>
         </span>
       </h1>
     </section>

@@ -1,6 +1,7 @@
 # 테크 스펙 v0.2
 
 개인 개발 블로그. 네이버 블로그처럼 웹 에디터로 쓰고, 발행 버튼 한 번으로 즉시 공개한다.
+히어로 카피: "SMALL CURRENTS / SHAPE THE SHORE / SLOWLY, SURELY."
 
 ## 원칙
 
