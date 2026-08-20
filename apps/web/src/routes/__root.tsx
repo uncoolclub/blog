@@ -45,7 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   )
 }
 
-const TICKER = 'yang-meli.tech ● write → publish → live ● no pipeline ● '
+const TICKER = 'yang-meli.tech ○ write → publish → live ● no pipeline ○ '
 
 function RootLayout() {
   return (
@@ -58,11 +58,11 @@ function RootLayout() {
       </div>
       <header className="site-header">
         <Link to="/" className="site-title">
-          yang-meli.tech
+          yang—meli.tech
         </Link>
         <nav className="site-nav">
-          <Link to="/">Index</Link>
-          <Link to="/about">About</Link>
+          <Link to="/">index</Link>
+          <Link to="/about">about</Link>
         </nav>
       </header>
       <main className="layout">

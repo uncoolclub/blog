@@ -47,78 +47,84 @@ function Home() {
   )
 }
 
-// 대형 타이포 사이에 이미지 칩이 끼어드는 배너.
-// "WRITE WITHOUT 'BUILDS' IS JUST 'LIVE'"
+// 정체성 배너: 문장은 내 것, 칩은 내 도메인의 오브젝트(토큰 스와치•UI 프레임•커서).
+// "marry yang turns design into code — and writes it here"
 function Hero() {
   return (
-    <section className="hero" aria-label="Write without builds is just live">
+    <section
+      className="hero"
+      aria-label="marry yang turns design into code — and writes it here"
+    >
       <h1 className="hero-lines" aria-hidden>
+        <span className="hl">marry yang</span>
         <span className="hl">
-          Write
-          <img className="chip" src="/hero/a.jpg" alt="" />
+          turns
+          <TokenChip />
+          design
         </span>
         <span className="hl">
-          <Star />
-          Without
+          into
+          <FrameChip />
+          code,
         </span>
         <span className="hl">
-          ‘Builds’
-          <span className="chip chip--blue" />
-          is
-        </span>
-        <span className="hl">
-          Just
-          <img className="chip" src="/hero/c.jpg" alt="" />
-          ‘Live’
+          writes it here
+          <Caret />
         </span>
       </h1>
       <div className="hero-foot">
         <div className="pill-row">
-          <span className="pill">Frontend</span>
-          <span className="pill">Design System</span>
-          <span className="pill">React Native</span>
-        </div>
-        <div className="hero-line--sub">
-          <span>Seoul</span>
-          <Wave />
-          <span>Based</span>
+          <span className="pill">frontend</span>
+          <span className="pill">design system</span>
+          <span className="pill">react native</span>
         </div>
         <div className="hero-meta">
-          <span>KR ● 37.5665, 126.9780</span>
-          <span>Personal dev blog</span>
+          <span>양수빈 · frontend / ux engineer</span>
+          <span>seoul kr ● 37.5665, 126.9780</span>
         </div>
       </div>
     </section>
   )
 }
 
-function Star() {
-  const spikes = Array.from({ length: 12 }, (_, i) => {
-    const a = (i * Math.PI) / 6
-    const b = a + Math.PI / 12
-    const c = a + Math.PI / 6
-    return `L${50 + 48 * Math.cos(a)} ${50 + 48 * Math.sin(a)} L${
-      50 + 16 * Math.cos(b)
-    } ${50 + 16 * Math.sin(b)} L${50 + 48 * Math.cos(c)} ${50 + 48 * Math.sin(c)}`
-  }).join(' ')
+// 디자인 토큰 스와치: 팔레트 견본 조각
+function TokenChip() {
   return (
-    <svg className="hero-star" viewBox="0 0 100 100" aria-hidden>
-      <path d={`M${50 + 48} 50 ${spikes} Z`} fill="currentColor" />
-    </svg>
+    <span className="chip chip--tokens">
+      <i style={{ background: 'var(--accent)' }} />
+      <i style={{ background: '#17a24a' }} />
+      <i style={{ background: '#ffb200' }} />
+      <i style={{ background: '#ff4f30' }} />
+    </span>
   )
 }
 
-function Wave() {
+// 미니 브라우저 와이어프레임
+function FrameChip() {
   return (
-    <svg className="hero-wave" viewBox="0 0 200 14" preserveAspectRatio="none">
-      <path
-        d="M0 7 Q 12.5 0 25 7 T 50 7 T 75 7 T 100 7 T 125 7 T 150 7 T 175 7 T 200 7"
+    <svg className="chip chip--frame" viewBox="0 0 76 40" aria-hidden>
+      <rect
+        x="1"
+        y="1"
+        width="74"
+        height="38"
+        rx="5"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
       />
+      <line x1="1" y1="11" x2="75" y2="11" stroke="currentColor" strokeWidth="2" />
+      <circle cx="8" cy="6.5" r="1.6" fill="currentColor" />
+      <circle cx="14" cy="6.5" r="1.6" fill="currentColor" />
+      <rect x="8" y="17" width="26" height="5" rx="2.5" fill="currentColor" />
+      <rect x="8" y="27" width="42" height="5" rx="2.5" fill="var(--accent)" />
     </svg>
   )
+}
+
+// 글 쓰는 중인 커서
+function Caret() {
+  return <span className="chip chip--caret" />
 }
 
 export function formatDate(sqlite: string): string {
