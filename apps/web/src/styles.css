@@ -258,31 +258,32 @@ button.danger:hover {
 .chip--block {
   /* 솔리드 블루 블록 */
   background: var(--accent);
-  border-radius: 0.16em;
+  border-radius: 16px;
+  border: 2px solid #0a0a0a;
   max-width: 3.4em;
 }
 
-.chip--pool {
-  /* 수영장 코스틱, 유기적 블롭 라운드 */
-  object-position: 0% 45%;
-  filter: saturate(1.1);
+.chip--sea {
+  /* 짙은 파도와 포말 */
+  object-position: 50% 58%;
   max-width: 3.4em;
-  border-radius: 0.38em 0.14em 0.34em 0.16em;
+  border-radius: 16px;
+  border: 2px solid #0a0a0a;
 }
 
-.chip--shore {
-  /* 물-모래 경계선, 타원 크롭 */
-  object-position: 20% 62%;
-  filter: saturate(1.08);
-  max-width: 4.6em;
-  border-radius: 50%;
+/* 보더 필 안에 들어간 단어 */
+.word-pill {
+  border: 0.05em solid currentColor;
+  border-radius: 999px;
+  padding: 0 0.26em 0.04em;
+  line-height: 1.1;
 }
 
 /* CURRENTS 뒤로 흐르는 물결선 */
 .hl-squiggle {
   flex: 1 1 0;
   min-width: 1em;
-  height: 0.24em;
+  height: 0.36em;
   color: var(--accent);
 }
 

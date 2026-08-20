@@ -63,26 +63,20 @@ function Hero() {
         </span>
         <span className="hl">
           <Dancers />
-          <span>Currents</span>
+          <span className="word-pill">Currents</span>
           <HeroWave />
         </span>
         <span className="hl">
           <span>Shape</span>
           <img className="chip chip--cut" src="/hero/mac.png" alt="" />
-          <span>the</span>
           <img
-            className="chip chip--fill chip--pool"
-            src="/hero/pool.jpg"
+            className="chip chip--fill chip--sea"
+            src="/hero/sea.jpg"
             alt=""
           />
         </span>
         <span className="hl">
-          <span className="oq">‘Shore.’</span>
-          <img
-            className="chip chip--fill chip--shore"
-            src="/hero/shore.jpg"
-            alt=""
-          />
+          <span>The ‘Shore.’</span>
         </span>
       </h1>
     </section>
@@ -119,10 +113,10 @@ function HeroWave() {
       aria-hidden
     >
       <path
-        d="M6 24 C14 6 28 4 38 18 C46 30 56 36 66 26 C76 16 82 6 94 12 C106 18 110 34 124 26 C136 19 140 6 152 12 C164 18 168 32 182 24 C192 18 200 10 214 16"
+        d="M8 26 C16 6 30 4 40 18 C48 30 58 36 68 26 C78 16 84 6 96 12 C108 18 112 34 126 26 C138 19 142 6 154 12 C166 18 170 32 184 24 C194 18 202 10 212 16"
         fill="none"
         stroke="currentColor"
-        strokeWidth="11"
+        strokeWidth="17"
         strokeLinecap="round"
       />
     </svg>
