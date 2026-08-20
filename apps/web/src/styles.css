@@ -30,8 +30,8 @@
     --border: #f2f2f0;
     --border-soft: #333330;
     --hover: rgba(242, 242, 240, 0.08);
-    --accent: #7373ff;
-    --accent-soft: rgba(115, 115, 255, 0.14);
+    --accent: #2e2eff;
+    --accent-soft: rgba(46, 46, 255, 0.18);
     --danger: #ff453a;
     --code-bg: #141414;
   }
