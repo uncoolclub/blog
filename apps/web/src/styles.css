@@ -179,126 +179,74 @@ button.danger:hover {
   overflow-x: clip;
 }
 
-/* 에디토리얼 컴포지션: CURRENTS만 주인공, 나머지는 체급·정렬을 일부러 흐트러뜨림 */
+/* 편집 그리드: 크기·굵기 통일된 3행, 이미지는 글자 한 글자처럼 */
 .hero-comp {
-  --hero: clamp(48px, 11vw, 150px);
-  width: fit-content;
+  --hero: clamp(34px, 6.4vw, 88px);
+  width: min(1180px, 100%);
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.045em;
+  gap: calc(var(--hero) * 0.6);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 
 .hc-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 0.35em;
   min-width: 0;
+  font-size: var(--hero);
 }
 
-/* 1행: small — CURRENTS 시작점 바로 위에 붙는다 */
-.hc-row--small {
-  margin-left: calc(var(--hero) * 1.3);
-  margin-bottom: calc(var(--hero) * 0.06);
-}
-
-.t-small {
-  font-size: calc(var(--hero) * 0.4);
+.t-100 {
+  font-size: var(--hero);
   font-weight: 500;
-  letter-spacing: -0.02em;
-  text-transform: lowercase;
 }
 
-/* 2행: 피규어가 캡슐을 침범하고, 물결이 흘러나감 */
+.t-90 {
+  font-size: calc(var(--hero) * 0.9);
+  font-weight: 400;
+}
+
+.hc-arrow {
+  font-weight: 400;
+}
+
+/* 파란 피규어: 글자 높이의 1.2배 */
 .hc-figure {
   height: calc(var(--hero) * 1.2);
   width: auto;
   flex: none;
-  margin-right: calc(var(--hero) * -0.16);
-  z-index: 1;
 }
 
-.capsule {
-  font-size: var(--hero);
-  border: 0.045em solid var(--text);
-  border-radius: 999px;
-  padding: 0 0.24em 0.06em;
-  line-height: 1.02;
-  white-space: nowrap;
-}
-
-.hc-wave {
-  width: calc(var(--hero) * 1.7);
-  height: calc(var(--hero) * 0.3);
-  flex: none;
-  margin-left: calc(var(--hero) * 0.12);
-  color: var(--accent);
-}
-
-/* 3행: SHAPE (맥) THE — 한 구절로 붙여 읽기 */
-.hc-row--shape {
-  margin-top: calc(var(--hero) * 0.2);
-  margin-left: calc(var(--hero) * 0.55);
-  gap: calc(var(--hero) * 0.3);
-}
-
-.t-shape {
-  font-size: calc(var(--hero) * 0.46);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-}
-
-.t-the {
-  font-size: calc(var(--hero) * 0.46);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-}
-
-.mac-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: calc(var(--hero) * 0.05) calc(var(--hero) * 0.3);
-  border: 2px solid var(--border);
-  border-radius: 999px;
-}
-
-.mac-pill img {
-  height: calc(var(--hero) * 0.5);
-  width: auto;
-}
-
-/* 4행: 얇고 긴 물 캡슐 — 계단 한 칸 더 */
-.hc-row--water {
-  margin-top: calc(var(--hero) * 0.2);
-  margin-left: calc(var(--hero) * 1);
-}
-
-.water-capsule {
-  width: min(58%, calc(var(--hero) * 5.4));
-  height: clamp(36px, 4.2vw, 60px);
+/* 바다 사진: 글자 높이에 맞춘 얇은 스트립 */
+.water-strip {
+  flex: 1 1 0;
+  min-width: 0;
+  height: calc(var(--hero) * 0.82);
+  margin: 0 0.3em;
   object-fit: cover;
   object-position: 50% 58%;
   border-radius: 999px;
   border: 2px solid var(--border);
 }
 
-/* 5행: 'SHORE.' — 대각선 끝 */
-.hc-row--shore {
-  margin-top: calc(var(--hero) * 0.16);
-  margin-left: calc(var(--hero) * 1.55);
+/* 맥: 글자 높이의 캡슐 */
+.mac-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: calc(var(--hero) * 0.07) calc(var(--hero) * 0.32);
+  border: 2px solid var(--border);
+  border-radius: 999px;
 }
 
-.t-shore {
-  font-size: calc(var(--hero) * 0.62);
-}
-
-.t-shore .q {
-  font-style: normal;
-  font-size: 1.35em;
-  line-height: 0;
-  vertical-align: -0.08em;
+.mac-pill img {
+  height: calc(var(--hero) * 0.68);
+  width: auto;
 }
 
 /* ── 홈 카드 그리드: 글마다 톤 자동 배정 ── */

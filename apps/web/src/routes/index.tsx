@@ -64,51 +64,25 @@ function Hero() {
       aria-label="small currents shape the shore — 양수빈, seoul"
     >
       <h1 className="hero-comp" aria-hidden>
-        <span className="hc-row hc-row--small">
-          <span className="t-small">small</span>
-        </span>
-        <span className="hc-row hc-row--currents">
+        <span className="hc-row">
+          <span className="t-90">Small</span>
           <img className="hc-figure" src="/hero/figure.png" alt="" />
-          <span className="capsule">Currents</span>
-          <HeroWave />
+          <span className="t-100">Currents</span>
         </span>
-        <span className="hc-row hc-row--shape">
-          <span className="t-shape">Shape</span>
+        <span className="hc-row">
+          <span className="t-90 hc-arrow">→</span>
+          <img className="water-strip" src="/hero/sea.jpg" alt="" />
+          <span className="t-90">Shape</span>
+        </span>
+        <span className="hc-row">
+          <span className="t-90">The</span>
           <span className="mac-pill">
             <img src="/hero/mac.png" alt="" />
           </span>
-          <span className="t-the">The</span>
-        </span>
-        <span className="hc-row hc-row--water">
-          <img className="water-capsule" src="/hero/sea.jpg" alt="" />
-        </span>
-        <span className="hc-row hc-row--shore">
-          <span className="t-shore">
-            <i className="q">‘</i>Shore.<i className="q">’</i>
-          </span>
+          <span className="t-100">‘Shore.’</span>
         </span>
       </h1>
     </section>
-  )
-}
-
-// CURRENTS 뒤로 흐르는 붓질 물결 (두껍고 불규칙한 컷아웃 스트로크)
-function HeroWave() {
-  return (
-    <svg
-      className="hc-wave"
-      viewBox="0 0 220 40"
-      preserveAspectRatio="none"
-      aria-hidden
-    >
-      <path
-        d="M8 26 C16 6 30 4 40 18 C48 30 58 36 68 26 C78 16 84 6 96 12 C108 18 112 34 126 26 C138 19 142 6 154 12 C166 18 170 32 184 24 C194 18 202 10 212 16"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="17"
-        strokeLinecap="round"
-      />
-    </svg>
   )
 }
 
