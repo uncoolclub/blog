@@ -106,40 +106,6 @@ button.danger:hover {
   color: #fff;
 }
 
-/* ── 티커 ── */
-.ticker {
-  overflow: hidden;
-  white-space: nowrap;
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  padding: 7px 0;
-  user-select: none;
-}
-
-.ticker-track {
-  display: inline-flex;
-  animation: ticker 40s linear infinite;
-}
-
-.ticker-track > span {
-  padding-right: 1em;
-}
-
-@keyframes ticker {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ticker-track {
-    animation: none;
-  }
-}
-
 /* ── 헤더: 박스 없는 미니멀 내비 ── */
 .site-header {
   display: flex;
