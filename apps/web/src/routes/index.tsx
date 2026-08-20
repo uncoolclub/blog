@@ -56,50 +56,37 @@ function Hero() {
       className="hero"
       aria-label="small currents shape the shore — 양수빈, seoul"
     >
-      <h1 className="hero-lines" aria-hidden>
-        <span className="hl">
-          <span>Small</span>
-          <span className="chip chip--fill chip--block" />
+      <h1 className="hero-comp" aria-hidden>
+        <span className="hc-row hc-row--small">
+          <span className="t-small">small</span>
+          <span className="t-bar" />
         </span>
-        <span className="hl">
-          <Dancers />
-          <span className="word-pill">Currents</span>
+        <span className="hc-row hc-row--currents">
+          <img className="hc-figure" src="/hero/figure.png" alt="" />
+          <span className="capsule">Currents</span>
           <HeroWave />
         </span>
-        <span className="hl">
-          <span>Shape</span>
-          <img className="chip chip--cut" src="/hero/mac.png" alt="" />
+        <span className="hc-row hc-row--shape">
+          <span className="t-shape">Shape</span>
+          <span className="mac-pill">
+            <img src="/hero/mac.png" alt="" />
+          </span>
+        </span>
+        <span className="hc-row hc-row--water">
           <img
-            className="chip chip--fill chip--sea"
+            className="water-capsule"
             src="/hero/sea.jpg"
             alt=""
           />
         </span>
-        <span className="hl">
-          <span>The ‘Shore.’</span>
+        <span className="hc-row hc-row--shore">
+          <span className="t-the">The</span>
+          <span className="t-shore">
+            <i className="q">‘</i>Shore.<i className="q">’</i>
+          </span>
         </span>
       </h1>
     </section>
-  )
-}
-
-// 미로풍 뒤집힌 사람(물구나무 스웨그): 두꺼운 곡선 두 덩어리 + 잉크 아웃라인
-function Dancers() {
-  const pieces = [
-    // 위: 차올려 뒤집힌 다리 아치 (기울어짐)
-    'M52 88 C54 38 112 22 136 52 C147 66 148 80 140 92',
-    // 아래: 바닥을 짚은 몸통 훅 (더 묵직하게)
-    'M16 148 C26 114 62 100 98 110 C126 118 144 138 134 166',
-  ]
-  return (
-    <svg className="chip chip--blob" viewBox="0 0 170 190" aria-hidden>
-      {pieces.map((d) => (
-        <g key={d} fill="none" strokeLinecap="round">
-          <path d={d} stroke="var(--text)" strokeWidth="46" />
-          <path d={d} stroke="currentColor" strokeWidth="37" />
-        </g>
-      ))}
-    </svg>
   )
 }
 
@@ -107,7 +94,7 @@ function Dancers() {
 function HeroWave() {
   return (
     <svg
-      className="hl-squiggle"
+      className="hc-wave"
       viewBox="0 0 220 40"
       preserveAspectRatio="none"
       aria-hidden

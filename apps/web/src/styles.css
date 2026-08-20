@@ -214,92 +214,139 @@ button.danger:hover {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   padding: 56px clamp(20px, 4.5vw, 72px) 0;
+  overflow-x: clip;
 }
 
-.hero-lines {
+/* 에디토리얼 컴포지션: CURRENTS만 주인공, 나머지는 체급·정렬을 일부러 흐트러뜨림 */
+.hero-comp {
+  --hero: clamp(48px, 11vw, 150px);
   display: flex;
   flex-direction: column;
-  gap: 0.09em;
-  font-size: clamp(44px, 10.8vw, 148px);
   font-weight: 700;
-  line-height: 0.92;
+  line-height: 0.95;
   letter-spacing: -0.045em;
   text-transform: uppercase;
 }
 
-/* 여는 따옴표 광학 정렬 */
-.oq {
-  margin-left: -0.09em;
-}
-
-/* 한 줄 = 왼끝~오른끝을 글자와 이미지가 꽉 채우는 유닛 */
-.hl {
+.hc-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.18em;
-  width: 100%;
   min-width: 0;
 }
 
-.hl-push {
-  margin-left: auto;
+/* 1행: 아주 작은 small + 검정 바 */
+.hc-row--small {
+  justify-content: space-between;
 }
 
-/* 남는 폭을 이미지가 단어처럼 채운다 */
-.chip--fill {
-  flex: 1 1 0;
-  min-width: 0.9em;
-  height: 0.76em;
-  object-fit: cover;
-  border-radius: 0.09em;
+.t-small {
+  font-size: calc(var(--hero) * 0.2);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
 }
 
-.chip--block {
-  /* 솔리드 블루 블록 */
-  background: var(--accent);
-  border-radius: 16px;
-  border: 2px solid #0a0a0a;
-  max-width: 3.4em;
-}
-
-.chip--sea {
-  /* 짙은 파도와 포말 */
-  object-position: 50% 58%;
-  max-width: 3.4em;
-  border-radius: 16px;
-  border: 2px solid #0a0a0a;
-}
-
-/* 보더 필 안에 들어간 단어 */
-.word-pill {
-  border: 0.05em solid currentColor;
+.t-bar {
+  width: calc(var(--hero) * 2.1);
+  height: calc(var(--hero) * 0.11);
   border-radius: 999px;
-  padding: 0 0.26em 0.04em;
-  line-height: 1.1;
+  background: var(--text);
 }
 
-/* CURRENTS 뒤로 흐르는 물결선 */
-.hl-squiggle {
-  flex: 1 1 0;
-  min-width: 1em;
-  height: 0.36em;
-  color: var(--accent);
+/* 2행: 피규어가 캡슐을 침범하고, 물결이 흘러나감 */
+.hc-row--currents {
+  margin-top: calc(var(--hero) * 0.34);
 }
 
-/* 타이포를 끊고 들어오는 컷아웃 오브젝트 */
-.chip--cut {
-  flex: none;
-  height: 1.02em;
+.hc-figure {
+  height: calc(var(--hero) * 1.2);
   width: auto;
-  filter: drop-shadow(0 0.03em 0.09em rgba(0, 0, 0, 0.28));
+  flex: none;
+  margin-right: calc(var(--hero) * -0.16);
+  z-index: 1;
 }
 
-.chip--blob {
-  width: 0.82em;
-  height: 0.98em;
+.capsule {
+  font-size: var(--hero);
+  border: 0.045em solid var(--text);
+  border-radius: 999px;
+  /* 일부러 비대칭 패딩: 글자가 왼쪽 보더에 닿을 듯 */
+  padding: 0 0.48em 0.06em 0.13em;
+  line-height: 1.02;
+  white-space: nowrap;
+}
+
+.hc-wave {
+  width: calc(var(--hero) * 1.7);
+  height: calc(var(--hero) * 0.3);
   flex: none;
+  margin-left: calc(var(--hero) * 0.12);
   color: var(--accent);
+}
+
+/* 3행: 라이트 웨이트 SHAPE + 캡슐 속 매킨토시 */
+.hc-row--shape {
+  margin-top: calc(var(--hero) * 0.52);
+  justify-content: space-between;
+  padding-right: 7%;
+}
+
+.t-shape {
+  font-size: calc(var(--hero) * 0.5);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.mac-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: calc(var(--hero) * 0.06) calc(var(--hero) * 0.34);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+}
+
+.mac-pill img {
+  height: calc(var(--hero) * 0.58);
+  width: auto;
+}
+
+/* 4행: 얇고 긴 물 캡슐, 들여쓰기 */
+.hc-row--water {
+  margin-top: calc(var(--hero) * 0.42);
+  padding-left: 17%;
+}
+
+.water-capsule {
+  width: 70%;
+  height: clamp(38px, 4.4vw, 64px);
+  object-fit: cover;
+  object-position: 50% 58%;
+  border-radius: 999px;
+  border: 2px solid var(--border);
+}
+
+/* 5행: THE와 'SHORE.'를 크게 벌리고 따옴표를 그래픽으로 */
+.hc-row--shore {
+  margin-top: calc(var(--hero) * 0.4);
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 3% 0 8%;
+}
+
+.t-the {
+  font-size: calc(var(--hero) * 0.32);
+  font-weight: 400;
+}
+
+.t-shore {
+  font-size: calc(var(--hero) * 0.62);
+}
+
+.t-shore .q {
+  font-style: normal;
+  font-size: 1.35em;
+  line-height: 0;
+  vertical-align: -0.08em;
 }
 
 /* ── 글 목록 (인덱스) ── */
