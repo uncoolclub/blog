@@ -220,6 +220,8 @@ button.danger:hover {
 /* 에디토리얼 컴포지션: CURRENTS만 주인공, 나머지는 체급·정렬을 일부러 흐트러뜨림 */
 .hero-comp {
   --hero: clamp(48px, 11vw, 150px);
+  width: fit-content;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   font-weight: 700;
