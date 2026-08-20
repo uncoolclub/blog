@@ -234,30 +234,20 @@ button.danger:hover {
   min-width: 0;
 }
 
-/* 1행: 아주 작은 small + 검정 바 */
+/* 1행: small — CURRENTS 시작점 바로 위에 붙는다 */
 .hc-row--small {
-  justify-content: space-between;
+  margin-left: calc(var(--hero) * 1.3);
+  margin-bottom: calc(var(--hero) * 0.06);
 }
 
 .t-small {
-  font-size: calc(var(--hero) * 0.42);
+  font-size: calc(var(--hero) * 0.4);
   font-weight: 500;
   letter-spacing: -0.02em;
   text-transform: lowercase;
 }
 
-.t-bar {
-  width: calc(var(--hero) * 2.1);
-  height: calc(var(--hero) * 0.11);
-  border-radius: 999px;
-  background: var(--text);
-}
-
 /* 2행: 피규어가 캡슐을 침범하고, 물결이 흘러나감 */
-.hc-row--currents {
-  margin-top: calc(var(--hero) * 0.34);
-}
-
 .hc-figure {
   height: calc(var(--hero) * 1.2);
   width: auto;
@@ -283,15 +273,21 @@ button.danger:hover {
   color: var(--accent);
 }
 
-/* 3행: 라이트 웨이트 SHAPE + 캡슐 속 매킨토시 */
+/* 3행: SHAPE (맥) THE — 한 구절로 붙여 읽기 */
 .hc-row--shape {
-  margin-top: calc(var(--hero) * 0.52);
-  justify-content: space-between;
-  padding-right: 7%;
+  margin-top: calc(var(--hero) * 0.2);
+  margin-left: calc(var(--hero) * 0.55);
+  gap: calc(var(--hero) * 0.3);
 }
 
 .t-shape {
-  font-size: calc(var(--hero) * 0.5);
+  font-size: calc(var(--hero) * 0.46);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.t-the {
+  font-size: calc(var(--hero) * 0.46);
   font-weight: 300;
   letter-spacing: -0.02em;
 }
@@ -299,42 +295,35 @@ button.danger:hover {
 .mac-pill {
   display: inline-flex;
   align-items: center;
-  padding: calc(var(--hero) * 0.06) calc(var(--hero) * 0.34);
+  padding: calc(var(--hero) * 0.05) calc(var(--hero) * 0.3);
   border: 2px solid var(--border);
   border-radius: 999px;
 }
 
 .mac-pill img {
-  height: calc(var(--hero) * 0.58);
+  height: calc(var(--hero) * 0.5);
   width: auto;
 }
 
-/* 4행: 얇고 긴 물 캡슐, 들여쓰기 */
+/* 4행: 얇고 긴 물 캡슐 — 계단 한 칸 더 */
 .hc-row--water {
-  margin-top: calc(var(--hero) * 0.42);
-  padding-left: 17%;
+  margin-top: calc(var(--hero) * 0.2);
+  margin-left: calc(var(--hero) * 1);
 }
 
 .water-capsule {
-  width: 70%;
-  height: clamp(38px, 4.4vw, 64px);
+  width: min(58%, calc(var(--hero) * 5.4));
+  height: clamp(36px, 4.2vw, 60px);
   object-fit: cover;
   object-position: 50% 58%;
   border-radius: 999px;
   border: 2px solid var(--border);
 }
 
-/* 5행: THE와 'SHORE.'를 크게 벌리고 따옴표를 그래픽으로 */
+/* 5행: 'SHORE.' — 대각선 끝 */
 .hc-row--shore {
-  margin-top: calc(var(--hero) * 0.4);
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 0 3% 0 8%;
-}
-
-.t-the {
-  font-size: calc(var(--hero) * 0.32);
-  font-weight: 400;
+  margin-top: calc(var(--hero) * 0.16);
+  margin-left: calc(var(--hero) * 1.55);
 }
 
 .t-shore {

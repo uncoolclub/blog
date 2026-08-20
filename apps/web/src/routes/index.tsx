@@ -59,7 +59,6 @@ function Hero() {
       <h1 className="hero-comp" aria-hidden>
         <span className="hc-row hc-row--small">
           <span className="t-small">small</span>
-          <span className="t-bar" />
         </span>
         <span className="hc-row hc-row--currents">
           <img className="hc-figure" src="/hero/figure.png" alt="" />
@@ -71,16 +70,12 @@ function Hero() {
           <span className="mac-pill">
             <img src="/hero/mac.png" alt="" />
           </span>
+          <span className="t-the">The</span>
         </span>
         <span className="hc-row hc-row--water">
-          <img
-            className="water-capsule"
-            src="/hero/sea.jpg"
-            alt=""
-          />
+          <img className="water-capsule" src="/hero/sea.jpg" alt="" />
         </span>
         <span className="hc-row hc-row--shore">
-          <span className="t-the">The</span>
           <span className="t-shore">
             <i className="q">‘</i>Shore.<i className="q">’</i>
           </span>
