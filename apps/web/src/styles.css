@@ -240,9 +240,9 @@ button.danger:hover {
 }
 
 .t-small {
-  font-size: calc(var(--hero) * 0.2);
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: calc(var(--hero) * 0.42);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   text-transform: lowercase;
 }
 
@@ -270,8 +270,7 @@ button.danger:hover {
   font-size: var(--hero);
   border: 0.045em solid var(--text);
   border-radius: 999px;
-  /* 일부러 비대칭 패딩: 글자가 왼쪽 보더에 닿을 듯 */
-  padding: 0 0.48em 0.06em 0.13em;
+  padding: 0 0.24em 0.06em;
   line-height: 1.02;
   white-space: nowrap;
 }
