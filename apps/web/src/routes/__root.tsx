@@ -52,6 +52,9 @@ function RootLayout() {
         <Link to="/" className="site-title">
           yang-meli.tech
         </Link>
+        <nav className="site-nav">
+          <Link to="/about">About</Link>
+        </nav>
       </header>
       <main>
         <Outlet />

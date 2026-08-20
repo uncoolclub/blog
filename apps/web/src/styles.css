@@ -121,6 +121,28 @@ button.danger {
   color: var(--accent);
 }
 
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+}
+
+.site-nav a {
+  color: var(--text-2);
+  font-size: 14px;
+}
+
+.site-nav a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.site-nav a[aria-current='page'],
+.site-nav a[data-status='active'] {
+  color: var(--text);
+  font-weight: 600;
+}
+
 .empty {
   padding: 96px 0;
   text-align: center;

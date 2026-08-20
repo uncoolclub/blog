@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as PostsSlugRouteImport } from './routes/posts.$slug'
 import { Route as WriteIndexRouteImport } from './routes/write.index'
@@ -19,6 +20,11 @@ import { Route as ApiImagesKeyRouteImport } from './routes/api.images.$key'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiUploadRoute = ApiUploadRouteImport.update({
@@ -49,6 +55,7 @@ const ApiImagesKeyRoute = ApiImagesKeyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
   '/write/$id': typeof WriteIdRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
   '/write/$id': typeof WriteIdRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
   '/write/$id': typeof WriteIdRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/api/upload'
     | '/posts/$slug'
     | '/write/$id'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/api/upload'
     | '/posts/$slug'
     | '/write/$id'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/api/upload'
     | '/posts/$slug'
     | '/write/$id'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ApiUploadRoute: typeof ApiUploadRoute
   PostsSlugRoute: typeof PostsSlugRoute
   WriteIdRoute: typeof WriteIdRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/upload': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ApiUploadRoute: ApiUploadRoute,
   PostsSlugRoute: PostsSlugRoute,
   WriteIdRoute: WriteIdRoute,
