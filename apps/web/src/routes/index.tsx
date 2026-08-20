@@ -15,6 +15,7 @@ function Home() {
   return (
     <>
       <Hero />
+      <div className="home-body">
       <div className="index-head">
         <span>Index</span>
         <span>({String(posts.length).padStart(2, '0')})</span>
@@ -50,6 +51,7 @@ function Home() {
           ))}
         </ul>
       )}
+      </div>
     </>
   )
 }
@@ -65,25 +67,64 @@ function Hero() {
     >
       <h1 className="hero-comp" aria-hidden>
         <span className="hc-row">
-          <span className="t-90">Small</span>
-          <img className="hc-figure" src="/hero/figure.png" alt="" />
-          <span className="t-100">Currents</span>
+          <span>Small</span>
+          <span className="blue-block" />
+          <span>Currents</span>
+          <img
+            className="hc-figure only-light"
+            src="/hero/figure.png"
+            alt=""
+          />
+          <img
+            className="hc-figure only-dark"
+            src="/hero/figure-dark.png"
+            alt=""
+          />
+          <span>Shape</span>
+        </span>
+        <span className="hc-duo">
+          <span className="hc-arrow">→</span>
+          <img className="duo-img" src="/hero/sea.jpg" alt="" />
+          <span className="duo-r1">The Shore</span>
+          <span className="duo-l2">Slowly,</span>
+          <span className="duo-r2">Surely.</span>
+        </span>
+        <span className="hc-row hc-pills">
+          <span className="pill">Frontend</span>
+          <span className="pill">Design System</span>
+          <span className="pill">React Native</span>
         </span>
         <span className="hc-row">
-          <span className="t-90 hc-arrow">→</span>
-          <span className="t-90">Shape</span>
-          <img className="water-strip" src="/hero/sea.jpg" alt="" />
-          <span className="t-100">The Shore</span>
+          <span>Seoul</span>
+          <Squiggle />
+          <span>Based</span>
         </span>
         <span className="hc-row">
-          <span className="t-90">Slowly,</span>
-          <span className="mac-pill">
-            <img src="/hero/mac.png" alt="" />
-          </span>
-          <span className="t-100">Surely.</span>
+          <span>KR</span>
+          <img className="ellipse-sea" src="/hero/sea.jpg" alt="" />
+          <span>37.5665, 126.9780</span>
         </span>
       </h1>
     </section>
+  )
+}
+
+function Squiggle() {
+  return (
+    <svg
+      className="hc-squiggle"
+      viewBox="0 0 200 20"
+      preserveAspectRatio="none"
+      aria-hidden
+    >
+      <path
+        d="M0 10 Q 12.5 2 25 10 T 50 10 T 75 10 T 100 10 T 125 10 T 150 10 T 175 10 T 200 10"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+      />
+    </svg>
   )
 }
 
