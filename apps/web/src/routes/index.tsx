@@ -25,15 +25,19 @@ function Home() {
           {posts.map((post, i) => (
             <li key={post.id}>
               <Link to="/posts/$slug" params={{ slug: post.slug! }}>
-                <span className="post-no">
-                  {String(posts.length - i).padStart(2, '0')}
-                </span>
+                <div className="entry-meta">
+                  <span className="post-no">
+                    {String(posts.length - i).padStart(2, '0')}
+                  </span>
+                  {post.published_at && (
+                    <time dateTime={post.published_at}>
+                      {formatDate(post.published_at)}
+                    </time>
+                  )}
+                </div>
                 <h2>{post.title || '(제목 없음)'}</h2>
-                {post.published_at && (
-                  <time dateTime={post.published_at}>
-                    {formatDate(post.published_at)}
-                  </time>
-                )}
+                {post.excerpt && <p className="excerpt">{post.excerpt}</p>}
+                <span className="read-more">Read →</span>
               </Link>
             </li>
           ))}
@@ -43,24 +47,38 @@ function Home() {
   )
 }
 
+// 대형 타이포 사이에 이미지 칩이 끼어드는 배너.
+// "WRITE WITHOUT 'BUILDS' IS JUST 'LIVE'"
 function Hero() {
   return (
-    <section className="hero" aria-label="yang-meli.tech">
-      <HeroArt />
-      <div className="hero-type">
-        <div className="hero-line">
-          <span>Write</span>
-          <span className="arrow">→</span>
-          <span>Publish</span>
-          <span className="arrow">→</span>
-          <span>Live</span>
-        </div>
+    <section className="hero" aria-label="Write without builds is just live">
+      <h1 className="hero-lines" aria-hidden>
+        <span className="hl">
+          Write
+          <img className="chip" src="/hero/a.jpg" alt="" />
+        </span>
+        <span className="hl">
+          <Star />
+          Without
+        </span>
+        <span className="hl">
+          ‘Builds’
+          <span className="chip chip--blue" />
+          is
+        </span>
+        <span className="hl">
+          Just
+          <img className="chip" src="/hero/c.jpg" alt="" />
+          ‘Live’
+        </span>
+      </h1>
+      <div className="hero-foot">
         <div className="pill-row">
           <span className="pill">Frontend</span>
           <span className="pill">Design System</span>
           <span className="pill">React Native</span>
         </div>
-        <div className="hero-line hero-line--sub">
+        <div className="hero-line--sub">
           <span>Seoul</span>
           <Wave />
           <span>Based</span>
@@ -74,46 +92,18 @@ function Hero() {
   )
 }
 
-function HeroArt() {
-  // 도트 사인파 4줄. 참조 무드(할프톤 웨이브)의 최소 구현.
-  const waves = [
-    { d: 'M-40 96 Q 140 10 320 96 T 680 96 T 1040 96', w: 10, o: 0.9 },
-    { d: 'M-40 120 Q 140 40 320 120 T 680 120 T 1040 120', w: 5, o: 0.6 },
-    { d: 'M-40 72 Q 140 150 320 72 T 680 72 T 1040 72', w: 3, o: 0.45 },
-    { d: 'M-40 140 Q 140 200 320 140 T 680 140 T 1040 140', w: 7, o: 0.3 },
-  ]
+function Star() {
+  const spikes = Array.from({ length: 12 }, (_, i) => {
+    const a = (i * Math.PI) / 6
+    const b = a + Math.PI / 12
+    const c = a + Math.PI / 6
+    return `L${50 + 48 * Math.cos(a)} ${50 + 48 * Math.sin(a)} L${
+      50 + 16 * Math.cos(b)
+    } ${50 + 16 * Math.sin(b)} L${50 + 48 * Math.cos(c)} ${50 + 48 * Math.sin(c)}`
+  }).join(' ')
   return (
-    <svg
-      className="hero-art"
-      viewBox="0 0 1000 210"
-      preserveAspectRatio="xMidYMid slice"
-      role="img"
-      aria-hidden
-    >
-      <rect width="1000" height="210" fill="#0a0a0a" />
-      {waves.map((wave) => (
-        <path
-          key={wave.d}
-          d={wave.d}
-          fill="none"
-          stroke="#f2f2f0"
-          strokeOpacity={wave.o}
-          strokeWidth={wave.w}
-          strokeLinecap="round"
-          strokeDasharray={`0.1 ${wave.w * 2.2}`}
-        />
-      ))}
-      <text
-        x="972"
-        y="34"
-        textAnchor="end"
-        fontFamily="SF Mono, Menlo, monospace"
-        fontSize="13"
-        fill="#f2f2f0"
-        fillOpacity="0.7"
-      >
-        [ yang—meli.tech ]
-      </text>
+    <svg className="hero-star" viewBox="0 0 100 100" aria-hidden>
+      <path d={`M${50 + 48} 50 ${spikes} Z`} fill="currentColor" />
     </svg>
   )
 }

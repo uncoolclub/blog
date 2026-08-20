@@ -55,15 +55,33 @@ export const assertAdmin = createServerOnlyFn(async () => {
   }
 })
 
+function extractExcerpt(node: JSONContent, max = 160): string {
+  let out = ''
+  const walk = (n: JSONContent) => {
+    if (out.length > max) return
+    if (n.type === 'text' && n.text) out += n.text
+    else if (n.type !== 'codeBlock' && n.content) {
+      n.content.forEach(walk)
+      if (n.type === 'paragraph') out += ' '
+    }
+  }
+  walk(node)
+  out = out.trim()
+  return out.length > max ? `${out.slice(0, max).trimEnd()}…` : out
+}
+
 export const listPublishedPosts = createServerFn().handler(async () => {
   const { results } = await db()
     .prepare(
-      `SELECT id, slug, title, status, published_at, updated_at
+      `SELECT id, slug, title, status, published_at, updated_at, content
        FROM posts WHERE status = 'published'
        ORDER BY published_at DESC`,
     )
-    .all<PostListItem>()
-  return results
+    .all<PostListItem & { content: string }>()
+  return results.map(({ content, ...post }) => ({
+    ...post,
+    excerpt: extractExcerpt(JSON.parse(content) as JSONContent),
+  }))
 })
 
 export const getPublishedPost = createServerFn()
