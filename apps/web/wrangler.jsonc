@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "blog-web",
+  "compatibility_date": "2025-09-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "blog",
+      // 배포 전 `wrangler d1 create blog` 결과의 id로 교체. 로컬 dev는 이 값 없이도 동작.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMAGES",
+      "bucket_name": "blog-images"
+    }
+  ],
+  "vars": {
+    // Cloudflare Access 앱 생성 후 채운다. 비어 있으면 프로덕션 어드민 API는 전부 403.
+    "ACCESS_TEAM_DOMAIN": "", // 예: https://<team>.cloudflareaccess.com
+    "ACCESS_AUD": "" // Access 앱의 Application Audience (AUD) 태그
+  }
+}

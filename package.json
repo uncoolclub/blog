@@ -1,0 +1,13 @@
+{
+  "name": "blog",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  },
+  "packageManager": "pnpm@11.20.0"
+}

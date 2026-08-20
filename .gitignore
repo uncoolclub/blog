@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.tanstack/
+.wrangler/
+.turbo/
+.env
+.DS_Store
+*.local
