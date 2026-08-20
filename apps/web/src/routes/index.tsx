@@ -54,39 +54,39 @@ function Hero() {
   return (
     <section
       className="hero"
-      aria-label="screens, systems and sentences — 양수빈, seoul"
+      aria-label="small currents shape the shore — 양수빈, seoul"
     >
       <h1 className="hero-lines" aria-hidden>
         <span className="hl">
-          <span>Screens</span>
+          <span>Small</span>
           <img
-            className="chip chip--fill chip--mac"
-            src="/hero/mac.png"
+            className="chip chip--fill chip--glitter"
+            src="/hero/glitter.jpg"
             alt=""
           />
         </span>
         <span className="hl">
           <Star />
-          <span>Systems</span>
-          <span className="hl-push">&amp;</span>
+          <span>Currents</span>
+          <HeroWave />
         </span>
         <span className="hl">
-          <span className="oq">‘Sentences’</span>
+          <span>Shape</span>
+          <img className="chip chip--cut" src="/hero/mac.png" alt="" />
+          <span>the</span>
           <img
-            className="chip chip--fill chip--type"
-            src="/hero/typewriter.jpg"
+            className="chip chip--fill chip--pool"
+            src="/hero/pool.jpg"
             alt=""
           />
-          <span>by</span>
         </span>
         <span className="hl">
-          <span>양수빈</span>
+          <span className="oq">‘Shore.’</span>
           <img
-            className="chip chip--fill chip--pencil"
-            src="/hero/pencil.jpg"
+            className="chip chip--fill chip--shore"
+            src="/hero/shore.jpg"
             alt=""
           />
-          <span>Seoul</span>
         </span>
       </h1>
       <div className="hero-rows">
@@ -111,9 +111,9 @@ function Hero() {
   )
 }
 
-function Squiggle() {
+function Squiggle({ className = 'squiggle' }: { className?: string }) {
   return (
-    <svg className="squiggle" viewBox="0 0 200 16" preserveAspectRatio="none">
+    <svg className={className} viewBox="0 0 200 16" preserveAspectRatio="none">
       <path
         d="M0 8 Q 12.5 0 25 8 T 50 8 T 75 8 T 100 8 T 125 8 T 150 8 T 175 8 T 200 8"
         fill="none"
@@ -124,18 +124,49 @@ function Squiggle() {
   )
 }
 
+// 8잎 데이지 애스터리스크
 function Star() {
-  const spikes = Array.from({ length: 12 }, (_, i) => {
-    const a = (i * Math.PI) / 6
-    const b = a + Math.PI / 12
-    const c = a + Math.PI / 6
-    return `L${50 + 48 * Math.cos(a)} ${50 + 48 * Math.sin(a)} L${
-      50 + 16 * Math.cos(b)
-    } ${50 + 16 * Math.sin(b)} L${50 + 48 * Math.cos(c)} ${50 + 48 * Math.sin(c)}`
-  }).join(' ')
   return (
     <svg className="chip chip--star" viewBox="0 0 100 100" aria-hidden>
-      <path d={`M${50 + 48} 50 ${spikes} Z`} fill="currentColor" />
+      {Array.from({ length: 8 }, (_, i) => (
+        <ellipse
+          key={i}
+          cx="50"
+          cy="24"
+          rx="11.5"
+          ry="24"
+          fill="currentColor"
+          transform={`rotate(${i * 45} 50 50)`}
+        />
+      ))}
+      <circle cx="50" cy="50" r="9" fill="var(--bg)" />
+    </svg>
+  )
+}
+
+// CURRENTS 뒤로 흐르며 옅어지는 물결
+function HeroWave() {
+  return (
+    <svg
+      className="hl-squiggle"
+      viewBox="0 0 200 20"
+      preserveAspectRatio="none"
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id="hero-wave-fade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="currentColor" />
+          <stop offset="1" stopColor="currentColor" stopOpacity="0.12" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M0 10 Q 12.5 1 25 10 T 50 10 T 75 10 T 100 10 T 125 10 T 150 10 T 175 10 T 200 10"
+        fill="none"
+        stroke="url(#hero-wave-fade)"
+        strokeWidth="4.5"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
     </svg>
   )
 }

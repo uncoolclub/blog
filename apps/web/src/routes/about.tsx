@@ -49,9 +49,9 @@ function About() {
         </li>
       </ul>
       <p className="credits">
-        home imagery: Macintosh 128k (Wikimedia Commons, CC BY-SA) ·
-        Silver-Reed SR200 © Jacek Halicki (CC BY-SA 4.0) · pencil (Wikimedia
-        Commons, CC BY-SA 4.0)
+        home imagery (Wikimedia Commons): sea glitter © Sunsetbeach (CC BY
+        3.0) · pool © Shixart1985 (CC BY 2.0) · Le Morne Beach © dronepicr
+        (CC BY 2.0)
       </p>
     </article>
   )

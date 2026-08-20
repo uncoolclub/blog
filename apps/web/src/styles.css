@@ -255,29 +255,41 @@ button.danger:hover {
   border-radius: 0.09em;
 }
 
-.chip--mac {
-  /* 컷아웃을 블루 지면 위에 올린다 */
-  object-fit: contain;
-  object-position: 50% 45%;
-  padding: 0.05em 0;
-  background: var(--accent);
-  max-width: 3.2em;
+.chip--glitter {
+  /* 윤슬 밴드 크롭 */
+  object-position: 50% 76%;
+  filter: contrast(1.25) saturate(1.15) brightness(0.94);
+  max-width: 3.6em;
 }
 
-.chip--type {
-  /* 빨간 몸통·키 클로즈업 */
-  object-position: 50% 62%;
-  filter: saturate(1.05);
-  max-width: 4em;
+.chip--pool {
+  /* 수영장 코스틱, 흰 테두리는 프레임 밖으로 */
+  object-position: 0% 45%;
+  filter: saturate(1.1);
+  max-width: 3.4em;
 }
 
-.chip--pencil {
-  object-position: 50% 31%;
-  height: 0.42em;
-  align-self: center;
-  filter: saturate(1.05);
-  border-radius: 999px;
-  max-width: none;
+.chip--shore {
+  /* 물-모래 경계선 */
+  object-position: 20% 62%;
+  filter: saturate(1.08);
+  max-width: 4.6em;
+}
+
+/* CURRENTS 뒤로 흐르는 물결선 */
+.hl-squiggle {
+  flex: 1 1 0;
+  min-width: 1em;
+  height: 0.24em;
+  color: var(--accent);
+}
+
+/* 타이포를 끊고 들어오는 컷아웃 오브젝트 */
+.chip--cut {
+  flex: none;
+  height: 1.02em;
+  width: auto;
+  filter: drop-shadow(0 0.03em 0.09em rgba(0, 0, 0, 0.28));
 }
 
 .chip--star {
