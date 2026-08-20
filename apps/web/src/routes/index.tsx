@@ -6,6 +6,9 @@ export const Route = createFileRoute('/')({
   component: Home,
 })
 
+// 글 id 기반으로 카드 배경 톤 자동 배정
+const CARD_TONES = ['blue', 'ink', 'cream'] as const
+
 function Home() {
   const posts = Route.useLoaderData()
 
@@ -21,10 +24,14 @@ function Home() {
           <p>No posts yet.</p>
         </div>
       ) : (
-        <ul className="post-list">
+        <ul className="post-grid">
           {posts.map((post, i) => (
             <li key={post.id}>
-              <Link to="/posts/$slug" params={{ slug: post.slug! }}>
+              <Link
+                to="/posts/$slug"
+                params={{ slug: post.slug! }}
+                className={`card card--${CARD_TONES[(post.id - 1) % CARD_TONES.length]}`}
+              >
                 <div className="entry-meta">
                   <span className="post-no">
                     {String(posts.length - i).padStart(2, '0')}
