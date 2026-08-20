@@ -89,34 +89,22 @@ function Hero() {
   )
 }
 
-// 미로(Miró)풍 블롭 피규어: 팔 들어올린 유기적 실루엣 + 팔 사이 구멍, 잉크 아웃라인
+// 미로풍 뒤집힌 사람(물구나무 스웨그): 두꺼운 곡선 두 덩어리 + 잉크 아웃라인
 function Dancers() {
+  const pieces = [
+    // 위: 차올려 뒤집힌 다리 아치 (기울어짐)
+    'M52 88 C54 38 112 22 136 52 C147 66 148 80 140 92',
+    // 아래: 바닥을 짚은 몸통 훅 (더 묵직하게)
+    'M16 148 C26 114 62 100 98 110 C126 118 144 138 134 166',
+  ]
   return (
-    <svg className="chip chip--blob" viewBox="0 0 150 190" aria-hidden>
-      <path
-        fill="currentColor"
-        stroke="var(--text)"
-        strokeWidth="5"
-        strokeLinejoin="round"
-        fillRule="evenodd"
-        d="M44 46
-           C34 28 44 10 58 12
-           C68 14 70 26 70 38
-           C70 48 68 58 72 64
-           C78 58 80 46 82 36
-           C86 20 96 6 112 8
-           C128 10 130 28 120 42
-           C114 52 108 60 106 70
-           C114 86 118 104 116 124
-           C114 142 118 158 112 172
-           C104 184 92 180 92 168
-           C92 156 92 146 88 138
-           C82 146 80 158 78 168
-           C74 180 60 182 56 170
-           C52 158 56 144 56 132
-           C48 116 44 96 46 78
-           C48 64 46 56 44 46 Z"
-      />
+    <svg className="chip chip--blob" viewBox="0 0 170 190" aria-hidden>
+      {pieces.map((d) => (
+        <g key={d} fill="none" strokeLinecap="round">
+          <path d={d} stroke="var(--text)" strokeWidth="46" />
+          <path d={d} stroke="currentColor" strokeWidth="37" />
+        </g>
+      ))}
     </svg>
   )
 }
