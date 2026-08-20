@@ -49,9 +49,8 @@ function About() {
         </li>
       </ul>
       <p className="credits">
-        home imagery (Wikimedia Commons): sea glitter © Sunsetbeach (CC BY
-        3.0) · pool © Shixart1985 (CC BY 2.0) · Le Morne Beach © dronepicr
-        (CC BY 2.0)
+        home imagery (Wikimedia Commons): pool © Shixart1985 (CC BY 2.0) · Le
+        Morne Beach © dronepicr (CC BY 2.0) · Macintosh 128k (CC BY-SA)
       </p>
     </article>
   )

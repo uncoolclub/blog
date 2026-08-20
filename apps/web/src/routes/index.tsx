@@ -59,14 +59,10 @@ function Hero() {
       <h1 className="hero-lines" aria-hidden>
         <span className="hl">
           <span>Small</span>
-          <img
-            className="chip chip--fill chip--glitter"
-            src="/hero/glitter.jpg"
-            alt=""
-          />
+          <span className="chip chip--fill chip--block" />
         </span>
         <span className="hl">
-          <Star />
+          <Dancers />
           <span>Currents</span>
           <HeroWave />
         </span>
@@ -89,83 +85,57 @@ function Hero() {
           />
         </span>
       </h1>
-      <div className="hero-rows">
-        <div className="hero-row hero-row--pills">
-          <span className="pill">frontend</span>
-          <span className="pill">design system</span>
-          <span className="pill">react native</span>
-        </div>
-        <div className="hero-row hero-row--slogan">
-          <span>Write</span>
-          <Squiggle />
-          <span>Publish</span>
-          <Squiggle />
-          <span>Live</span>
-        </div>
-        <div className="hero-row hero-row--meta">
-          <span>kr ● seoul, 양수빈</span>
-          <span>37.5665, 126.9780</span>
-        </div>
-      </div>
     </section>
   )
 }
 
-function Squiggle({ className = 'squiggle' }: { className?: string }) {
+// 미로(Miró)풍 블롭 피규어: 팔 들어올린 유기적 실루엣 + 팔 사이 구멍, 잉크 아웃라인
+function Dancers() {
   return (
-    <svg className={className} viewBox="0 0 200 16" preserveAspectRatio="none">
+    <svg className="chip chip--blob" viewBox="0 0 150 190" aria-hidden>
       <path
-        d="M0 8 Q 12.5 0 25 8 T 50 8 T 75 8 T 100 8 T 125 8 T 150 8 T 175 8 T 200 8"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
+        fill="currentColor"
+        stroke="var(--text)"
+        strokeWidth="5"
+        strokeLinejoin="round"
+        fillRule="evenodd"
+        d="M44 46
+           C34 28 44 10 58 12
+           C68 14 70 26 70 38
+           C70 48 68 58 72 64
+           C78 58 80 46 82 36
+           C86 20 96 6 112 8
+           C128 10 130 28 120 42
+           C114 52 108 60 106 70
+           C114 86 118 104 116 124
+           C114 142 118 158 112 172
+           C104 184 92 180 92 168
+           C92 156 92 146 88 138
+           C82 146 80 158 78 168
+           C74 180 60 182 56 170
+           C52 158 56 144 56 132
+           C48 116 44 96 46 78
+           C48 64 46 56 44 46 Z"
       />
     </svg>
   )
 }
 
-// 8잎 데이지 애스터리스크
-function Star() {
-  return (
-    <svg className="chip chip--star" viewBox="0 0 100 100" aria-hidden>
-      {Array.from({ length: 8 }, (_, i) => (
-        <ellipse
-          key={i}
-          cx="50"
-          cy="24"
-          rx="11.5"
-          ry="24"
-          fill="currentColor"
-          transform={`rotate(${i * 45} 50 50)`}
-        />
-      ))}
-      <circle cx="50" cy="50" r="9" fill="var(--bg)" />
-    </svg>
-  )
-}
-
-// CURRENTS 뒤로 흐르며 옅어지는 물결
+// CURRENTS 뒤로 흐르는 붓질 물결 (두껍고 불규칙한 컷아웃 스트로크)
 function HeroWave() {
   return (
     <svg
       className="hl-squiggle"
-      viewBox="0 0 200 20"
+      viewBox="0 0 220 40"
       preserveAspectRatio="none"
       aria-hidden
     >
-      <defs>
-        <linearGradient id="hero-wave-fade" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="currentColor" />
-          <stop offset="1" stopColor="currentColor" stopOpacity="0.12" />
-        </linearGradient>
-      </defs>
       <path
-        d="M0 10 Q 12.5 1 25 10 T 50 10 T 75 10 T 100 10 T 125 10 T 150 10 T 175 10 T 200 10"
+        d="M6 24 C14 6 28 4 38 18 C46 30 56 36 66 26 C76 16 82 6 94 12 C106 18 110 34 124 26 C136 19 140 6 152 12 C164 18 168 32 182 24 C192 18 200 10 214 16"
         fill="none"
-        stroke="url(#hero-wave-fade)"
-        strokeWidth="4.5"
+        stroke="currentColor"
+        strokeWidth="11"
         strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
       />
     </svg>
   )

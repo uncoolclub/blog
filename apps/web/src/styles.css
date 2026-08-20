@@ -8,8 +8,8 @@
   --border: #0a0a0a;
   --border-soft: #d8d8d4;
   --hover: rgba(10, 10, 10, 0.06);
-  --accent: #2722e8;
-  --accent-soft: rgba(39, 34, 232, 0.08);
+  --accent: #1e1eff;
+  --accent-soft: rgba(30, 30, 255, 0.08);
   --danger: #d70015;
   --code-bg: #f7f7f5;
 
@@ -30,8 +30,8 @@
     --border: #f2f2f0;
     --border-soft: #333330;
     --hover: rgba(242, 242, 240, 0.08);
-    --accent: #6b6bff;
-    --accent-soft: rgba(107, 107, 255, 0.14);
+    --accent: #7373ff;
+    --accent-soft: rgba(115, 115, 255, 0.14);
     --danger: #ff453a;
     --code-bg: #141414;
   }
@@ -213,7 +213,7 @@ button.danger:hover {
 .hero {
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  padding: 56px clamp(20px, 4.5vw, 72px) 8px;
+  padding: 56px clamp(20px, 4.5vw, 72px) 0;
 }
 
 .hero-lines {
@@ -255,25 +255,27 @@ button.danger:hover {
   border-radius: 0.09em;
 }
 
-.chip--glitter {
-  /* 윤슬 밴드 크롭 */
-  object-position: 50% 76%;
-  filter: contrast(1.25) saturate(1.15) brightness(0.94);
-  max-width: 3.6em;
-}
-
-.chip--pool {
-  /* 수영장 코스틱, 흰 테두리는 프레임 밖으로 */
-  object-position: 0% 45%;
-  filter: saturate(1.1);
+.chip--block {
+  /* 솔리드 블루 블록 */
+  background: var(--accent);
+  border-radius: 0.16em;
   max-width: 3.4em;
 }
 
+.chip--pool {
+  /* 수영장 코스틱, 유기적 블롭 라운드 */
+  object-position: 0% 45%;
+  filter: saturate(1.1);
+  max-width: 3.4em;
+  border-radius: 0.38em 0.14em 0.34em 0.16em;
+}
+
 .chip--shore {
-  /* 물-모래 경계선 */
+  /* 물-모래 경계선, 타원 크롭 */
   object-position: 20% 62%;
   filter: saturate(1.08);
   max-width: 4.6em;
+  border-radius: 50%;
 }
 
 /* CURRENTS 뒤로 흐르는 물결선 */
@@ -292,75 +294,11 @@ button.danger:hover {
   filter: drop-shadow(0 0.03em 0.09em rgba(0, 0, 0, 0.28));
 }
 
-.chip--star {
-  width: 0.62em;
-  height: 0.62em;
+.chip--blob {
+  width: 0.82em;
+  height: 0.98em;
   flex: none;
-  color: #17a24a;
-  animation: star-spin 16s linear infinite;
-}
-
-@keyframes star-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .chip--star {
-    animation: none;
-  }
-}
-
-/* ── 히어로 하단: 양끝 맞춤 행들 ── */
-.hero-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  margin-top: 30px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-}
-
-.hero-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.hero-row--slogan {
-  font-size: clamp(18px, 3vw, 30px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-.squiggle {
-  flex: 1;
-  min-width: 40px;
-  height: 14px;
-  color: var(--text);
-}
-
-.hero-row--meta {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.03em;
-  color: var(--text-2);
-}
-
-.pill {
-  display: inline-block;
-  padding: 4px 0;
-  flex: 1;
-  text-align: center;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.03em;
-  color: var(--text);
+  color: var(--accent);
 }
 
 /* ── 글 목록 (인덱스) ── */
