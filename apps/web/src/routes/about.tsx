@@ -48,6 +48,11 @@ function About() {
           </a>
         </li>
       </ul>
+      <p className="credits">
+        home imagery: Macintosh 128k (Wikimedia Commons, CC BY-SA) ·
+        Silver-Reed SR200 © Jacek Halicki (CC BY-SA 4.0) · pencil (Wikimedia
+        Commons, CC BY-SA 4.0)
+      </p>
     </article>
   )
 }

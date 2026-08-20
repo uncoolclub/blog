@@ -217,11 +217,12 @@ button.danger:hover {
 .hero-lines {
   display: flex;
   flex-direction: column;
-  gap: 0.04em;
-  font-size: clamp(42px, 9.6vw, 84px);
+  gap: 0.07em;
+  font-size: clamp(44px, 10.4vw, 92px);
   font-weight: 700;
-  line-height: 1.04;
+  line-height: 0.94;
   letter-spacing: -0.05em;
+  text-transform: uppercase;
 }
 
 .hl {
@@ -231,24 +232,79 @@ button.danger:hover {
   min-width: 0;
 }
 
-.chip {
+/* 시작 기준선은 두 개만: 0 / 0.6em 교차 */
+.hl--alt {
+  margin-left: 0.6em;
+}
+
+/* 연결어는 낮은 체급 + accent */
+.amp {
+  font-size: 0.62em;
+  color: var(--accent);
+}
+
+/* 서명 줄: 낮은 체급 */
+.hl--sig {
+  font-size: 0.48em;
+  letter-spacing: -0.03em;
+  margin-top: 0.3em;
+}
+
+/* 오브젝트 + 주석 번호를 한 단위로 */
+.obj {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
   flex: none;
 }
 
-/* 토큰 스와치: 팔레트 견본 */
-.chip--tokens {
-  display: inline-flex;
-  gap: 0.07em;
-  padding: 0.09em;
-  border: 2px solid var(--border);
-  border-radius: 0.16em;
-  background: var(--bg);
+.obj sup,
+.hero-pencil sup {
+  position: absolute;
+  top: -1em;
+  right: -0.4ch;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-3);
 }
 
-.chip--tokens i {
-  width: 0.42em;
-  height: 0.42em;
-  border-radius: 0.07em;
+.hero-pencil sup {
+  position: static;
+}
+
+.hero-legend {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--text-3);
+}
+
+.chip {
+  flex: none;
+  transition: transform 0.25s ease;
+}
+
+.hl:hover .chip {
+  transform: rotate(0deg) scale(1.05);
+}
+
+/* 실물 오브젝트 */
+.chip--mac {
+  height: 1.15em;
+  width: auto;
+  transform: rotate(-6deg);
+  filter: drop-shadow(0 0.04em 0.1em rgba(0, 0, 0, 0.25));
+}
+
+.chip--type {
+  height: 0.88em;
+  width: 1.16em;
+  object-fit: cover;
+  border-radius: 0.12em;
+  transform: rotate(2.5deg);
 }
 
 /* 미니 브라우저 와이어프레임 */
@@ -259,31 +315,51 @@ button.danger:hover {
   color: var(--text);
 }
 
-/* 깜빡이는 텍스트 커서 */
-.chip--caret {
-  width: 0.09em;
-  height: 0.82em;
-  background: var(--accent);
-  animation: caret-blink 1.1s steps(1) infinite;
+.chip--star {
+  width: 0.6em;
+  height: 0.6em;
+  color: #17a24a;
+  animation: star-spin 14s linear infinite;
 }
 
-@keyframes caret-blink {
-  50% {
-    opacity: 0;
+@keyframes star-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .chip--caret {
+  .chip--star {
     animation: none;
   }
+}
+
+/* 연필: 한 줄을 통째로 차지하는 견본 */
+.hero-pencil {
+  display: flex;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.hero-pencil img {
+  width: min(420px, 70%);
+  height: 30px;
+  object-fit: cover;
+  object-position: 50% 31%;
+  border-radius: 999px;
+  filter: saturate(1.2) contrast(1.05);
+}
+
+.hero-pencil sup {
+  font-size: 11px;
+  margin-top: 0;
 }
 
 .hero-foot {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  margin-top: 36px;
+  margin-top: 30px;
 }
 
 .hero-meta {
@@ -647,6 +723,14 @@ button.danger:hover {
   color: var(--text-3);
   font-size: 12px;
   text-transform: none;
+}
+
+.credits {
+  margin-top: 48px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  color: var(--text-3);
 }
 
 /* ── 글쓰기 화면 ── */

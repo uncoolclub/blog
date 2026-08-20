@@ -47,31 +47,52 @@ function Home() {
   )
 }
 
-// 정체성 배너: 문장은 내 것, 칩은 내 도메인의 오브젝트(토큰 스와치•UI 프레임•커서).
-// "marry yang turns design into code — and writes it here"
+// 정체성 배너: 견본 시트(specimen sheet) 컨셉.
+// 화면을 만들고 문장을 쓰는 사람 — "TOOLS FOR 'SCREENS' & SENTENCES BY 양수빈"
+// 오브젝트는 주석 번호를 단 실물(맥 128k·타자기·연필) + 직접 그린 UI 프레임.
 function Hero() {
   return (
     <section
       className="hero"
-      aria-label="marry yang turns design into code — and writes it here"
+      aria-label="screens, systems and sentences — 양수빈, seoul"
     >
       <h1 className="hero-lines" aria-hidden>
-        <span className="hl">marry yang</span>
         <span className="hl">
-          turns
-          <TokenChip />
-          design
+          Screens
+          <span className="obj">
+            <img className="chip chip--mac" src="/hero/mac.png" alt="" />
+            <sup>1)</sup>
+          </span>
+        </span>
+        <span className="hl hl--alt">
+          Systems
+          <span className="obj">
+            <FrameChip />
+            <sup>2)</sup>
+          </span>
         </span>
         <span className="hl">
-          into
-          <FrameChip />
-          code,
+          <span className="amp">&amp;</span>
+          Sentences
+          <span className="obj">
+            <img className="chip chip--type" src="/hero/typewriter.jpg" alt="" />
+            <sup>3)</sup>
+          </span>
         </span>
-        <span className="hl">
-          writes it here
-          <Caret />
+        <span className="hl hl--alt hl--sig">
+          양수빈
+          <Star />
+          Seoul
         </span>
       </h1>
+      <div className="hero-pencil" aria-hidden>
+        <img src="/hero/pencil.jpg" alt="" />
+        <sup>4)</sup>
+      </div>
+      <p className="hero-legend" aria-hidden>
+        1) macintosh 128k, 1984 · 2) a screen · 3) silver-reed sr200 · 4)
+        연필, hb
+      </p>
       <div className="hero-foot">
         <div className="pill-row">
           <span className="pill">frontend</span>
@@ -84,18 +105,6 @@ function Hero() {
         </div>
       </div>
     </section>
-  )
-}
-
-// 디자인 토큰 스와치: 팔레트 견본 조각
-function TokenChip() {
-  return (
-    <span className="chip chip--tokens">
-      <i style={{ background: 'var(--accent)' }} />
-      <i style={{ background: '#17a24a' }} />
-      <i style={{ background: '#ffb200' }} />
-      <i style={{ background: '#ff4f30' }} />
-    </span>
   )
 }
 
@@ -122,9 +131,20 @@ function FrameChip() {
   )
 }
 
-// 글 쓰는 중인 커서
-function Caret() {
-  return <span className="chip chip--caret" />
+function Star() {
+  const spikes = Array.from({ length: 12 }, (_, i) => {
+    const a = (i * Math.PI) / 6
+    const b = a + Math.PI / 12
+    const c = a + Math.PI / 6
+    return `L${50 + 48 * Math.cos(a)} ${50 + 48 * Math.sin(a)} L${
+      50 + 16 * Math.cos(b)
+    } ${50 + 16 * Math.sin(b)} L${50 + 48 * Math.cos(c)} ${50 + 48 * Math.sin(c)}`
+  }).join(' ')
+  return (
+    <svg className="chip chip--star" viewBox="0 0 100 100" aria-hidden>
+      <path d={`M${50 + 48} 50 ${spikes} Z`} fill="currentColor" />
+    </svg>
+  )
 }
 
 export function formatDate(sqlite: string): string {
