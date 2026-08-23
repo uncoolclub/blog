@@ -1,29 +1,15 @@
 <div align="center">
-  <a href="https://yang-meli.tech">
-    <img src="apps/web/public/favicon.svg" width="80" alt="Small Currents 로고">
-  </a>
-  <h1>Small Currents</h1>
-  <p>에디터로 쓰고, 버튼 한 번으로 발행하는 개인 블로그.</p>
-  <p><sub>SMALL CURRENTS SHAPE THE SHORE — SLOWLY, SURELY</sub></p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/banner-dark.svg">
+    <img src="docs/images/banner.svg" alt="Small Currents" width="400">
+  </picture>
+  <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1342ff.svg" alt="license MIT"></a>
+    <img src="https://img.shields.io/badge/cloudflare-workers-f38020.svg" alt="cloudflare workers">
+  </p>
 </div>
 
-<br>
-
-## 특징
-
-- **발행 = UPDATE 쿼리 한 번.** 빌드 파이프라인이 글쓰기에 끼어들지 않는다.
-- **에디터가 본체.** 쓰기 화면과 발행 글이 같은 Tiptap extension 세트를 공유해서, 쓰면서 본 화면이 곧 발행된 화면이다.
-- **이미지는 붙여넣기.** 붙여넣기•드래그가 그대로 R2 업로드가 된다.
-- **조용한 지면.** 672px 한 컬럼, 읽기 진행률 바, 글마다 순환하는 커버 모티프.
-
-## 스택
-
-| 영역 | 선택 | 이유 |
-|---|---|---|
-| 프레임워크 | [TanStack Start](https://tanstack.com/start) | Vite 기반이라 Workers 배포가 1급 |
-| 런타임 | Cloudflare Workers | 글 저장소(D1)•이미지(R2)와 같은 플랫폼 |
-| 에디터 | [Tiptap](https://tiptap.dev) v3 | 스키마 단일 정본(`@blog/editor`) |
-| 어드민 인증 | Cloudflare Access | 로그인 UI 코드 0줄, server fn은 JWT 직접 검증 |
+에디터로 쓰고, 버튼 한 번으로 발행하는 개인 블로그. TanStack Start + Cloudflare (Workers•D1•R2).
 
 ## 구조
 
@@ -65,7 +51,7 @@ pnpm deploy                      # build + wrangler deploy
 
 ## 댓글 (giscus)
 
-GitHub Discussions 기반이라 **public 레포에서만** 동작한다. 레포 공개 후:
+GitHub Discussions 기반이라 public 레포에서만 동작한다. 레포 공개 후:
 
 1. Settings에서 Discussions를 켜고 [giscus 앱](https://github.com/apps/giscus)을 설치한다.
 2. [giscus.app](https://giscus.app)에서 발급되는 `repoId`•`category`•`categoryId`를 `apps/web/src/components/comments.tsx`의 `GISCUS`에 채운다.
@@ -75,3 +61,9 @@ GitHub Discussions 기반이라 **public 레포에서만** 동작한다. 레포 
 ## 문서
 
 설계 배경은 [docs/SPEC.md](docs/SPEC.md), 디자인 시스템은 [DESIGN.md](DESIGN.md).
+
+## License
+
+MIT © 양수빈. See [LICENSE](LICENSE) for details.
+
+<img src="apps/web/public/favicon.svg" width="26" alt="">
