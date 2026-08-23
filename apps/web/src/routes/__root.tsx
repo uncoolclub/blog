@@ -6,6 +6,14 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 
+import {
+  DocIcon,
+  GithubIcon,
+  MailIcon,
+  RssIcon,
+  UserIcon,
+  WaveMark,
+} from '../svgs'
 import appCss from '../styles.css?url'
 import editorCss from '@blog/editor/styles.css?url'
 
@@ -17,6 +25,17 @@ export const Route = createRootRoute({
       { title: 'yang-meli.tech' },
     ],
     links: [
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'anonymous',
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap',
+      },
       { rel: 'stylesheet', href: appCss },
       { rel: 'stylesheet', href: editorCss },
     ],
@@ -47,19 +66,45 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
 function RootLayout() {
   return (
-    <>
+    <div className="shell">
       <header className="site-header">
-        <Link to="/" className="site-title">
-          yang—meli.tech
+        <Link to="/" aria-label="홈으로">
+          <WaveMark />
         </Link>
         <nav className="site-nav">
-          <Link to="/">index</Link>
-          <Link to="/about">about</Link>
+          <Link to="/" aria-label="글" title="글">
+            <DocIcon />
+          </Link>
+          <Link to="/about" aria-label="소개" title="소개">
+            <UserIcon />
+          </Link>
         </nav>
       </header>
-      <main className="layout">
+      <main>
         <Outlet />
       </main>
-    </>
+      <footer className="site-footer">
+        <div className="left">
+          <WaveMark small muted />
+          <span>© 2026</span>
+        </div>
+        <div className="links">
+          <a
+            href="https://github.com/uncoolclub"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+          >
+            <GithubIcon />
+          </a>
+          <a href="/rss.xml" aria-label="RSS">
+            <RssIcon />
+          </a>
+          <a href="mailto:marry@laftel.net" aria-label="메일">
+            <MailIcon />
+          </a>
+        </div>
+      </footer>
+    </div>
   )
 }

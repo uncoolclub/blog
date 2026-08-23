@@ -1,130 +1,113 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { listPublishedPosts } from '../server/posts'
+import { WaveGlyph } from '../svgs'
 
 export const Route = createFileRoute('/')({
   loader: () => listPublishedPosts(),
   component: Home,
 })
 
-// 글 id 기반으로 카드 배경 톤 자동 배정
-const CARD_TONES = ['blue', 'ink', 'cream'] as const
+// 커버 이미지 필드가 생기기 전까지, 글 id 기반의 잔잔한 그라디언트 커버
+const COVERS = [
+  { bg: 'linear-gradient(135deg, #e8ebff 0%, #ccd5ff 100%)', ink: '#2f2fff' },
+  { bg: 'linear-gradient(135deg, #f1efe9 0%, #e6e2d6 100%)', ink: '#6b6b73' },
+  { bg: 'linear-gradient(135deg, #e9f2ec 0%, #d9e8de 100%)', ink: '#4d7a5f' },
+] as const
+
+function Cover({ id, large }: { id: number; large?: boolean }) {
+  const c = COVERS[id % COVERS.length]
+  const size = large ? { width: 96, height: 60 } : { width: 60, height: 38 }
+  return (
+    <div className="cover" style={{ background: c.bg }} aria-hidden="true">
+      <WaveGlyph stroke={c.ink} strokeWidth={7} style={size} />
+    </div>
+  )
+}
 
 function Home() {
   const posts = Route.useLoaderData()
+  const [featured, ...others] = posts
+  const cards = others.slice(0, 2)
+  const rest = others.slice(2)
+
+  if (!featured) {
+    return (
+      <div className="empty">
+        <p>아직 글이 없어요.</p>
+      </div>
+    )
+  }
 
   return (
     <>
-      <Hero />
-      <div className="home-body">
-      <div className="index-head">
-        <span>Index</span>
-        <span>({String(posts.length).padStart(2, '0')})</span>
-      </div>
-      {posts.length === 0 ? (
-        <div className="empty">
-          <p>No posts yet.</p>
+      <Link
+        to="/posts/$slug"
+        params={{ slug: featured.slug! }}
+        className="featured"
+      >
+        <Cover id={featured.id} large />
+        <div className="card-body">
+          <span className="card-title">{featured.title}</span>
+          {featured.excerpt && (
+            <p className="card-excerpt">{featured.excerpt}</p>
+          )}
+          {featured.published_at && (
+            <time className="card-date" dateTime={featured.published_at}>
+              {formatDate(featured.published_at)}
+            </time>
+          )}
         </div>
-      ) : (
-        <ul className="post-grid">
-          {posts.map((post, i) => (
-            <li key={post.id}>
-              <Link
-                to="/posts/$slug"
-                params={{ slug: post.slug! }}
-                className={`card card--${CARD_TONES[(post.id - 1) % CARD_TONES.length]}`}
-              >
-                <div className="entry-meta">
-                  <span className="post-no">
-                    {String(posts.length - i).padStart(2, '0')}
-                  </span>
-                  {post.published_at && (
-                    <time dateTime={post.published_at}>
-                      {formatDate(post.published_at)}
-                    </time>
-                  )}
-                </div>
-                <h2>{post.title || '(제목 없음)'}</h2>
-                {post.excerpt && <p className="excerpt">{post.excerpt}</p>}
-                <span className="read-more">Read →</span>
-              </Link>
-            </li>
+      </Link>
+
+      {cards.length > 0 && (
+        <div className="card-grid">
+          {cards.map((post) => (
+            <Link
+              key={post.id}
+              to="/posts/$slug"
+              params={{ slug: post.slug! }}
+              className="post-card"
+            >
+              <Cover id={post.id} />
+              <div className="card-body">
+                <span className="card-title">{post.title}</span>
+                {post.excerpt && (
+                  <p className="card-excerpt">{post.excerpt}</p>
+                )}
+                {post.published_at && (
+                  <time className="card-date" dateTime={post.published_at}>
+                    {formatDate(post.published_at)}
+                  </time>
+                )}
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       )}
-      </div>
+
+      {rest.length > 0 && (
+        <div className="row-list">
+          <span className="year">
+            {rest[0].published_at?.slice(0, 4) ?? ''}
+          </span>
+          {rest.map((post) => (
+            <Link
+              key={post.id}
+              to="/posts/$slug"
+              params={{ slug: post.slug! }}
+            >
+              <span className="row-title">{post.title}</span>
+              <span className="spacer" />
+              {post.published_at && (
+                <time className="row-date" dateTime={post.published_at}>
+                  {formatDate(post.published_at).slice(5)}
+                </time>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
     </>
-  )
-}
-
-// 정체성 배너: 견본 시트(specimen sheet) 컨셉.
-// 화면을 만들고 문장을 쓰는 사람 — "TOOLS FOR 'SCREENS' & SENTENCES BY 양수빈"
-// 오브젝트는 주석 번호를 단 실물(맥 128k·타자기·연필) + 직접 그린 UI 프레임.
-function Hero() {
-  return (
-    <section
-      className="hero"
-      aria-label="small currents shape the shore — slowly, surely."
-    >
-      <h1 className="hero-comp" aria-hidden>
-        <span className="hc-row">
-          <span>Small</span>
-          <span className="blue-block" />
-          <span>Currents</span>
-          <img
-            className="hc-figure only-light"
-            src="/hero/figure.png"
-            alt=""
-          />
-          <img
-            className="hc-figure only-dark"
-            src="/hero/figure-dark.png"
-            alt=""
-          />
-          <span>Shape</span>
-        </span>
-        <span className="hc-duo">
-          <span className="hc-arrow">→</span>
-          <img className="duo-img" src="/hero/sea.jpg" alt="" />
-          <span className="duo-r1">The Shore</span>
-          <span className="duo-l2">Slowly,</span>
-          <span className="duo-r2">Surely.</span>
-        </span>
-        <span className="hc-row hc-pills">
-          <span className="pill">Frontend</span>
-          <span className="pill">Design System</span>
-          <span className="pill">React Native</span>
-        </span>
-        <span className="hc-row">
-          <span>Seoul</span>
-          <Squiggle />
-          <span>Based</span>
-        </span>
-        <span className="hc-row">
-          <span>KR</span>
-          <img className="ellipse-sea" src="/hero/sea.jpg" alt="" />
-          <span>37.5665, 126.9780</span>
-        </span>
-      </h1>
-    </section>
-  )
-}
-
-function Squiggle() {
-  return (
-    <svg
-      className="hc-squiggle"
-      viewBox="0 0 200 20"
-      preserveAspectRatio="none"
-      aria-hidden
-    >
-      <path
-        d="M0 10 Q 12.5 2 25 10 T 50 10 T 75 10 T 100 10 T 125 10 T 150 10 T 175 10 T 200 10"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3.5"
-        strokeLinecap="round"
-      />
-    </svg>
   )
 }
 
