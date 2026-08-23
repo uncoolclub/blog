@@ -1,5 +1,3 @@
-/* 에디터 구조 스타일. 본문 타이포는 앱의 .prose가 담당한다. */
-
 .blog-editor {
   display: flex;
   flex-direction: column;
@@ -20,18 +18,35 @@
 
 .blog-editor-toolbar button,
 .blog-editor-image-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 32px;
   height: 32px;
   padding: 0 8px;
   border: none;
+  border-radius: 7px;
   background: transparent;
   color: var(--text-2);
   font-family: var(--font-mono, monospace);
   font-size: 12px;
   font-weight: 600;
-  line-height: 32px;
-  text-align: center;
   cursor: pointer;
+}
+
+.blog-editor-image-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.blog-editor-image-button svg [data-fill] {
+  fill: currentColor;
+  stroke: none;
 }
 
 .blog-editor-toolbar button:hover,
