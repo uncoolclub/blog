@@ -1,12 +1,8 @@
 <div align="center">
   <a href="https://blog.th3shu.dev">
-    <img src="docs/images/banner.svg" alt="Small Currents" width="480">
+    <img src="docs/images/banner.png" alt="Small Currents">
   </a>
 </div>
-
-<br>
-
-에디터로 쓰고, 버튼 한 번으로 발행하는 개인 블로그.
 
 ## Structure
 

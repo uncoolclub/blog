@@ -25,7 +25,7 @@ export const Route = createRootRoute({
       { title: '양수빈 블로그' },
     ],
     links: [
-      { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
       { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
       {
         rel: 'preconnect',
@@ -85,7 +85,7 @@ function RootLayout() {
       </main>
       <footer className="site-footer">
         <div className="left">
-          <WaveMark small muted />
+          <WaveMark small />
           <span>© 2026</span>
         </div>
         <div className="links">
