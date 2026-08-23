@@ -532,9 +532,10 @@ button.danger:hover {
 }
 
 .section-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-4);
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.014em;
+  color: var(--text);
 }
 
 /* 커리어: 간트 연대기 */
