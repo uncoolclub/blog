@@ -1,5 +1,5 @@
 export { WaveGlyph, WAVE_PATHS, WAVE_TRANSFORM, WAVE_VIEWBOX } from './wave'
-export { WaveMark } from './wave-mark'
+export { StarMark } from './star-mark'
 export {
   ChevronIcon,
   DocIcon,

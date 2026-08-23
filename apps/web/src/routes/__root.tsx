@@ -12,7 +12,7 @@ import {
   MailIcon,
   RssIcon,
   UserIcon,
-  WaveMark,
+  StarMark,
 } from '../svgs'
 import appCss from '../styles.css?url'
 import editorCss from '@blog/editor/styles.css?url'
@@ -69,7 +69,7 @@ function RootLayout() {
     <div className="shell">
       <header className="site-header">
         <Link to="/" aria-label="홈으로">
-          <WaveMark />
+          <StarMark />
         </Link>
         <nav className="site-nav">
           <Link to="/" aria-label="글" title="글">
@@ -85,7 +85,7 @@ function RootLayout() {
       </main>
       <footer className="site-footer">
         <div className="left">
-          <WaveMark small />
+          <StarMark small />
           <span>© 2026</span>
         </div>
         <div className="links">
