@@ -4,12 +4,13 @@
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
   "main": "@tanstack/react-start/server-entry",
+  "routes": [{ "pattern": "blog.th3shu.dev", "custom_domain": true }],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "blog",
       // 배포 전 `wrangler d1 create blog` 결과의 id로 교체. 로컬 dev는 이 값 없이도 동작.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "10a4ff73-61c7-42e5-956d-fa2c5cd40ec6",
       "migrations_dir": "migrations"
     }
   ],
