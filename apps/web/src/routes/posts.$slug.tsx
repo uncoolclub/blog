@@ -14,7 +14,7 @@ export const Route = createFileRoute('/posts/$slug')({
     return { post, list }
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.post.title ?? '글'} · yang-meli.tech` }],
+    meta: [{ title: `${loaderData?.post.title ?? '글'} · 양수빈 블로그` }],
   }),
   component: PostPage,
 })

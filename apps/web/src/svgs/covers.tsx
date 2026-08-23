@@ -76,7 +76,7 @@ export const COVERS = [
     bg: 'linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%)',
     ink: '#1342ff',
     Motif: ({ ink, style }: MotifProps) => (
-      <WaveGlyph stroke={ink} strokeWidth={7} style={style} />
+      <WaveGlyph fill={ink} style={style} />
     ),
   },
   {

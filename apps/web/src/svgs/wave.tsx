@@ -1,41 +1,26 @@
 import type { CSSProperties } from 'react'
 
-// 시그니처 파도 글리프: 앞으로 말리는 파도 + 그 면을 타는 서핑보드. 🏄에서 사람만 뺐다.
-// 로고 타일•커버 모티프•파비콘이 전부 이 곡선을 공유한다.
-export const WAVE_VIEWBOX = '0 0 64 40'
-export const WAVE_CURL = 'M5 32C18 32 20 10 34 10c10 0 14.2 9.5 8.5 14.4'
-// 보드: 둥근 테일(좌) + 뾰족한 노즈(우)의 잎사귀형 실루엣. 원점 기준 수평, transform으로 배치.
-export const WAVE_BOARD =
-  'M-11 0C-11 -2.2 -7 -3 -3 -3 4.5 -3 9.8 -1.1 11.5 0 9.8 1.1 4.5 3 -3 3 -7 3 -11 2.2 -11 0Z'
-export const WAVE_BOARD_TRANSFORM = 'translate(50 31.5) rotate(-10)'
+export const WAVE_VIEWBOX = '0 0 1348 654'
+export const WAVE_TRANSFORM = 'translate(-94.531219,828.820124) scale(0.100000,-0.100000)'
+export const WAVE_PATHS = [
+  'M9935 8283 c-673 -58 -1242 -239 -1802 -572 -703 -417 -1387 -1068 -2249 -2141 -55 -69 -136 -169 -180 -224 -43 -54 -90 -113 -104 -130 -672 -852 -886 -1103 -1229 -1447 -351 -350 -605 -550 -966 -759 -560 -325 -1265 -500 -2011 -500 -94 0 -196 -5 -228 -11 -81 -17 -154 -64 -191 -123 -27 -44 -30 -58 -30 -125 1 -94 21 -137 98 -208 129 -117 338 -188 728 -244 133 -20 195 -23 449 -23 315 0 421 10 695 60 676 125 1293 418 1855 880 293 240 546 499 921 940 90 105 392 483 571 715 614 791 770 984 1059 1305 840 932 1597 1451 2372 1624 700 156 1381 9 1852 -401 154 -133 251 -257 338 -426 73 -143 110 -264 111 -368 1 -94 10 -88 -159 -104 -527 -52 -907 -380 -1011 -871 -26 -125 -24 -344 5 -473 65 -291 224 -541 459 -725 123 -96 279 -172 295 -144 3 4 -28 58 -69 119 -174 263 -243 468 -244 714 0 217 61 386 188 521 128 136 250 194 482 227 294 43 450 115 596 274 270 295 320 776 129 1252 -182 454 -560 837 -1085 1096 -310 153 -683 254 -1070 289 -106 9 -481 11 -575 3z',
+  'M11440 2534 c-1184 -32 -1797 -60 -2920 -134 -777 -51 -1761 -170 -2028 -246 -197 -56 -232 -173 -72 -243 144 -63 520 -115 1020 -142 565 -29 2144 -21 3105 17 1557 61 3024 211 3563 365 263 75 372 181 279 274 -92 92 -322 106 -1792 110 -577 1 -1097 1 -1155 -1z',
+] as const
 
 export function WaveGlyph({
-  stroke = 'currentColor',
-  strokeWidth = 5.5,
+  fill = 'currentColor',
   style,
 }: {
-  stroke?: string
-  strokeWidth?: number
+  fill?: string
   style?: CSSProperties
 }) {
   return (
-    <svg
-      viewBox={WAVE_VIEWBOX}
-      style={{
-        fill: 'none',
-        stroke,
-        strokeWidth,
-        strokeLinecap: 'round',
-        ...style,
-      }}
-      aria-hidden="true"
-    >
-      <path d={WAVE_CURL} />
-      <path
-        d={WAVE_BOARD}
-        transform={WAVE_BOARD_TRANSFORM}
-        style={{ fill: stroke, stroke: 'none' }}
-      />
+    <svg viewBox={WAVE_VIEWBOX} style={style} aria-hidden="true">
+      <g transform={WAVE_TRANSFORM} fill={fill}>
+        {WAVE_PATHS.map((d) => (
+          <path key={d.length} d={d} />
+        ))}
+      </g>
     </svg>
   )
 }

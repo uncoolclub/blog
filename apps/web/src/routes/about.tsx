@@ -3,7 +3,7 @@ import { FaceSketch, GithubIcon, MailIcon } from '../svgs'
 
 export const Route = createFileRoute('/about')({
   head: () => ({
-    meta: [{ title: '소개 · yang-meli.tech' }],
+    meta: [{ title: '소개 · 양수빈 블로그' }],
   }),
   component: About,
 })
@@ -34,8 +34,7 @@ const CAREER = [
     end: '2021.08',
     color: '#e0402e',
     logo: '/logos/getcha.png',
-    bar: { left: '0%', width: '9.7%' },
-    labelOut: true,
+    bar: { left: '0%', minWidth: '9.7%' },
   },
 ]
 
@@ -127,19 +126,8 @@ function About() {
                   }}
                 >
                   <img src={c.logo} alt="" />
-                  {!c.labelOut && c.org}
+                  {c.org}
                 </span>
-                {c.labelOut && (
-                  <span
-                    className="gantt-out-label"
-                    style={{
-                      left: `calc(${c.bar.left} + ${c.bar.width} + 10px)`,
-                      color: c.color,
-                    }}
-                  >
-                    {c.org}
-                  </span>
-                )}
               </div>
             ))}
           </div>

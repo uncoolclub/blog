@@ -149,7 +149,7 @@ button.danger:hover {
 
 .mark svg {
   width: 22px;
-  height: 14px;
+  height: 11px;
 }
 
 .mark.sm {
@@ -159,8 +159,8 @@ button.danger:hover {
 }
 
 .mark.sm svg {
-  width: 13px;
-  height: 8px;
+  width: 14px;
+  height: 7px;
 }
 
 .site-nav {
@@ -611,17 +611,6 @@ button.danger:hover {
   flex-shrink: 0;
 }
 
-.gantt-out-label {
-  position: absolute;
-  top: 5px;
-  height: 27px;
-  display: inline-flex;
-  align-items: center;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-}
 
 .gantt-legend {
   display: flex;

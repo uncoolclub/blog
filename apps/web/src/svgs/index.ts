@@ -1,4 +1,4 @@
-export { WaveGlyph, WAVE_BOARD, WAVE_CURL, WAVE_VIEWBOX } from './wave'
+export { WaveGlyph, WAVE_PATHS, WAVE_TRANSFORM, WAVE_VIEWBOX } from './wave'
 export { WaveMark } from './wave-mark'
 export {
   ChevronIcon,
