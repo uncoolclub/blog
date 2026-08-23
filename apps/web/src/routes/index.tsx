@@ -9,7 +9,7 @@ export const Route = createFileRoute('/')({
 
 // 커버 이미지 필드가 생기기 전까지, 글 id 기반의 잔잔한 그라디언트 커버
 const COVERS = [
-  { bg: 'linear-gradient(135deg, #e8ebff 0%, #ccd5ff 100%)', ink: '#2f2fff' },
+  { bg: 'linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%)', ink: '#1342ff' },
   { bg: 'linear-gradient(135deg, #f1efe9 0%, #e6e2d6 100%)', ink: '#6b6b73' },
   { bg: 'linear-gradient(135deg, #e9f2ec 0%, #d9e8de 100%)', ink: '#4d7a5f' },
 ] as const
