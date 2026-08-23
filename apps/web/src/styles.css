@@ -558,12 +558,11 @@ button.danger:hover {
   top: 0;
 }
 
-.gantt-track {
+.gantt-chart {
   position: relative;
-  height: 74px;
-  background: var(--bg-soft);
-  border-radius: 10px;
-  overflow: hidden;
+  margin-top: 6px;
+  padding: 6px 0 2px;
+  border-bottom: 1px solid var(--border);
 }
 
 .gantt-grid {
@@ -571,13 +570,48 @@ button.danger:hover {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: var(--border);
+  background: var(--border-soft);
 }
 
-.gantt-bar {
+.gantt-lane {
+  position: relative;
+  height: 38px;
+}
+
+.gantt-pill {
   position: absolute;
-  height: 9px;
-  border-radius: 999px;
+  top: 5px;
+  height: 27px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.gantt-pill img {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.gantt-out-label {
+  position: absolute;
+  top: 5px;
+  height: 27px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .gantt-legend {
@@ -592,24 +626,6 @@ button.danger:hover {
   align-items: baseline;
   gap: 10px;
   font-size: 15px;
-}
-
-.gantt-legend .dot {
-  align-self: center;
-  flex-shrink: 0;
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background: var(--accent);
-}
-
-.gantt-legend .logo {
-  width: 17px;
-  height: 17px;
-  border-radius: 4px;
-  object-fit: contain;
-  flex-shrink: 0;
-  align-self: center;
 }
 
 .gantt-legend .org {

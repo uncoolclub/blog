@@ -15,7 +15,7 @@ const CAREER = [
     period: '2024.01 — 현재',
     color: '#8068f8',
     logo: '/logos/laftel.png',
-    bar: { left: '50%', right: '6%' },
+    bar: { left: '50%', right: '0%' },
   },
   {
     org: '반지하게임즈',
@@ -31,7 +31,8 @@ const CAREER = [
     period: '2021.01 — 2021.08',
     color: '#e0402e',
     logo: '/logos/getcha.png',
-    bar: { left: '0.5%', width: '9.2%' },
+    bar: { left: '0%', width: '9.7%' },
+    labelOut: true,
   },
 ]
 
@@ -91,7 +92,7 @@ function About() {
               </span>
             ))}
           </div>
-          <div className="gantt-track" style={{ marginTop: 6 }}>
+          <div className="gantt-chart">
             {YEARS.slice(1).map((y, i) => (
               <span
                 key={y}
@@ -99,20 +100,37 @@ function About() {
                 style={{ left: `${((i + 1) * 100) / 6}%` }}
               />
             ))}
-            {CAREER.map((c, i) => (
-              <span
-                key={c.org}
-                className="gantt-bar"
-                style={{ top: 12 + i * 18, background: c.color, ...c.bar }}
-              />
+            {CAREER.map((c) => (
+              <div key={c.org} className="gantt-lane">
+                <span
+                  className="gantt-pill"
+                  style={{
+                    background: `color-mix(in srgb, ${c.color} 14%, var(--bg))`,
+                    color: c.color,
+                    ...c.bar,
+                  }}
+                >
+                  <img src={c.logo} alt="" />
+                  {!c.labelOut && c.org}
+                </span>
+                {c.labelOut && (
+                  <span
+                    className="gantt-out-label"
+                    style={{
+                      left: `calc(${c.bar.left} + ${c.bar.width} + 10px)`,
+                      color: c.color,
+                    }}
+                  >
+                    {c.org}
+                  </span>
+                )}
+              </div>
             ))}
           </div>
         </div>
         <div className="gantt-legend">
           {CAREER.map((c) => (
             <div key={c.org}>
-              <span className="dot" style={{ background: c.color }} />
-              <img className="logo" src={c.logo} alt="" />
               <span className="org">{c.org}</span>
               <span className="role">{c.role}</span>
               <span className="period">{c.period}</span>
