@@ -70,6 +70,15 @@ function extractExcerpt(node: JSONContent, max = 160): string {
   return out.length > max ? `${out.slice(0, max).trimEnd()}…` : out
 }
 
+function firstImage(node: JSONContent): string | null {
+  if (node.type === 'image') return (node.attrs?.src as string) ?? null
+  for (const child of node.content ?? []) {
+    const src = firstImage(child)
+    if (src) return src
+  }
+  return null
+}
+
 export const listPublishedPosts = createServerFn().handler(async () => {
   const { results } = await db()
     .prepare(
@@ -78,10 +87,10 @@ export const listPublishedPosts = createServerFn().handler(async () => {
        ORDER BY published_at DESC`,
     )
     .all<PostListItem & { content: string }>()
-  return results.map(({ content, ...post }) => ({
-    ...post,
-    excerpt: extractExcerpt(JSON.parse(content) as JSONContent),
-  }))
+  return results.map(({ content, ...post }) => {
+    const doc = JSON.parse(content) as JSONContent
+    return { ...post, excerpt: extractExcerpt(doc), cover: firstImage(doc) }
+  })
 })
 
 export const getPublishedPost = createServerFn()

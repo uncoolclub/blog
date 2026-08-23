@@ -29,7 +29,7 @@ function Home() {
         params={{ slug: featured.slug! }}
         className="featured"
       >
-        <Cover id={featured.id} large />
+        <Cover id={featured.id} image={featured.cover} large />
         <div className="card-body">
           <span className="card-title">{featured.title}</span>
           {featured.excerpt && (
@@ -52,7 +52,7 @@ function Home() {
               params={{ slug: post.slug! }}
               className="post-card"
             >
-              <Cover id={post.id} />
+              <Cover id={post.id} image={post.cover} />
               <div className="card-body">
                 <span className="card-title">{post.title}</span>
                 {post.excerpt && (
