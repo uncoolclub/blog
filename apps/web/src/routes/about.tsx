@@ -13,8 +13,7 @@ const CAREER = [
     org: '라프텔',
     role: 'Frontend Engineer',
     period: '2024.01 — 현재',
-    color: 'var(--accent)',
-    logo: '/logos/laftel.png',
+    color: '#8068f8',
     bar: { left: '50%', right: '6%' },
   },
   {
@@ -22,7 +21,6 @@ const CAREER = [
     role: 'Full-Stack Developer',
     period: '2021.08 — 2023.11',
     color: '#d29a2c',
-    logo: null,
     bar: { left: '9.7%', width: '37.5%' },
   },
   {
@@ -30,7 +28,6 @@ const CAREER = [
     role: 'Frontend Developer',
     period: '2021.01 — 2021.08',
     color: '#e0402e',
-    logo: '/logos/getcha.png',
     bar: { left: '0.5%', width: '9.2%' },
   },
 ]
@@ -52,17 +49,32 @@ function About() {
 
       <div className="about-body">
         <p>
-          체감의 차이를 만드는 디테일에 집중한다. 터치 인터랙션의 미세한 반응,
-          화면 전환의 작은 어긋남처럼 사용자가 말로 설명하지 못해도 분명히
-          체감하는 지점을 찾아 다듬는 일을 좋아한다. 그 과정에서 발견한 기준이
-          혼자의 감각으로 남지 않도록 디자인 시스템과 컴포넌트, 린트 규칙과
-          도구로 구조화한다.
+          서비스가 지향하는 가치를 충분히 이해하고, 그 가치가 사용자의 경험
+          속에서 자연스럽게 드러나도록 만드는 일을 좋아합니다. 좋은 제품은
+          개별 기능의 완성도만으로 만들어지는 것이 아니라, 무엇을 중요하게
+          여기는지에 대한 팀의 공통된 이해에서 시작된다고 믿습니다. 같은
+          방향을 바라보는 사람들과 생각을 나누고, 그 생각을 구체적인 경험으로
+          번역해 나가는 과정에서 가장 큰 즐거움을 느낍니다.
         </p>
         <p>
-          신차 구매 플랫폼, 누적 120만 다운로드를 기록한 인디 게임, MAU 160만
-          애니메이션 OTT까지 규모와 도메인이 다른 환경에서 일해 왔다. React
-          Native 앱과 7개 언어 글로벌 웹, WebView 하이브리드 서비스를 오가며
-          웹과 네이티브의 경계에서 제품 경험을 만든다.
+          개발에서는 복잡함을 감추는 것보다 불필요한 복잡함 자체를 줄이는
+          설계를 지향합니다. 사용자가 제품을 이해하기 위해 들이는 노력뿐
+          아니라, 동료가 코드를 읽고 판단하고 확장하는 데 필요한 인지적
+          비용까지 설계의 일부라고 생각합니다. 좋은 구조란 영리한 구조보다
+          다음 사람이 자연스럽게 이해할 수 있는 구조에 가깝다고 믿습니다.
+        </p>
+        <p>
+          한편으로는 제가 제품과 팀에 어떤 방식으로 더 좋은 기여를 할 수
+          있는지 자주 고민합니다. 특정 기술을 더 많이 아는 것보다는 문제를
+          바라보는 해상도를 높이고, 이전보다 나은 질문을 할 수 있는 사람이
+          되는 데 관심이 있습니다. 최근에는 특히 사용자 경험에 깊이 빠져
+          있습니다. 작은 인터랙션과 문장 하나, 화면 사이의 흐름이 사용자가
+          제품을 어떻게 받아들이게 만드는지 관찰하고, 기술이 그 경험을
+          어디까지 섬세하게 뒷받침할 수 있는지를 탐구하고 있습니다.
+        </p>
+        <p>
+          결국 오래 함께 제품을 만들고 싶은 동료, 그리고 자신이 만드는 것에
+          애정을 잃지 않는 개발자가 되고 싶습니다.
         </p>
       </div>
 
@@ -97,27 +109,12 @@ function About() {
           {CAREER.map((c) => (
             <div key={c.org}>
               <span className="dot" style={{ background: c.color }} />
-              {c.logo ? (
-                <img className="logo" src={c.logo} alt="" />
-              ) : (
-                <span className="logo logo-tile">반</span>
-              )}
               <span className="org">{c.org}</span>
               <span className="role">{c.role}</span>
               <span className="period">{c.period}</span>
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="slogan-card">
-        <span className="slogan">
-          SMALL CURRENTS SHAPE THE SHORE — SLOWLY, SURELY
-        </span>
-        <p>
-          작은 물결이 해안의 모양을 바꾼다고 믿는다. 크게 한 번이 아니라, 작게
-          그리고 꾸준히. 이 블로그는 그 물결들의 기록이다.
-        </p>
       </div>
 
       <div className="contact">
