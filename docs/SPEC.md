@@ -1,41 +1,42 @@
-# 테크 스펙 v0.2
+# 테크 스펙
 
-개인 개발 블로그. 네이버 블로그처럼 웹 에디터로 쓰고, 발행 버튼 한 번으로 즉시 공개한다.
-히어로 카피: "SMALL CURRENTS / SHAPE THE SHORE / SLOWLY, SURELY."
+네이버 블로그처럼 웹 에디터로 쓰고, 발행 버튼 한 번으로 즉시 공개되는 개인 블로그.
+글 하나 고치는 데 빌드 파이프라인이 끼어들지 않는 것이 이 프로젝트의 유일한 요구사항이다.
 
 ## 원칙
 
-- 회사 자산(pudding, 토스 톤) 미사용. 100% 개인 소유.
-- 에디터 패키지(`@blog/editor`)가 프로젝트의 본체. 앱은 그걸 소비한다.
-- 발행 = D1 UPDATE 한 번. 빌드•배포 파이프라인이 글 발행에 개입하지 않는다.
-- 에디터와 발행 글 렌더러는 **같은 extension 세트**(`baseExtensions`)를 쓴다.
-  여기가 어긋나면 에디터에서 보이는 것과 발행 글이 달라진다.
+- 발행 = D1 UPDATE 한 번. 빌드•배포는 글 발행에 관여하지 않는다.
+- 에디터 패키지(`@blog/editor`)가 본체고, 앱은 그걸 소비한다.
+- 에디터와 발행 글 렌더러는 같은 extension 세트(`extensions.ts`)를 쓴다.
+  여기가 어긋나면 쓰면서 본 화면과 발행된 화면이 달라진다.
 
 ## 구조
 
 ```
-blog/ (pnpm workspace + turborepo)
-├─ apps/web              TanStack Start, Cloudflare Workers 배포
-│   ├─ /                 글 목록
-│   ├─ /posts/$slug      글 상세 (SSR, static-renderer HTML)
-│   ├─ /write, /write/$id  관리자 (Cloudflare Access + JWT 검증)
-│   └─ /api/upload, /api/images/$key  R2 이미지 파이프라인
-└─ packages/editor       Tiptap v3
-    ├─ <Editor />        쓰기 모드 (툴바, 자동저장 콜백, 이미지 붙여넣기/드롭)
-    ├─ extensions.ts     스키마 단일 정본 (StarterKit + CodeBlockLowlight + Image)
-    ├─ html.ts           서버 렌더: @tiptap/static-renderer (Workers에서 DOM 불필요)
-    └─ highlight.ts      발행 글 코드블록 클라이언트 하이라이트 (lowlight)
+apps/web                 TanStack Start, Cloudflare Workers
+├─ /                     글 목록 (대표 카드 + 리스트)
+├─ /posts/$slug          글 상세 (SSR, static-renderer HTML)
+├─ /about                소개
+├─ /write, /write/$id    관리자 (Cloudflare Access + JWT 검증)
+└─ /api/upload, /api/images/$key   R2 이미지 파이프라인
+
+packages/editor          Tiptap v3
+├─ Editor.tsx            쓰기 모드
+├─ Toolbar.tsx           서식 버튼
+├─ extensions.ts         스키마 단일 정본
+├─ html.ts               서버 렌더 (@tiptap/static-renderer)
+└─ highlight.ts          발행 글 코드 하이라이트 (lowlight)
 ```
 
-## 스택 결정과 이유
+## 스택을 고른 이유
 
 | 선택 | 이유 |
 |---|---|
-| TanStack Start | Vite 기반이라 Cloudflare Workers 배포가 1급. RSC 불필요한 규모 |
-| D1 | posts 테이블 하나. SQLite로 충분, 같은 플랫폼 |
-| R2 | 이미지. `/api/images/$key`로 서빙(UUID 키 = 영구 캐시) |
-| Cloudflare Access | 관리자 1명. 로그인 UI를 코드 0줄로. 단 server fn RPC는 경로 보호가 안 닿아서 앱에서 Access JWT를 직접 검증(`assertAdmin`, jose) |
-| @tiptap/static-renderer | `@tiptap/html`은 happy-dom 의존이라 Workers 불가. static-renderer는 순수 함수 |
+| TanStack Start | Vite 기반이라 Workers 배포가 1급. RSC가 필요 없는 규모 |
+| D1 | posts 테이블 하나. SQLite로 충분하고 Workers와 같은 플랫폼 |
+| R2 | 이미지 저장. `/api/images/$key`로 서빙 (UUID 키 = 영구 캐시) |
+| Cloudflare Access | 관리자 1명. 로그인 UI를 코드 0줄로 해결. 단 server fn RPC는 경로 보호가 닿지 않아 앱에서 Access JWT를 직접 검증한다 (`assertAdmin`, jose) |
+| @tiptap/static-renderer | `@tiptap/html`은 happy-dom 의존이라 Workers에서 못 쓴다. static-renderer는 순수 함수 |
 
 ## 데이터
 
@@ -44,27 +45,10 @@ posts(id, slug UNIQUE, title, content /* Tiptap JSON */, status draft|published,
       published_at, created_at, updated_at)
 ```
 
-## 에디터 로드맵
+글 목록의 발췌와 커버는 저장하지 않고 content에서 파생한다
+(첫 이미지 = 썸네일, 이미지가 없으면 id 기반 모티프 커버).
 
-- **E1 코어 (완료)**: StarterKit(제목•리스트•인용 등), 링크(autolink + 붙여넣기), 구분선, 코드블록(lowlight)
-- **E2 미디어 (업로드 완료 / 정렬•캡션 남음)**: 이미지 업로드(붙여넣기•드래그•버튼) ✅, 정렬•캡션•리사이즈
-- **E3 임베드**: 유튜브, 트위터/X, URL og 카드
-- **E4 네이버 감성**: 콜아웃, 이미지 그룹(2~3장), 글자색•배경색
+## 하지 않는 것
 
-## v1에서 안 하는 것
-
-댓글(필요하면 giscus), 조회수, 검색, 태그, 예약 발행, RSS(M2), 다중 작성자.
-
-## 디자인
-
-에디토리얼 브루탈리즘 (2026-08-20, Apple Dev 톤에서 피벗). 레퍼런스: Us By Night,
-Entkunstung, Alec Figuracion 류의 페스티벌•아카이브 사이트.
-
-- 지면: 화이트 + 블랙 1px 룰(보더가 곧 레이아웃), 일렉트릭 블루(#1d1dff / 다크 #6b6bff) 1색
-- 타이포: Helvetica 계열 + 모노스페이스 메타 라벨(대문자, letter-spacing)
-- 시그니처: 상단 티커(마키), 홈 히어로 = 대형 타이포 "사이에" 인라인 이미지 칩
-  (WRITE [칩] / ✳ WITHOUT / 'BUILDS' [블루 블록] IS / JUST [칩] 'LIVE'), 필 태그 +
-  물결선 + 좌표, 발췌(excerpt) 딸린 인덱스 목록, 글 상세는 가운데 헤드라인 + 룰 사이 모노 메타,
-  스퀘어 버튼(호버 반전)
-- 히어로 칩 사진은 `apps/web/public/hero/`의 픽섬 플레이스홀더 — 본인 사진으로 교체 예정
-- 라이트•다크는 `prefers-color-scheme`. 토큰은 `apps/web/src/styles.css`의 CSS 변수
+조회수, 검색, 태그, 예약 발행, RSS, 다중 작성자.
+댓글은 giscus(GitHub Discussions)로 외주 — [DEPLOY.md](DEPLOY.md) 참고.
