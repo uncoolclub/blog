@@ -24,7 +24,7 @@ export function Comments() {
       'data-mapping': 'pathname',
       'data-reactions-enabled': '1',
       'data-input-position': 'bottom',
-      'data-theme': 'preferred_color_scheme',
+      'data-theme': 'https://blog.th3shu.dev/giscus-theme.css',
       'data-lang': 'ko',
     }).forEach(([k, v]) => s.setAttribute(k, v))
     ref.current.appendChild(s)
