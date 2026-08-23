@@ -85,7 +85,7 @@ function RootLayout() {
       </main>
       <footer className="site-footer">
         <div className="left">
-          <StarMark small />
+          <StarMark small muted />
           <span>© 2026</span>
         </div>
         <div className="links">
