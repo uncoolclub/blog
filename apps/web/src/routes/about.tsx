@@ -12,7 +12,8 @@ const CAREER = [
   {
     org: '라프텔',
     role: 'Frontend Engineer',
-    period: '2024.01 — 현재',
+    start: '2024.01',
+    end: null,
     color: '#8068f8',
     logo: '/logos/laftel.png',
     bar: { left: '50%', right: '0%' },
@@ -20,7 +21,8 @@ const CAREER = [
   {
     org: '반지하게임즈',
     role: 'Full-Stack Developer',
-    period: '2021.08 — 2023.11',
+    start: '2021.08',
+    end: '2023.11',
     color: '#2eb8d8',
     logo: '/logos/banjiha.png',
     bar: { left: '9.7%', width: '37.5%' },
@@ -28,7 +30,8 @@ const CAREER = [
   {
     org: '겟차',
     role: 'Frontend Developer',
-    period: '2021.01 — 2021.08',
+    start: '2021.01',
+    end: '2021.08',
     color: '#e0402e',
     logo: '/logos/getcha.png',
     bar: { left: '0%', width: '9.7%' },
@@ -37,6 +40,19 @@ const CAREER = [
 ]
 
 const YEARS = ['2021', '2022', '2023', '2024', '2025', '2026']
+
+function formatPeriod(start: string, end: string | null): string {
+  const [sy, sm] = start.split('.').map(Number)
+  const now = new Date()
+  const [ey, em] = end
+    ? end.split('.').map(Number)
+    : [now.getFullYear(), now.getMonth() + 1]
+  const months = (ey - sy) * 12 + (em - sm)
+  const y = Math.floor(months / 12)
+  const m = months % 12
+  const dur = [y > 0 && `${y}년`, m > 0 && `${m}개월`].filter(Boolean).join(' ')
+  return `${start} — ${end ?? '현재'} (${dur})`
+}
 
 function About() {
   return (
@@ -131,9 +147,10 @@ function About() {
         <div className="gantt-legend">
           {CAREER.map((c) => (
             <div key={c.org}>
+              <span className="dot" style={{ background: c.color }} />
               <span className="org">{c.org}</span>
               <span className="role">{c.role}</span>
-              <span className="period">{c.period}</span>
+              <span className="period">{formatPeriod(c.start, c.end)}</span>
             </div>
           ))}
         </div>

@@ -628,6 +628,14 @@ button.danger:hover {
   font-size: 15px;
 }
 
+.gantt-legend .dot {
+  align-self: center;
+  flex-shrink: 0;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+
 .gantt-legend .org {
   font-weight: 600;
   letter-spacing: -0.011em;
