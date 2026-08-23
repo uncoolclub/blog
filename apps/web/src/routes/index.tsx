@@ -1,25 +1,18 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { listPublishedPosts } from '../server/posts'
-import { WaveGlyph } from '../svgs'
+import { COVERS } from '../svgs/covers'
 
 export const Route = createFileRoute('/')({
   loader: () => listPublishedPosts(),
   component: Home,
 })
 
-// 커버 이미지 필드가 생기기 전까지, 글 id 기반의 잔잔한 그라디언트 커버
-const COVERS = [
-  { bg: 'linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%)', ink: '#1342ff' },
-  { bg: 'linear-gradient(135deg, #f1efe9 0%, #e6e2d6 100%)', ink: '#6b6b73' },
-  { bg: 'linear-gradient(135deg, #e9f2ec 0%, #d9e8de 100%)', ink: '#4d7a5f' },
-] as const
-
 function Cover({ id, large }: { id: number; large?: boolean }) {
-  const c = COVERS[id % COVERS.length]
-  const size = large ? { width: 96, height: 60 } : { width: 60, height: 38 }
+  const { bg, ink, Motif } = COVERS[id % COVERS.length]
+  const size = large ? { width: 100, height: 62 } : { width: 62, height: 39 }
   return (
-    <div className="cover" style={{ background: c.bg }} aria-hidden="true">
-      <WaveGlyph stroke={c.ink} strokeWidth={7} style={size} />
+    <div className="cover" style={{ background: bg }} aria-hidden="true">
+      <Motif ink={ink} style={size} />
     </div>
   )
 }

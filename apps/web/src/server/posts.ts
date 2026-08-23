@@ -62,7 +62,7 @@ function extractExcerpt(node: JSONContent, max = 160): string {
     if (n.type === 'text' && n.text) out += n.text
     else if (n.type !== 'codeBlock' && n.content) {
       n.content.forEach(walk)
-      if (n.type === 'paragraph') out += ' '
+      if (n.type === 'paragraph' || n.type === 'heading') out += ' '
     }
   }
   walk(node)
