@@ -43,3 +43,13 @@ pnpm deploy                      # build + wrangler deploy
 apps/web          TanStack Start 앱 (라우트, server fn, D1/R2 바인딩)
 packages/editor   Tiptap 에디터 + 렌더러 (@blog/editor)
 ```
+
+## 댓글 (giscus)
+
+GitHub Discussions 기반. 레포를 GitHub에 올린 뒤:
+
+1. 레포 Settings에서 Discussions 활성화, https://github.com/apps/giscus 앱 설치.
+2. https://giscus.app 에서 레포 입력 후 발급되는 `repoId`•`category`•`categoryId`를
+   `apps/web/src/components/comments.tsx`의 `GISCUS`에 채운다.
+
+값이 비어 있는 동안 댓글 섹션은 렌더되지 않는다.

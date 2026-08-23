@@ -1,21 +1,12 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
+import { Cover } from '../components/cover'
+import { formatDate } from '../lib/date'
 import { listPublishedPosts } from '../server/posts'
-import { COVERS } from '../svgs/covers'
 
 export const Route = createFileRoute('/')({
   loader: () => listPublishedPosts(),
   component: Home,
 })
-
-function Cover({ id, large }: { id: number; large?: boolean }) {
-  const { bg, ink, Motif } = COVERS[id % COVERS.length]
-  const size = large ? { width: 100, height: 62 } : { width: 62, height: 39 }
-  return (
-    <div className="cover" style={{ background: bg }} aria-hidden="true">
-      <Motif ink={ink} style={size} />
-    </div>
-  )
-}
 
 function Home() {
   const posts = Route.useLoaderData()
@@ -102,10 +93,4 @@ function Home() {
       )}
     </>
   )
-}
-
-export function formatDate(sqlite: string): string {
-  const d = new Date(sqlite.replace(' ', 'T') + 'Z')
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`
 }

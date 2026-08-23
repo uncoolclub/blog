@@ -1,6 +1,6 @@
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { adminListPosts, createPost } from '../server/posts'
-import { formatDate } from './index'
+import { formatDate } from '../lib/date'
 
 export const Route = createFileRoute('/write/')({
   loader: () => adminListPosts(),
