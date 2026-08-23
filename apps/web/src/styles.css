@@ -754,10 +754,20 @@ button.danger:hover {
 }
 
 .prose blockquote {
-  margin: 26px 0;
-  padding: 2px 0 2px 20px;
-  border-left: 2px solid var(--text-4);
-  color: var(--text-3);
+  margin: 36px 0;
+  padding: 6px 0 6px 22px;
+  border-left: 2.5px solid var(--accent);
+  color: var(--text);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose blockquote p + p {
+  margin-top: 10px;
 }
 
 .prose hr {
