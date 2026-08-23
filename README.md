@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://yang-meli.tech">
+  <a href="https://blog.th3shu.dev">
     <img src="docs/images/banner.svg" alt="Small Currents" width="480">
   </a>
 </div>
