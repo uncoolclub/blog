@@ -14,13 +14,15 @@ const CAREER = [
     role: 'Frontend Engineer',
     period: '2024.01 — 현재',
     color: '#8068f8',
+    logo: '/logos/laftel.png',
     bar: { left: '50%', right: '6%' },
   },
   {
     org: '반지하게임즈',
     role: 'Full-Stack Developer',
     period: '2021.08 — 2023.11',
-    color: '#d29a2c',
+    color: '#2eb8d8',
+    logo: '/logos/banjiha.png',
     bar: { left: '9.7%', width: '37.5%' },
   },
   {
@@ -28,6 +30,7 @@ const CAREER = [
     role: 'Frontend Developer',
     period: '2021.01 — 2021.08',
     color: '#e0402e',
+    logo: '/logos/getcha.png',
     bar: { left: '0.5%', width: '9.2%' },
   },
 ]
@@ -109,6 +112,7 @@ function About() {
           {CAREER.map((c) => (
             <div key={c.org}>
               <span className="dot" style={{ background: c.color }} />
+              <img className="logo" src={c.logo} alt="" />
               <span className="org">{c.org}</span>
               <span className="role">{c.role}</span>
               <span className="period">{c.period}</span>
@@ -131,7 +135,6 @@ function About() {
           <a href="mailto:azxq1000@gmail.com" aria-label="메일">
             <MailIcon />
           </a>
-          <span>깃허브와 메일로 열려 있습니다.</span>
         </div>
       </div>
     </article>

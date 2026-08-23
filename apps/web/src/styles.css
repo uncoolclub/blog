@@ -35,8 +35,6 @@
     --text-3: #8b8b94;
     --text-4: #5b5b64;
     --hover: rgba(236, 236, 240, 0.07);
-    --accent: #5c7fff;
-    --accent-soft: rgba(92, 127, 255, 0.4);
     --danger: #ff453a;
     --code-bg: #1b1b1f;
   }
@@ -603,6 +601,15 @@ button.danger:hover {
   height: 9px;
   border-radius: 999px;
   background: var(--accent);
+}
+
+.gantt-legend .logo {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
+  align-self: center;
 }
 
 .gantt-legend .org {
