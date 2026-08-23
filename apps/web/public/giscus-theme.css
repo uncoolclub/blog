@@ -44,11 +44,6 @@ main {
   }
 }
 
-/* 시안에 없던 상단 반응 블록은 숨긴다 */
-main .gsc-reactions {
-  display: none;
-}
-
 /* 라운드•헤어라인 정리 */
 main .gsc-comment-box,
 main .gsc-comment > div {
