@@ -22,7 +22,7 @@
   ],
   "vars": {
     // Cloudflare Access 앱 생성 후 채운다. 비어 있으면 프로덕션 어드민 API는 전부 403.
-    "ACCESS_TEAM_DOMAIN": "", // 예: https://<team>.cloudflareaccess.com
-    "ACCESS_AUD": "" // Access 앱의 Application Audience (AUD) 태그
+    "ACCESS_TEAM_DOMAIN": "https://th3shu.cloudflareaccess.com", // 예: https://<team>.cloudflareaccess.com
+    "ACCESS_AUD": "635c2b612d413f46a9e53ad6450464920c8b4ddf58c6c45e24e0df1458791e0e" // Access 앱의 Application Audience (AUD) 태그
   }
 }
