@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react'
 
 const GISCUS = {
-  repo: '',
-  repoId: '',
-  category: '',
-  categoryId: '',
+  repo: 'uncoolclub/blog',
+  repoId: 'R_kgDOQcDIMQ',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOQcDIMc4DEBbd',
 }
 
 export function Comments() {
