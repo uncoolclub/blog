@@ -22,9 +22,10 @@ export const Route = createFileRoute('/posts/$slug')({
 function PostPage() {
   const { post, list } = Route.useLoaderData()
 
-  const idx = list.findIndex((p) => p.slug === post.slug)
-  const next = idx > 0 ? list[idx - 1] : null
-  const prev = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null
+  const articles = post.book ? [] : list.filter((p) => !p.book)
+  const idx = articles.findIndex((p) => p.slug === post.slug)
+  const next = idx > 0 ? articles[idx - 1] : null
+  const prev = idx >= 0 && idx < articles.length - 1 ? articles[idx + 1] : null
 
   const shelf = useMemo(
     () => list.filter((p) => p.book && p.slug !== post.slug).slice(0, 4),
