@@ -12,7 +12,6 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   const posts = Route.useLoaderData()
-  // 서평은 아래 책장 섹션이 표지 격자로 따로 보여 준다. 글 리스트에는 섞지 않는다.
   const shelf = posts.filter((p) => p.book)
   const articles = posts.filter((p) => !p.book)
   const [featured, ...others] = articles

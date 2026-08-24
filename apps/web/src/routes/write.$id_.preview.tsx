@@ -3,8 +3,6 @@ import { useMemo } from 'react'
 import { listPublishedPosts, previewPost } from '../server/posts'
 import { PostView } from '../components/post-view'
 
-// 파일명의 `$id_`는 편집 화면(write.$id.tsx) 아래로 중첩되지 않게 하는 표시다.
-// URL은 /write/$id/preview 그대로라 Cloudflare Access의 /write* 보호를 받는다.
 export const Route = createFileRoute('/write/$id_/preview')({
   params: {
     parse: (raw) => ({ id: Number(raw.id) }),

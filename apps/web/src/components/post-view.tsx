@@ -12,7 +12,6 @@ export interface ShelfItem {
   book: BookSummary | null
 }
 
-/** 상세와 미리보기가 공유하는 읽기 화면. 이전·다음 내비와 댓글은 호출부가 붙인다. */
 export function PostView({
   post,
   shelf,

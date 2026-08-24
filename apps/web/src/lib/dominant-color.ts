@@ -1,18 +1,9 @@
 const SIZE = 32
 
-// 표지의 인상을 대표하지 못하는 픽셀을 걸러내는 기준.
-// 무채색(흰 여백•검은 글자)과 극단적으로 밝거나 어두운 픽셀이 최빈값을 먹어 버린다.
 const MIN_CHROMA = 24
 const MAX_LEVEL = 240
 const MIN_LEVEL = 32
 
-/**
- * 표지 이미지의 주조색을 hex로 뽑는다. 4비트로 양자화한 버킷에 픽셀을 모아
- * 최빈 버킷의 평균색을 돌려준다.
- *
- * 외부 URL은 CORS 헤더가 없으면 canvas가 오염돼 getImageData가 던진다.
- * 업로드 표지(/api/images/…)는 same-origin이라 항상 성공한다.
- */
 export async function dominantColor(url: string): Promise<string | null> {
   try {
     const img = new Image()

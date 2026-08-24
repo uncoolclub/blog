@@ -78,8 +78,6 @@ function WritePage() {
     [book, setBook],
   )
 
-  // 표지가 정해지는 순간에만 주조색을 다시 뽑는다. 추출이 실패하면(외부 URL의
-  // canvas 오염 등) 기존 값을 그대로 두고 수동 보정에 맡긴다.
   const pickCoverColor = useCallback(
     async (coverUrl: string) => {
       if (!coverUrl) return

@@ -48,7 +48,6 @@ export interface Book {
   toc: BookTocEntry[]
 }
 
-// 목록·격자에 필요한 만큼만. 인용문•목차까지 실어 보내면 홈 페이로드가 글 수만큼 불어난다.
 export type BookSummary = Pick<
   Book,
   'title' | 'author' | 'coverUrl' | 'rating'
@@ -171,7 +170,6 @@ export const getPublishedPost = createServerFn()
     return toPostDetail(row)
   })
 
-// 발행 전 미리보기. 상세와 같은 페이로드를 status 조건 없이 돌려준다
 export const previewPost = createServerFn()
   .validator((id: number) => id)
   .handler(async ({ data: id }) => {

@@ -13,7 +13,6 @@ export function StarGlyph() {
   )
 }
 
-// 0.5 단위 별점. 반 별은 채운 별을 폭 50%로 잘라 빈 별 위에 겹친다.
 export function StarRating({ rating }: { rating: number }) {
   return (
     <span className="stars" role="img" aria-label={`별점 ${rating} / 5`}>
