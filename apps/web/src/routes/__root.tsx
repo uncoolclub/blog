@@ -26,10 +26,12 @@ function toggleTheme() {
     ? root.dataset.theme === 'dark'
     : matchMedia('(prefers-color-scheme: dark)').matches
   const next = dark ? 'light' : 'dark'
+  root.classList.add('theme-switching')
   root.dataset.theme = next
   try {
     localStorage.setItem('theme', next)
   } catch {}
+  setTimeout(() => root.classList.remove('theme-switching'), 300)
 }
 import appCss from '../styles.css?url'
 import editorCss from '@blog/editor/styles.css?url'
