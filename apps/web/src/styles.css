@@ -1668,8 +1668,21 @@ img.book-cover {
   align-items: center;
 }
 
-.view-link {
+/* 액션 바의 링크(미리보기•보기)는 버튼과 같은 컨트롤 규격을 쓴다 */
+.write-actions a {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
   font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.write-actions a:hover {
+  background: var(--hover);
 }
 
 .title-input,
