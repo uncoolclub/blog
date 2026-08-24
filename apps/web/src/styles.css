@@ -14,7 +14,8 @@
   --accent-soft: rgba(19, 66, 255, 0.3);
   --accent-tint: rgba(19, 66, 255, 0.07);
   --star-muted: #b0b0b8;
-  --star: #f0b429;
+  /* 별점은 잉크색. 노랑을 쓰면 블루 1색 규칙이 깨지고, 5개가 반복돼 과해진다 */
+  --star: var(--text);
   --star-empty: #e2e2e6;
   --danger: #d70015;
   --code-bg: #f5f5f7;
@@ -819,7 +820,7 @@ img.book-cover {
   color: var(--accent);
 }
 
-/* ── 서평: 목차 타임라인 ── */
+/* ── 서평: 목차 — 단행본 차례 조판 ── */
 .book-toc ol {
   list-style: none;
   margin: 0;
@@ -828,36 +829,9 @@ img.book-cover {
 
 .book-toc li {
   display: flex;
-  gap: 16px;
-}
-
-.book-toc li:not(:last-child) .toc-body {
-  padding-bottom: 24px;
-}
-
-.toc-marker {
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  margin-top: 5px;
-  border: 1.5px solid var(--text-4);
-  border-radius: 999px;
-}
-
-.book-toc li:first-child .toc-marker {
-  border-color: var(--accent);
-}
-
-/* 마커를 잇는 세로선 */
-.book-toc li:not(:last-child) {
-  background: linear-gradient(var(--border), var(--border)) 4.5px 19px / 1px
-    100% no-repeat;
-}
-
-.toc-body {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 0;
 }
 
 .toc-title {
@@ -866,7 +840,17 @@ img.book-cover {
   color: var(--text);
 }
 
+/* 제목과 표기를 잇는 점선 리더 */
+.toc-leader {
+  flex: 1;
+  min-width: 24px;
+  align-self: baseline;
+  border-bottom: 1px dotted var(--border);
+  transform: translateY(-4px);
+}
+
 .toc-note {
+  flex-shrink: 0;
   font-family: var(--font-label);
   font-size: 12px;
   color: var(--text-4);

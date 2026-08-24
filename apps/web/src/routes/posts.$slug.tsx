@@ -242,11 +242,13 @@ function Toc({ book }: { book: Book }) {
       <ol>
         {book.toc.map((entry, i) => (
           <li key={i}>
-            <span className="toc-marker" aria-hidden="true" />
-            <div className="toc-body">
-              <span className="toc-title">{entry.title}</span>
-              {entry.note && <span className="toc-note">{entry.note}</span>}
-            </div>
+            <span className="toc-title">{entry.title}</span>
+            {entry.note && (
+              <>
+                <span className="toc-leader" aria-hidden="true" />
+                <span className="toc-note">{entry.note}</span>
+              </>
+            )}
           </li>
         ))}
       </ol>
