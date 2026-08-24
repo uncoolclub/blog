@@ -1668,21 +1668,50 @@ img.book-cover {
   align-items: center;
 }
 
-/* 액션 바의 링크(미리보기•보기)는 버튼과 같은 컨트롤 규격을 쓴다 */
-.write-actions a {
+/* 액션 바: 발행(채움)만 강조하고 나머지는 테두리 없는 고스트로 통일 —
+   상자가 나란히 경쟁하지 않아야 위계가 읽힌다 */
+.write-actions a,
+.write-actions button {
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--border);
+  height: 32px;
+  border: none;
   border-radius: 8px;
-  padding: 7px 14px;
+  padding: 0 13px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--text);
+  background: transparent;
+  color: var(--text-2);
   text-decoration: none;
+  cursor: pointer;
 }
 
-.write-actions a:hover {
+.write-actions a:hover,
+.write-actions button:hover {
   background: var(--hover);
+  color: var(--text);
+}
+
+.write-actions button.primary {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 0 16px;
+}
+
+.write-actions button.primary:hover {
+  background: var(--accent);
+  color: #fff;
+  opacity: 0.9;
+}
+
+.write-actions button.danger {
+  color: var(--danger);
+}
+
+.write-actions button.danger:hover {
+  background: color-mix(in srgb, var(--danger) 9%, transparent);
+  color: var(--danger);
 }
 
 .title-input,
