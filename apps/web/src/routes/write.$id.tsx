@@ -1,7 +1,7 @@
 import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Editor } from '@blog/editor'
-import type { JSONContent } from '@blog/editor'
+import type { EmbedMeta, JSONContent } from '@blog/editor'
 import {
   adminGetPost,
   deletePost,
@@ -83,6 +83,12 @@ function WritePage() {
     return url
   }
 
+  async function unfurl(url: string) {
+    const res = await fetch(`/api/unfurl?url=${encodeURIComponent(url)}`)
+    if (!res.ok) throw new Error(`unfurl failed: ${res.status}`)
+    return res.json() as Promise<Partial<EmbedMeta>>
+  }
+
   return (
     <div className="write-page">
       <div className="write-bar">
@@ -149,6 +155,7 @@ function WritePage() {
           scheduleSave()
         }}
         uploadImage={uploadImage}
+        unfurl={unfurl}
       />
     </div>
   )

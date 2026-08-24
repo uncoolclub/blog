@@ -38,9 +38,9 @@ function PostPage() {
   )
 
   useEffect(() => {
-    if (!articleRef.current?.querySelector('pre > code')) return
-    void import('@blog/editor/highlight').then(({ highlightCodeBlocks }) => {
-      if (articleRef.current) highlightCodeBlocks(articleRef.current)
+    if (!articleRef.current?.querySelector('pre > code, .embed-youtube')) return
+    void import('@blog/editor/highlight').then(({ enhancePost }) => {
+      if (articleRef.current) enhancePost(articleRef.current)
     })
   }, [post.id])
 

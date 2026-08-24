@@ -49,6 +49,23 @@
   stroke: none;
 }
 
+.blog-editor-lang {
+  height: 32px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.blog-editor-lang:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
 .blog-editor-toolbar button:hover,
 .blog-editor-image-button:hover {
   background: var(--hover);
@@ -73,7 +90,14 @@
   pointer-events: none;
 }
 
-.blog-editor .tiptap img.ProseMirror-selectednode {
+.blog-editor .tiptap img.ProseMirror-selectednode,
+.blog-editor .tiptap .embed.ProseMirror-selectednode {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* 에디터 안에서 임베드는 클릭 재생 없이 선택만 되게 한다 */
+.blog-editor .tiptap .embed a,
+.blog-editor .tiptap .embed .embed-frame {
+  pointer-events: none;
 }

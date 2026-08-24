@@ -1,5 +1,20 @@
 import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
+import { lowlight } from './extensions'
+
+const LANGUAGES = lowlight.listLanguages().sort()
+
+const IMAGE_ALIGNS = [
+  { value: 'left', label: 'L', title: '왼쪽 정렬' },
+  { value: 'center', label: 'C', title: '가운데 정렬' },
+  { value: 'right', label: 'R', title: '오른쪽 정렬' },
+] as const
+
+const IMAGE_WIDTHS = [
+  { value: 50, label: '50%' },
+  { value: 75, label: '75%' },
+  { value: null, label: '100%' },
+] as const
 
 interface ToolbarButton {
   label: string
@@ -89,9 +104,21 @@ export function Toolbar({
   editor: Editor
   onPickImage?: (file: File) => void
 }) {
-  const active = useEditorState({
+  const state = useEditorState({
     editor,
-    selector: ({ editor }) => BUTTONS.map((b) => b.isActive?.(editor) ?? false),
+    selector: ({ editor }) => ({
+      active: BUTTONS.map((b) => b.isActive?.(editor) ?? false),
+      codeLang: editor.isActive('codeBlock')
+        ? ((editor.getAttributes('codeBlock').language as string | null) ??
+          'auto')
+        : null,
+      image: editor.isActive('image')
+        ? {
+            align: (editor.getAttributes('image').align as string | null) ?? null,
+            width: (editor.getAttributes('image').width as number | null) ?? null,
+          }
+        : null,
+    }),
   })
 
   return (
@@ -102,8 +129,8 @@ export function Toolbar({
           type="button"
           title={b.title}
           aria-label={b.title}
-          aria-pressed={active[i]}
-          data-active={active[i] || undefined}
+          aria-pressed={state.active[i]}
+          data-active={state.active[i] || undefined}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => b.toggle(editor)}
         >
@@ -111,6 +138,76 @@ export function Toolbar({
         </button>
       ))}
       {onPickImage && <ImagePicker onPick={onPickImage} />}
+      {state.codeLang !== null && (
+        <select
+          className="blog-editor-lang"
+          title="코드 언어"
+          aria-label="코드 언어"
+          value={state.codeLang}
+          onChange={(e) =>
+            editor
+              .chain()
+              .focus()
+              .updateAttributes('codeBlock', {
+                language: e.target.value === 'auto' ? null : e.target.value,
+              })
+              .run()
+          }
+        >
+          <option value="auto">자동</option>
+          {LANGUAGES.map((lang) => (
+            <option key={lang} value={lang}>
+              {lang}
+            </option>
+          ))}
+        </select>
+      )}
+      {state.image && (
+        <>
+          {IMAGE_ALIGNS.map((a) => (
+            <button
+              key={a.value}
+              type="button"
+              title={a.title}
+              aria-label={a.title}
+              aria-pressed={state.image?.align === a.value}
+              data-active={state.image?.align === a.value || undefined}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .updateAttributes('image', {
+                    align: state.image?.align === a.value ? null : a.value,
+                  })
+                  .run()
+              }
+            >
+              {a.label}
+            </button>
+          ))}
+          {IMAGE_WIDTHS.map((w) => (
+            <button
+              key={w.label}
+              type="button"
+              title={`너비 ${w.label}`}
+              aria-label={`너비 ${w.label}`}
+              aria-pressed={state.image?.width === w.value}
+              data-active={state.image?.width === w.value || undefined}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .updateAttributes('image', { width: w.value })
+                  .run()
+              }
+            >
+              {w.label}
+            </button>
+          ))}
+        </>
+      )}
     </div>
   )
 }
