@@ -138,6 +138,14 @@ function WritePage() {
               : '작성 중'}
         </span>
         <div className="write-actions">
+          <Link
+            to="/write/$id/preview"
+            params={{ id: post.id }}
+            target="_blank"
+            className="view-link"
+          >
+            미리보기
+          </Link>
           {status === 'published' ? (
             <>
               {slug && (

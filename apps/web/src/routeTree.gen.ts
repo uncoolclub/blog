@@ -17,6 +17,7 @@ import { Route as PostsSlugRouteImport } from './routes/posts.$slug'
 import { Route as WriteIndexRouteImport } from './routes/write.index'
 import { Route as WriteIdRouteImport } from './routes/write.$id'
 import { Route as ApiImagesKeyRouteImport } from './routes/api.images.$key'
+import { Route as WriteIdPreviewRouteImport } from './routes/write.$id_.preview'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +59,11 @@ const ApiImagesKeyRoute = ApiImagesKeyRouteImport.update({
   path: '/api/images/$key',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WriteIdPreviewRoute = WriteIdPreviewRouteImport.update({
+  id: '/write/$id_/preview',
+  path: '/write/$id/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/write/$id': typeof WriteIdRoute
   '/write/': typeof WriteIndexRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
+  '/write/$id/preview': typeof WriteIdPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/write/$id': typeof WriteIdRoute
   '/write': typeof WriteIndexRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
+  '/write/$id/preview': typeof WriteIdPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/write/$id': typeof WriteIdRoute
   '/write/': typeof WriteIndexRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
+  '/write/$id_/preview': typeof WriteIdPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/write/$id'
     | '/write/'
     | '/api/images/$key'
+    | '/write/$id/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/write/$id'
     | '/write'
     | '/api/images/$key'
+    | '/write/$id/preview'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/write/$id'
     | '/write/'
     | '/api/images/$key'
+    | '/write/$id_/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   WriteIdRoute: typeof WriteIdRoute
   WriteIndexRoute: typeof WriteIndexRoute
   ApiImagesKeyRoute: typeof ApiImagesKeyRoute
+  WriteIdPreviewRoute: typeof WriteIdPreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiImagesKeyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/write/$id_/preview': {
+      id: '/write/$id_/preview'
+      path: '/write/$id/preview'
+      fullPath: '/write/$id/preview'
+      preLoaderRoute: typeof WriteIdPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   WriteIdRoute: WriteIdRoute,
   WriteIndexRoute: WriteIndexRoute,
   ApiImagesKeyRoute: ApiImagesKeyRoute,
+  WriteIdPreviewRoute: WriteIdPreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

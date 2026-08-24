@@ -147,6 +147,19 @@ export const listPublishedPosts = createServerFn().handler(async () => {
   })
 })
 
+function toPostDetail(row: PostRow) {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    publishedAt: row.published_at,
+    html: renderPostHTML(JSON.parse(row.content) as JSONContent),
+    book: parseBook(row.book),
+  }
+}
+
+export type PostDetail = ReturnType<typeof toPostDetail>
+
 export const getPublishedPost = createServerFn()
   .validator((slug: string) => slug)
   .handler(async ({ data: slug }) => {
@@ -155,14 +168,20 @@ export const getPublishedPost = createServerFn()
       .bind(slug)
       .first<PostRow>()
     if (!row) throw notFound()
-    return {
-      id: row.id,
-      slug: row.slug,
-      title: row.title,
-      publishedAt: row.published_at,
-      html: renderPostHTML(JSON.parse(row.content) as JSONContent),
-      book: parseBook(row.book),
-    }
+    return toPostDetail(row)
+  })
+
+// 발행 전 미리보기. 상세와 같은 페이로드를 status 조건 없이 돌려준다
+export const previewPost = createServerFn()
+  .validator((id: number) => id)
+  .handler(async ({ data: id }) => {
+    await assertAdmin()
+    const row = await db()
+      .prepare(`SELECT * FROM posts WHERE id = ?`)
+      .bind(id)
+      .first<PostRow>()
+    if (!row) throw notFound()
+    return toPostDetail(row)
   })
 
 export const adminListPosts = createServerFn().handler(async () => {
