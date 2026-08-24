@@ -69,7 +69,7 @@ export function PostView({
       <div className="post-progress" ref={progressRef} aria-hidden="true" />
       {banner}
       <header className="post-header">
-        {post.book && <span className="post-label">BOOKSHELF</span>}
+        {post.book && <span className="post-label">책장</span>}
         <h1>{post.title}</h1>
         <p className="post-meta">
           {post.publishedAt ? formatDate(post.publishedAt) : 'Draft'} · {words}{' '}
@@ -141,14 +141,7 @@ function BookInfo({ id, book }: { id: number; book: Book }) {
       <div className="book-meta">
         {(book.readTo || period) && (
           <div className="book-chips">
-            {book.readTo && (
-              <span className="chip done">
-                <svg viewBox="0 0 16 16">
-                  <path d="m2.5 8.5 3.5 3.5 7.5-8" />
-                </svg>
-                완독
-              </span>
-            )}
+            {book.readTo && <span className="chip done">완독</span>}
             {period && <span className="chip">{period}</span>}
           </div>
         )}

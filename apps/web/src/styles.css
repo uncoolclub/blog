@@ -511,9 +511,10 @@ button.danger:hover {
 
 .post-label {
   font-family: var(--font-label);
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
+  font-size: 12px;
+  font-weight: 600;
+  /* 한글 라벨은 라틴만큼 벌리면 흩어져 보인다 */
+  letter-spacing: 0.14em;
   color: var(--accent);
 }
 
@@ -725,24 +726,13 @@ img.book-cover {
   color: var(--text-3);
 }
 
-/* 한글은 라틴만큼 자간을 벌리면 흩어져 보인다 */
+/* 한글은 라틴만큼 자간을 벌리면 흩어져 보인다.
+   완독은 상태의 완결이라 틴트 대신 액센트를 채우고, 아이콘 없이 글자만 */
 .book-chips .chip.done {
-  background: var(--accent-tint);
-  padding-left: 9px;
+  background: var(--accent);
   letter-spacing: 0.02em;
-  color: var(--accent);
-}
-
-.book-chips .chip svg {
-  width: 9.5px;
-  height: 9.5px;
-  /* 대문자 높이 기준 광학 정렬 */
-  margin-top: -0.5px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  font-weight: 600;
+  color: #fff;
 }
 
 @media (max-width: 560px) {
@@ -768,6 +758,8 @@ img.book-cover {
 
 .quote-rail {
   display: flex;
+  /* 가장 긴 카드에 맞춰 늘어나지 않게 — 짧은 문장 카드는 내용만큼만 */
+  align-items: flex-start;
   gap: 16px;
   overflow-x: auto;
   /* 첫 카드 왼쪽은 본문 컬럼에 맞추고, 오른쪽만 셸 끝까지 흘려
@@ -809,19 +801,19 @@ img.book-cover {
   scroll-snap-align: start;
 }
 
-/* 장식 따옴표는 한글 바탕체의 전각 글리프가 빈약해서 라틴 세리프 글리프를 쓴다 */
+/* 장식 따옴표는 한글 바탕체의 전각 글리프가 빈약해서 라틴 세리프 글리프를 쓴다.
+   글리프가 em 상단에 몰려 있어 높이를 잘라 카드 패딩과 시각적으로 맞춘다 */
 .quote-mark {
+  display: block;
+  height: 22px;
+  overflow: hidden;
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 64px;
-  line-height: 0.4;
+  font-size: 46px;
+  line-height: 30px;
+  margin: -2px 0 0 -2px;
   color: var(--accent);
 }
 
-/* 서평 본문 안의 제목은 바탕체로 — 마무리 문장 같은 시적 강조 용도 */
-.review-body .prose h2 {
-  font-family: var(--font-serif);
-  font-weight: 700;
-}
 
 .quote-card blockquote {
   margin: 0;
