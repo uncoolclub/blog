@@ -71,6 +71,15 @@ interface MotifProps {
   style?: CSSProperties
 }
 
+// 표지 이미지가 없는 책의 폴백. 종이 표지처럼 읽히도록 어둡게 깔고 제목을 얹는다.
+export const BOOK_COVERS = [
+  'linear-gradient(155deg, #35415e 0%, #222b42 100%)',
+  'linear-gradient(155deg, #3a5e50 0%, #26423a 100%)',
+  'linear-gradient(155deg, #6b4a3a 0%, #4a3126 100%)',
+  'linear-gradient(155deg, #5a4a6e 0%, #3c3050 100%)',
+  'linear-gradient(155deg, #7a6540 0%, #574828 100%)',
+] as const
+
 export const COVERS = [
   {
     bg: 'linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%)',

@@ -15,12 +15,60 @@ export interface PostRow {
   published_at: string | null
   created_at: string
   updated_at: string
+  book: string | null
 }
 
 export type PostListItem = Pick<
   PostRow,
   'id' | 'slug' | 'title' | 'status' | 'published_at' | 'updated_at'
 >
+
+export interface BookQuote {
+  text: string
+  page?: string
+}
+
+export interface BookTocEntry {
+  title: string
+  note?: string
+}
+
+export interface Book {
+  title: string
+  author: string
+  translator?: string
+  publisher?: string
+  coverUrl?: string
+  rating?: number
+  readFrom?: string
+  readTo?: string
+  oneLiner?: string
+  quotes: BookQuote[]
+  toc: BookTocEntry[]
+}
+
+// 목록·격자에 필요한 만큼만. 인용문•목차까지 실어 보내면 홈 페이로드가 글 수만큼 불어난다.
+export type BookSummary = Pick<
+  Book,
+  'title' | 'author' | 'coverUrl' | 'rating'
+>
+
+function parseBook(json: string | null): Book | null {
+  if (!json) return null
+  try {
+    const book = JSON.parse(json) as Book
+    return { ...book, quotes: book.quotes ?? [], toc: book.toc ?? [] }
+  } catch {
+    return null
+  }
+}
+
+function summarizeBook(json: string | null): BookSummary | null {
+  const book = parseBook(json)
+  if (!book) return null
+  const { title, author, coverUrl, rating } = book
+  return { title, author, coverUrl, rating }
+}
 
 const db = () => env.DB
 
@@ -82,14 +130,19 @@ function firstImage(node: JSONContent): string | null {
 export const listPublishedPosts = createServerFn().handler(async () => {
   const { results } = await db()
     .prepare(
-      `SELECT id, slug, title, status, published_at, updated_at, content
+      `SELECT id, slug, title, status, published_at, updated_at, content, book
        FROM posts WHERE status = 'published'
        ORDER BY published_at DESC`,
     )
-    .all<PostListItem & { content: string }>()
-  return results.map(({ content, ...post }) => {
+    .all<PostListItem & { content: string; book: string | null }>()
+  return results.map(({ content, book, ...post }) => {
     const doc = JSON.parse(content) as JSONContent
-    return { ...post, excerpt: extractExcerpt(doc), cover: firstImage(doc) }
+    return {
+      ...post,
+      excerpt: extractExcerpt(doc),
+      cover: firstImage(doc),
+      book: summarizeBook(book),
+    }
   })
 })
 
@@ -107,6 +160,7 @@ export const getPublishedPost = createServerFn()
       title: row.title,
       publishedAt: row.published_at,
       html: renderPostHTML(JSON.parse(row.content) as JSONContent),
+      book: parseBook(row.book),
     }
   })
 
@@ -130,7 +184,11 @@ export const adminGetPost = createServerFn()
       .bind(id)
       .first<PostRow>()
     if (!row) throw notFound()
-    return { ...row, content: JSON.parse(row.content) as JSONContent }
+    return {
+      ...row,
+      content: JSON.parse(row.content) as JSONContent,
+      book: parseBook(row.book),
+    }
   })
 
 export const createPost = createServerFn({ method: 'POST' }).handler(
@@ -145,15 +203,25 @@ export const createPost = createServerFn({ method: 'POST' }).handler(
 
 export const savePost = createServerFn({ method: 'POST' })
   .validator(
-    (data: { id: number; title: string; content: JSONContent }) => data,
+    (data: {
+      id: number
+      title: string
+      content: JSONContent
+      book: Book | null
+    }) => data,
   )
   .handler(async ({ data }) => {
     await assertAdmin()
     await db()
       .prepare(
-        `UPDATE posts SET title = ?, content = ?, updated_at = datetime('now') WHERE id = ?`,
+        `UPDATE posts SET title = ?, content = ?, book = ?, updated_at = datetime('now') WHERE id = ?`,
       )
-      .bind(data.title, JSON.stringify(data.content), data.id)
+      .bind(
+        data.title,
+        JSON.stringify(data.content),
+        data.book && JSON.stringify(data.book),
+        data.id,
+      )
       .run()
   })
 

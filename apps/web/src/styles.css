@@ -12,13 +12,17 @@
   --hover: rgba(25, 25, 28, 0.05);
   --accent: #1342ff;
   --accent-soft: rgba(19, 66, 255, 0.3);
+  --accent-tint: rgba(19, 66, 255, 0.07);
   --star-muted: #b0b0b8;
+  --star: #f0b429;
+  --star-empty: #e2e2e6;
   --danger: #d70015;
   --code-bg: #f5f5f7;
 
   --font-sans: system-ui, 'Helvetica Neue', 'Apple SD Gothic Neo',
     'Pretendard Variable', Pretendard, sans-serif;
   --font-label: 'Space Grotesk', 'Helvetica Neue', system-ui, sans-serif;
+  --font-serif: 'Noto Serif KR', 'Apple SD Gothic Neo', Georgia, serif;
   --font-mono: 'SF Mono', ui-monospace, 'IBM Plex Mono', Menlo, monospace;
 
   --content-width: 672px;
@@ -36,7 +40,9 @@
     --text-3: #8b8b94;
     --text-4: #5b5b64;
     --hover: rgba(236, 236, 240, 0.07);
+    --accent-tint: rgba(72, 110, 255, 0.18);
     --star-muted: #ffffff;
+    --star-empty: #3a3a42;
     --danger: #ff453a;
     --code-bg: #1b1b1f;
   }
@@ -481,6 +487,496 @@ button.danger:hover {
 @media (max-width: 560px) {
   .post-nav {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ── 서평: 책 정보 ── */
+.post-label {
+  font-family: var(--font-label);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.review-section {
+  font-size: 16.5px;
+  font-weight: 650;
+  letter-spacing: -0.013em;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.review-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.see-all {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.see-all svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.book-info {
+  display: flex;
+  gap: 32px;
+  margin-top: 44px;
+}
+
+/* 홈 썸네일과 같은 파스텔 타일 위에 표지를 얹는다 */
+.book-tile {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 232px;
+  height: 248px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%);
+}
+
+.book-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 5px;
+  padding: 17px 15px;
+  box-shadow: 0 14px 28px rgba(37, 44, 84, 0.32);
+  object-fit: cover;
+}
+
+.book-tile .book-cover {
+  width: 126px;
+  height: 182px;
+}
+
+.book-cover-title {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.book-cover-author {
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 6px 0;
+}
+
+.book-title {
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.016em;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 2.5px;
+}
+
+.star {
+  position: relative;
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+}
+
+.star svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.star-outline {
+  fill: none;
+  stroke: var(--star-empty);
+  stroke-width: 1.3;
+}
+
+.star-solid {
+  fill: var(--star);
+}
+
+.star-fill {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.star-score {
+  margin-left: 6px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.book-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.book-fields > div {
+  display: flex;
+  gap: 12px;
+}
+
+.book-fields dt {
+  flex-shrink: 0;
+  width: 44px;
+  color: var(--text-4);
+}
+
+.book-fields dd {
+  margin: 0;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.book-oneliner {
+  margin-top: auto;
+  padding-top: 12px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+
+.book-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.book-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--chip);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-3);
+}
+
+.book-chips .chip.done {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+
+.book-chips .chip svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 560px) {
+  .book-info {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .book-tile {
+    width: 100%;
+  }
+}
+
+/* ── 서평: 인용 레일 ── */
+.quotes,
+.book-toc,
+.review-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 56px;
+}
+
+.quote-rail {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  /* 672px 컬럼 밖까지 흘려 잘린 카드가 스크롤을 암시하게 한다 */
+  margin-inline: -20px;
+  padding: 2px 20px;
+  scroll-snap-type: x mandatory;
+}
+
+.quote-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 400px;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 26px 28px;
+  scroll-snap-align: start;
+}
+
+.quote-mark {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  line-height: 0.5;
+  color: var(--accent);
+}
+
+.quote-card blockquote {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 16.5px;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.quote-card figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.quote-book {
+  font-size: 12.5px;
+  color: var(--text-4);
+}
+
+.quote-page {
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ── 서평: 목차 타임라인 ── */
+.book-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 4px 2px 0;
+}
+
+.book-toc li {
+  display: flex;
+  gap: 16px;
+}
+
+.book-toc li:not(:last-child) .toc-body {
+  padding-bottom: 24px;
+}
+
+.toc-marker {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 5px;
+  border: 1.5px solid var(--text-4);
+  border-radius: 999px;
+}
+
+.book-toc li:first-child .toc-marker {
+  border-color: var(--accent);
+}
+
+/* 마커를 잇는 세로선 */
+.book-toc li:not(:last-child) {
+  background: linear-gradient(var(--border), var(--border)) 4.5px 19px / 1px
+    100% no-repeat;
+}
+
+.toc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toc-title {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.toc-note {
+  font-family: var(--font-label);
+  font-size: 12px;
+  color: var(--text-4);
+}
+
+/* ── 서평: 본문 · 읽었던 책 ── */
+.post .review-body .prose {
+  padding-top: 0;
+}
+
+.read-books {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 1px solid var(--border);
+  margin-top: 64px;
+  padding-top: 64px;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.book-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.book-mini .book-cover {
+  height: 150px;
+  padding: 13px 12px;
+  box-shadow: 0 4px 10px rgba(26, 46, 40, 0.16);
+}
+
+.book-mini .book-cover-title {
+  font-size: 12px;
+}
+
+.book-mini-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.book-mini-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+  line-height: 1.45;
+}
+
+.book-mini:hover .book-mini-title,
+.shelf-item:hover .shelf-title {
+  color: var(--accent);
+}
+
+.book-mini-author {
+  font-size: 11.5px;
+  color: var(--text-4);
+}
+
+/* ── 홈: 책장 ── */
+.shelf {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 64px;
+}
+
+.shelf-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.shelf-head .year {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-4);
+}
+
+.shelf-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.shelf-item .book-cover {
+  height: 216px;
+  border-radius: 6px;
+  padding: 18px 15px;
+  box-shadow: 0 4px 12px rgba(30, 36, 66, 0.18);
+}
+
+.shelf-item .book-cover-title {
+  font-size: 14px;
+}
+
+.shelf-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shelf-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.011em;
+  line-height: 1.45;
+}
+
+.shelf-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  color: var(--text-4);
+}
+
+.shelf-meta svg {
+  width: 11px;
+  height: 11px;
+}
+
+.shelf-rating {
+  color: var(--text-3);
+}
+
+@media (max-width: 560px) {
+  .book-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quote-card {
+    width: 300px;
   }
 }
 
@@ -1141,5 +1637,101 @@ button.danger:hover {
 
 .title-input::placeholder,
 .slug-input::placeholder {
+  color: var(--text-4);
+}
+
+/* ── 글쓰기: 서평 메타 폼 ── */
+.book-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  align-self: flex-start;
+  padding-bottom: 14px;
+  font-size: 13px;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.book-toggle input {
+  accent-color: var(--accent);
+}
+
+.book-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.book-form input[type='text'],
+.book-form input[type='number'],
+.book-form input:not([type]) {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 7px 10px;
+}
+
+.book-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.book-form input::placeholder {
+  color: var(--text-4);
+}
+
+.book-form input.narrow {
+  flex: 0 0 110px;
+}
+
+.book-form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.book-form-row.cover .upload-btn {
+  flex-shrink: 0;
+}
+
+.upload-btn {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background: var(--hover);
+}
+
+.book-list-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.book-list-field .book-form-row {
+  width: 100%;
+}
+
+.book-form-label {
+  font-size: 12px;
+  font-weight: 500;
   color: var(--text-4);
 }

@@ -9,6 +9,7 @@ import {
   savePost,
   unpublishPost,
 } from '../server/posts'
+import type { Book } from '../server/posts'
 
 export const Route = createFileRoute('/write/$id')({
   params: {
@@ -21,6 +22,8 @@ export const Route = createFileRoute('/write/$id')({
 
 type SaveState = 'saved' | 'saving' | 'dirty'
 
+const EMPTY_BOOK: Book = { title: '', author: '', quotes: [], toc: [] }
+
 function WritePage() {
   const post = Route.useLoaderData()
   const router = useRouter()
@@ -28,9 +31,14 @@ function WritePage() {
   const [title, setTitle] = useState(post.title)
   const [status, setStatus] = useState(post.status)
   const [slug, setSlug] = useState(post.slug ?? '')
+  const [book, setBookState] = useState<Book | null>(post.book)
   const [saveState, setSaveState] = useState<SaveState>('saved')
 
-  const latest = useRef({ title: post.title, content: post.content })
+  const latest = useRef({
+    title: post.title,
+    content: post.content,
+    book: post.book,
+  })
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const flush = useCallback(async () => {
@@ -41,6 +49,7 @@ function WritePage() {
         id: post.id,
         title: latest.current.title,
         content: latest.current.content,
+        book: latest.current.book,
       },
     })
     setSaveState('saved')
@@ -53,6 +62,20 @@ function WritePage() {
   }, [flush])
 
   useEffect(() => () => clearTimeout(timer.current), [])
+
+  const setBook = useCallback(
+    (next: Book | null) => {
+      setBookState(next)
+      latest.current.book = next
+      scheduleSave()
+    },
+    [scheduleSave],
+  )
+
+  const patchBook = useCallback(
+    (patch: Partial<Book>) => setBook({ ...(book ?? EMPTY_BOOK), ...patch }),
+    [book, setBook],
+  )
 
   async function onPublish() {
     await flush()
@@ -148,6 +171,141 @@ function WritePage() {
         onChange={(e) => setSlug(e.target.value)}
       />
 
+      <label className="book-toggle">
+        <input
+          type="checkbox"
+          checked={book !== null}
+          onChange={(e) => setBook(e.target.checked ? EMPTY_BOOK : null)}
+        />
+        서평
+      </label>
+
+      {book && (
+        <div className="book-form">
+          <div className="book-form-row">
+            <input
+              placeholder="책 제목"
+              value={book.title}
+              onChange={(e) => patchBook({ title: e.target.value })}
+            />
+            <input
+              placeholder="지은이"
+              value={book.author}
+              onChange={(e) => patchBook({ author: e.target.value })}
+            />
+          </div>
+          <div className="book-form-row">
+            <input
+              placeholder="옮긴이"
+              value={book.translator ?? ''}
+              onChange={(e) => patchBook({ translator: e.target.value })}
+            />
+            <input
+              placeholder="출판사"
+              value={book.publisher ?? ''}
+              onChange={(e) => patchBook({ publisher: e.target.value })}
+            />
+          </div>
+          <div className="book-form-row">
+            <input
+              type="number"
+              min={0}
+              max={5}
+              step={0.5}
+              placeholder="평점"
+              value={book.rating ?? ''}
+              onChange={(e) =>
+                patchBook({
+                  rating:
+                    e.target.value === '' ? undefined : Number(e.target.value),
+                })
+              }
+            />
+            <input
+              placeholder="읽기 시작 (2026.07)"
+              value={book.readFrom ?? ''}
+              onChange={(e) => patchBook({ readFrom: e.target.value })}
+            />
+            <input
+              placeholder="완독 (2026.08)"
+              value={book.readTo ?? ''}
+              onChange={(e) => patchBook({ readTo: e.target.value })}
+            />
+          </div>
+          <input
+            placeholder="한 줄 평"
+            value={book.oneLiner ?? ''}
+            onChange={(e) => patchBook({ oneLiner: e.target.value })}
+          />
+
+          <div className="book-form-row cover">
+            <input
+              placeholder="표지 URL"
+              value={book.coverUrl ?? ''}
+              onChange={(e) => patchBook({ coverUrl: e.target.value })}
+            />
+            <label className="upload-btn">
+              표지 업로드
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={async (e) => {
+                  const file = e.target.files?.[0]
+                  if (!file) return
+                  patchBook({ coverUrl: await uploadImage(file) })
+                  e.target.value = ''
+                }}
+              />
+            </label>
+          </div>
+
+          <ListField
+            label="문장들"
+            rows={book.quotes}
+            blank={{ text: '' }}
+            onChange={(quotes) => patchBook({ quotes })}
+            render={(quote, patch) => (
+              <>
+                <input
+                  placeholder="문장"
+                  value={quote.text}
+                  onChange={(e) => patch({ text: e.target.value })}
+                />
+                <input
+                  className="narrow"
+                  placeholder="쪽"
+                  value={quote.page ?? ''}
+                  onChange={(e) => patch({ page: e.target.value })}
+                />
+              </>
+            )}
+          />
+
+          <ListField
+            label="목차"
+            rows={book.toc}
+            blank={{ title: '' }}
+            onChange={(toc) => patchBook({ toc })}
+            render={(entry, patch) => (
+              <>
+                <input
+                  placeholder="장 제목"
+                  value={entry.title}
+                  onChange={(e) => patch({ title: e.target.value })}
+                />
+                <input
+                  className="narrow"
+                  placeholder="메모"
+                  value={entry.note ?? ''}
+                  onChange={(e) => patch({ note: e.target.value })}
+                />
+              </>
+            )}
+          />
+        </div>
+      )}
+
       <Editor
         initialContent={post.content as JSONContent}
         onChange={(content) => {
@@ -157,6 +315,42 @@ function WritePage() {
         uploadImage={uploadImage}
         unfurl={unfurl}
       />
+    </div>
+  )
+}
+
+function ListField<T>({
+  label,
+  rows,
+  blank,
+  onChange,
+  render,
+}: {
+  label: string
+  rows: T[]
+  blank: T
+  onChange: (rows: T[]) => void
+  render: (row: T, patch: (patch: Partial<T>) => void) => React.ReactNode
+}) {
+  return (
+    <div className="book-list-field">
+      <span className="book-form-label">{label}</span>
+      {rows.map((row, i) => (
+        <div key={i} className="book-form-row">
+          {render(row, (patch) =>
+            onChange(rows.map((r, j) => (i === j ? { ...r, ...patch } : r))),
+          )}
+          <button
+            type="button"
+            onClick={() => onChange(rows.filter((_, j) => i !== j))}
+          >
+            −
+          </button>
+        </div>
+      ))}
+      <button type="button" onClick={() => onChange([...rows, blank])}>
+        + {label} 추가
+      </button>
     </div>
   )
 }
