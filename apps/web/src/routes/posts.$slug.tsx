@@ -175,14 +175,6 @@ function BookInfo({ id, book }: { id: number; book: Book }) {
         <BookCover id={id} book={book} />
       </div>
       <div className="book-meta">
-        <span className="book-title">{book.title}</span>
-        {book.rating != null && <StarRating rating={book.rating} />}
-        <dl className="book-fields">
-          <Field label="지은이" value={book.author} />
-          <Field label="옮긴이" value={book.translator} />
-          <Field label="출판사" value={book.publisher} />
-        </dl>
-        {book.oneLiner && <p className="book-oneliner">{book.oneLiner}</p>}
         {(book.readTo || period) && (
           <div className="book-chips">
             {book.readTo && (
@@ -196,6 +188,14 @@ function BookInfo({ id, book }: { id: number; book: Book }) {
             {period && <span className="chip">{period}</span>}
           </div>
         )}
+        <span className="book-title">{book.title}</span>
+        {book.rating != null && <StarRating rating={book.rating} />}
+        <dl className="book-fields">
+          <Field label="지은이" value={book.author} />
+          <Field label="옮긴이" value={book.translator} />
+          <Field label="출판사" value={book.publisher} />
+        </dl>
+        {book.oneLiner && <p className="book-oneliner">{book.oneLiner}</p>}
       </div>
     </section>
   )
@@ -242,6 +242,9 @@ function Toc({ book }: { book: Book }) {
       <ol>
         {book.toc.map((entry, i) => (
           <li key={i}>
+            <span className="toc-num" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
             <span className="toc-title">{entry.title}</span>
             {entry.note && (
               <>
