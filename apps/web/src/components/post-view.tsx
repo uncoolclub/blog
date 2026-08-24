@@ -83,7 +83,7 @@ export function PostView({
           <Quotes book={post.book} />
           <Toc book={post.book} />
           <section className="review-body">
-            <h2 className="review-section">서평</h2>
+            <h2 className="review-section">읽고 나서</h2>
             {prose}
           </section>
           {shelf.length > 0 && (
