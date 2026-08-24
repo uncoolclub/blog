@@ -6,6 +6,8 @@ export {
   FaceSketch,
   GithubIcon,
   MailIcon,
+  MoonIcon,
   RssIcon,
+  SunIcon,
   UserIcon,
 } from './icons'

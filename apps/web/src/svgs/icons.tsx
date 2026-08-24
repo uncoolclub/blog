@@ -56,6 +56,23 @@ export function MailIcon() {
   )
 }
 
+export function SunIcon() {
+  return (
+    <svg viewBox="0 0 16 16" className="sun" style={stroked}>
+      <circle cx="8" cy="8" r="3.1" />
+      <path d="M8 1.2v1.7M8 13.1v1.7M1.2 8h1.7M13.1 8h1.7M3.2 3.2l1.2 1.2M11.6 11.6l1.2 1.2M12.8 3.2l-1.2 1.2M4.4 11.6l-1.2 1.2" />
+    </svg>
+  )
+}
+
+export function MoonIcon() {
+  return (
+    <svg viewBox="0 0 16 16" className="moon" style={stroked}>
+      <path d="M13.4 9.6a5.6 5.6 0 1 1-7-7 4.5 4.5 0 0 0 7 7Z" />
+    </svg>
+  )
+}
+
 export function ChevronIcon({ dir }: { dir: 'left' | 'right' }) {
   return (
     <svg viewBox="0 0 16 16" style={{ ...stroked, strokeWidth: 1.8 }}>

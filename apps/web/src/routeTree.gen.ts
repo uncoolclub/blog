@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as BooksRouteImport } from './routes/books'
 import { Route as ApiUnfurlRouteImport } from './routes/api.unfurl'
 import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as PostsSlugRouteImport } from './routes/posts.$slug'
@@ -27,6 +28,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BooksRoute = BooksRouteImport.update({
+  id: '/books',
+  path: '/books',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiUnfurlRoute = ApiUnfurlRouteImport.update({
@@ -68,6 +74,7 @@ const WriteIdPreviewRoute = WriteIdPreviewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/books': typeof BooksRoute
   '/api/unfurl': typeof ApiUnfurlRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/books': typeof BooksRoute
   '/api/unfurl': typeof ApiUnfurlRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/books': typeof BooksRoute
   '/api/unfurl': typeof ApiUnfurlRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/books'
     | '/api/unfurl'
     | '/api/upload'
     | '/posts/$slug'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/books'
     | '/api/unfurl'
     | '/api/upload'
     | '/posts/$slug'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/books'
     | '/api/unfurl'
     | '/api/upload'
     | '/posts/$slug'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BooksRoute: typeof BooksRoute
   ApiUnfurlRoute: typeof ApiUnfurlRoute
   ApiUploadRoute: typeof ApiUploadRoute
   PostsSlugRoute: typeof PostsSlugRoute
@@ -161,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/books': {
+      id: '/books'
+      path: '/books'
+      fullPath: '/books'
+      preLoaderRoute: typeof BooksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/unfurl': {
@@ -218,6 +238,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BooksRoute: BooksRoute,
   ApiUnfurlRoute: ApiUnfurlRoute,
   ApiUploadRoute: ApiUploadRoute,
   PostsSlugRoute: PostsSlugRoute,

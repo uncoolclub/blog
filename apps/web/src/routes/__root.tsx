@@ -11,10 +11,26 @@ import {
   DocIcon,
   GithubIcon,
   MailIcon,
+  MoonIcon,
   RssIcon,
+  SunIcon,
   UserIcon,
   StarMark,
 } from '../svgs'
+
+const THEME_INIT = `try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`
+
+function toggleTheme() {
+  const root = document.documentElement
+  const dark = root.dataset.theme
+    ? root.dataset.theme === 'dark'
+    : matchMedia('(prefers-color-scheme: dark)').matches
+  const next = dark ? 'light' : 'dark'
+  root.dataset.theme = next
+  try {
+    localStorage.setItem('theme', next)
+  } catch {}
+}
 import appCss from '../styles.css?url'
 import editorCss from '@blog/editor/styles.css?url'
 
@@ -55,6 +71,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <HeadContent />
       </head>
       <body>
@@ -80,6 +97,16 @@ function RootLayout() {
           <Link to="/about" aria-label="소개" title="소개">
             <UserIcon />
           </Link>
+          <button
+            type="button"
+            className="theme-toggle"
+            aria-label="테마 전환"
+            title="테마 전환"
+            onClick={toggleTheme}
+          >
+            <SunIcon />
+            <MoonIcon />
+          </button>
         </nav>
       </header>
       <main>

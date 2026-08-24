@@ -102,10 +102,10 @@ function Home() {
         <section className="shelf">
           <div className="shelf-head">
             <span className="year">책장</span>
-            <span className="see-all">
+            <Link to="/books" className="see-all">
               전체 보기
               <ChevronIcon dir="right" />
-            </span>
+            </Link>
           </div>
           <div className="book-grid">
             {shelf.map((post) => (

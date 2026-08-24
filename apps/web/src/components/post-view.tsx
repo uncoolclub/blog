@@ -89,10 +89,10 @@ export function PostView({
             <section className="read-books">
               <div className="review-section-head">
                 <h2 className="review-section">읽었던 책</h2>
-                <span className="see-all">
+                <Link to="/books" className="see-all">
                   전체 보기
                   <ChevronIcon dir="right" />
-                </span>
+                </Link>
               </div>
               <div className="book-grid">
                 {shelf.map((p) => (
