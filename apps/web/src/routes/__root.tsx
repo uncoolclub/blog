@@ -4,6 +4,7 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  useLocation,
 } from '@tanstack/react-router'
 
 import {
@@ -65,6 +66,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 }
 
 function RootLayout() {
+  const pathname = useLocation({ select: (l) => l.pathname })
   return (
     <div className="shell">
       <header className="site-header">
@@ -83,28 +85,30 @@ function RootLayout() {
       <main>
         <Outlet />
       </main>
-      <footer className="site-footer">
-        <div className="left">
-          <StarMark small muted />
-          <span>© 2026</span>
-        </div>
-        <div className="links">
-          <a
-            href="https://github.com/uncoolclub"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-          >
-            <GithubIcon />
-          </a>
-          <a href="/rss.xml" aria-label="RSS">
-            <RssIcon />
-          </a>
-          <a href="mailto:marry@laftel.net" aria-label="메일">
-            <MailIcon />
-          </a>
-        </div>
-      </footer>
+      {pathname !== '/about' && (
+        <footer className="site-footer">
+          <div className="left">
+            <StarMark small muted />
+            <span>© 2026</span>
+          </div>
+          <div className="links">
+            <a
+              href="https://github.com/uncoolclub"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+            >
+              <GithubIcon />
+            </a>
+            <a href="/rss.xml" aria-label="RSS">
+              <RssIcon />
+            </a>
+            <a href="mailto:marry@laftel.net" aria-label="메일">
+              <MailIcon />
+            </a>
+          </div>
+        </footer>
+      )}
     </div>
   )
 }
