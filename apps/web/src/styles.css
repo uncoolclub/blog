@@ -756,7 +756,6 @@ img.book-cover,
 
 .quote-rail {
   display: flex;
-  align-items: flex-start;
   gap: 16px;
   overflow-x: auto;
   margin-inline-end: -20px;
@@ -814,6 +813,10 @@ img.book-cover,
   font-size: 16.5px;
   line-height: 1.9;
   color: var(--text);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 10;
+  overflow: hidden;
 }
 
 .quote-card figcaption {
