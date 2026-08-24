@@ -582,7 +582,10 @@ button.danger:hover {
   object-fit: cover;
 }
 
-img.book-cover {
+img.book-cover,
+.book-tile img.book-cover,
+.book-mini img.book-cover,
+.shelf-item img.book-cover {
   padding: 0;
   border-radius: 8px;
   outline: 1px solid rgba(25, 25, 28, 0.12);
