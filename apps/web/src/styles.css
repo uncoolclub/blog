@@ -582,8 +582,13 @@ button.danger:hover {
   object-fit: cover;
 }
 
+/* inset 그림자는 img 콘텐츠 아래에 깔려 안 보이므로 outline으로 경계를 그린다 */
 img.book-cover {
   padding: 0;
+  border-radius: 8px;
+  outline: 1px solid rgba(25, 25, 28, 0.12);
+  outline-offset: -1px;
+  box-shadow: 0 4px 12px rgba(25, 25, 28, 0.18);
 }
 
 .book-tile .book-cover {
