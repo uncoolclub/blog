@@ -582,7 +582,6 @@ button.danger:hover {
   object-fit: cover;
 }
 
-/* inset 그림자는 img 콘텐츠 아래에 깔려 안 보이므로 outline으로 경계를 그린다 */
 img.book-cover {
   padding: 0;
   border-radius: 8px;
