@@ -809,10 +809,11 @@ img.book-cover {
   scroll-snap-align: start;
 }
 
+/* 장식 따옴표는 한글 바탕체의 전각 글리프가 빈약해서 라틴 세리프 글리프를 쓴다 */
 .quote-mark {
-  font-family: var(--font-serif);
-  font-size: 44px;
-  line-height: 0.55;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 64px;
+  line-height: 0.4;
   color: var(--accent);
 }
 
