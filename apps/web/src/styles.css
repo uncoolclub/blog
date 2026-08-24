@@ -23,7 +23,8 @@
   --font-sans: system-ui, 'Helvetica Neue', 'Apple SD Gothic Neo',
     'Pretendard Variable', Pretendard, sans-serif;
   --font-label: 'Space Grotesk', 'Helvetica Neue', system-ui, sans-serif;
-  --font-serif: 'Noto Serif KR', 'Apple SD Gothic Neo', Georgia, serif;
+  --font-serif: 'Gowun Batang', 'Noto Serif KR', 'Apple SD Gothic Neo', Georgia,
+    serif;
   --font-mono: 'SF Mono', ui-monospace, 'IBM Plex Mono', Menlo, monospace;
 
   --content-width: 672px;
@@ -810,9 +811,15 @@ img.book-cover {
 
 .quote-mark {
   font-family: var(--font-serif);
-  font-size: 30px;
-  line-height: 0.5;
+  font-size: 44px;
+  line-height: 0.55;
   color: var(--accent);
+}
+
+/* 서평 본문 안의 제목은 바탕체로 — 마무리 문장 같은 시적 강조 용도 */
+.review-body .prose h2 {
+  font-family: var(--font-serif);
+  font-weight: 700;
 }
 
 .quote-card blockquote {
