@@ -537,16 +537,23 @@ button.danger:hover {
   margin-top: 44px;
 }
 
-/* 홈 썸네일과 같은 파스텔 타일 위에 표지를 얹는다 */
+/* 표지에서 뽑은 주조색이 있으면 그 단색, 없으면 홈 썸네일과 같은 파스텔 타일 */
 .book-tile {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 232px;
-  height: 248px;
+  height: 296px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%);
+  background: var(--cover-color, linear-gradient(135deg, #e6ecff 0%, #c9d6ff 100%));
+}
+
+@media (prefers-color-scheme: dark) {
+  /* 원색 그대로면 어두운 지면에서 쨍하다. --bg를 섞어 눌러 준다 */
+  .book-tile[data-cover-color] {
+    background: color-mix(in srgb, var(--cover-color) 55%, var(--bg));
+  }
 }
 
 .book-cover {
@@ -554,15 +561,21 @@ button.danger:hover {
   flex-direction: column;
   justify-content: space-between;
   gap: 8px;
+  aspect-ratio: 2 / 3;
   border-radius: 5px;
   padding: 17px 15px;
   box-shadow: 0 14px 28px rgba(37, 44, 84, 0.32);
   object-fit: cover;
 }
 
+/* 이미지 표지는 안쪽 여백 없이 꽉 채운다 (패딩은 폴백 표지의 글자 자리) */
+img.book-cover {
+  padding: 0;
+}
+
 .book-tile .book-cover {
-  width: 126px;
-  height: 182px;
+  width: auto;
+  height: 232px;
 }
 
 .book-cover-title {
@@ -731,10 +744,30 @@ button.danger:hover {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  /* 672px 컬럼 밖까지 흘려 잘린 카드가 스크롤을 암시하게 한다 */
-  margin-inline: -20px;
-  padding: 2px 20px;
+  /* 첫 카드 왼쪽은 본문 컬럼에 맞추고, 오른쪽만 셸 끝까지 흘려
+     잘린 카드가 스크롤을 암시하게 한다 */
+  margin-inline-end: -20px;
+  padding: 2px 20px 14px 0;
   scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.quote-rail::-webkit-scrollbar {
+  height: 5px;
+}
+
+.quote-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quote-rail::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+.quote-rail::-webkit-scrollbar-thumb:hover {
+  background: var(--text-4);
 }
 
 .quote-card {
@@ -868,7 +901,6 @@ button.danger:hover {
 }
 
 .book-mini .book-cover {
-  height: 150px;
   padding: 13px 12px;
   box-shadow: 0 4px 10px rgba(26, 46, 40, 0.16);
 }
@@ -929,7 +961,6 @@ button.danger:hover {
 }
 
 .shelf-item .book-cover {
-  height: 216px;
   border-radius: 6px;
   padding: 18px 15px;
   box-shadow: 0 4px 12px rgba(30, 36, 66, 0.18);
@@ -1699,8 +1730,19 @@ button.danger:hover {
   gap: 8px;
 }
 
-.book-form-row.cover .upload-btn {
+.book-form-row.cover .upload-btn,
+.book-form-row.cover .color-field {
   flex-shrink: 0;
+}
+
+.color-field input[type='color'] {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  padding: 2px;
+  cursor: pointer;
 }
 
 .upload-btn {

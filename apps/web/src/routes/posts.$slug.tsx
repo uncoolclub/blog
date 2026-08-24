@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef } from 'react'
+import type { CSSProperties } from 'react'
 import { getPublishedPost, listPublishedPosts } from '../server/posts'
 import type { Book } from '../server/posts'
 import { BookCover, StarRating } from '../components/book'
@@ -162,7 +163,15 @@ function BookInfo({ id, book }: { id: number; book: Book }) {
   const period = [book.readFrom, book.readTo].filter(Boolean).join(' ~ ')
   return (
     <section className="book-info">
-      <div className="book-tile">
+      <div
+        className="book-tile"
+        data-cover-color={book.coverColor ? '' : undefined}
+        style={
+          book.coverColor
+            ? ({ '--cover-color': book.coverColor } as CSSProperties)
+            : undefined
+        }
+      >
         <BookCover id={id} book={book} />
       </div>
       <div className="book-meta">
@@ -206,7 +215,7 @@ function Quotes({ book }: { book: Book }) {
   if (book.quotes.length === 0) return null
   return (
     <section className="quotes">
-      <h2 className="review-section">마음을 이끈 문장들</h2>
+      <h2 className="review-section">문장 수집</h2>
       <div className="quote-rail">
         {book.quotes.map((quote, i) => (
           <figure key={i} className="quote-card">

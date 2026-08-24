@@ -10,6 +10,7 @@ import {
   unpublishPost,
 } from '../server/posts'
 import type { Book } from '../server/posts'
+import { dominantColor } from '../lib/dominant-color'
 
 export const Route = createFileRoute('/write/$id')({
   params: {
@@ -75,6 +76,17 @@ function WritePage() {
   const patchBook = useCallback(
     (patch: Partial<Book>) => setBook({ ...(book ?? EMPTY_BOOK), ...patch }),
     [book, setBook],
+  )
+
+  // 표지가 정해지는 순간에만 주조색을 다시 뽑는다. 추출이 실패하면(외부 URL의
+  // canvas 오염 등) 기존 값을 그대로 두고 수동 보정에 맡긴다.
+  const pickCoverColor = useCallback(
+    async (coverUrl: string) => {
+      if (!coverUrl) return
+      const coverColor = await dominantColor(coverUrl)
+      if (coverColor) patchBook({ coverUrl, coverColor })
+    },
+    [patchBook],
   )
 
   async function onPublish() {
@@ -243,6 +255,7 @@ function WritePage() {
               placeholder="표지 URL"
               value={book.coverUrl ?? ''}
               onChange={(e) => patchBook({ coverUrl: e.target.value })}
+              onBlur={(e) => void pickCoverColor(e.target.value)}
             />
             <label className="upload-btn">
               표지 업로드
@@ -253,15 +266,24 @@ function WritePage() {
                 onChange={async (e) => {
                   const file = e.target.files?.[0]
                   if (!file) return
-                  patchBook({ coverUrl: await uploadImage(file) })
+                  const coverUrl = await uploadImage(file)
+                  patchBook({ coverUrl })
                   e.target.value = ''
+                  await pickCoverColor(coverUrl)
                 }}
+              />
+            </label>
+            <label className="color-field" title="타일 배경색 (표지에서 자동 추출)">
+              <input
+                type="color"
+                value={book.coverColor ?? '#c9d6ff'}
+                onChange={(e) => patchBook({ coverColor: e.target.value })}
               />
             </label>
           </div>
 
           <ListField
-            label="문장들"
+            label="문장 수집"
             rows={book.quotes}
             blank={{ text: '' }}
             onChange={(quotes) => patchBook({ quotes })}
@@ -349,7 +371,7 @@ function ListField<T>({
         </div>
       ))}
       <button type="button" onClick={() => onChange([...rows, blank])}>
-        + {label} 추가
+        + 추가
       </button>
     </div>
   )

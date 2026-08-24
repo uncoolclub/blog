@@ -39,6 +39,7 @@ export interface Book {
   translator?: string
   publisher?: string
   coverUrl?: string
+  coverColor?: string
   rating?: number
   readFrom?: string
   readTo?: string
