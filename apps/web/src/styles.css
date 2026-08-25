@@ -2016,3 +2016,9 @@ img.book-cover,
 .shell.no-footer > main {
   padding-bottom: 96px;
 }
+
+.prose em {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-size: 1.03em;
+}
