@@ -2012,3 +2012,7 @@ img.book-cover,
     stroke 0.25s ease,
     outline-color 0.25s ease !important;
 }
+
+.shell.no-footer > main {
+  padding-bottom: 96px;
+}

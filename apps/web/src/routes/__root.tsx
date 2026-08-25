@@ -86,8 +86,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
 function RootLayout() {
   const pathname = useLocation({ select: (l) => l.pathname })
+  const hideFooter = pathname === '/about'
   return (
-    <div className="shell">
+    <div className={hideFooter ? 'shell no-footer' : 'shell'}>
       <header className="site-header">
         <Link to="/" aria-label="홈으로">
           <StarMark />
@@ -114,7 +115,7 @@ function RootLayout() {
       <main>
         <Outlet />
       </main>
-      {pathname !== '/about' && (
+      {!hideFooter && (
         <footer className="site-footer">
           <div className="left">
             <StarMark small muted />
