@@ -35,30 +35,65 @@ function toggleTheme() {
 }
 import appCss from '../styles.css?url'
 import editorCss from '@blog/editor/styles.css?url'
+import {
+  CF_BEACON_TOKEN,
+  DEFAULT_OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  absoluteUrl,
+} from '../lib/site'
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: '양수빈 블로그' },
-    ],
-    links: [
-      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-        crossOrigin: 'anonymous',
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Gowun+Batang:wght@400;700&display=swap',
-      },
-      { rel: 'stylesheet', href: appCss },
-      { rel: 'stylesheet', href: editorCss },
-    ],
-  }),
+  head: ({ matches }) => {
+    const url = absoluteUrl(matches.at(-1)?.pathname ?? '/')
+    return {
+      meta: [
+        { charSet: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { title: SITE_NAME },
+        { name: 'description', content: SITE_DESCRIPTION },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: SITE_NAME },
+        { property: 'og:description', content: SITE_DESCRIPTION },
+        { property: 'og:url', content: url },
+        { property: 'og:image', content: absoluteUrl(DEFAULT_OG_IMAGE) },
+        { property: 'og:site_name', content: SITE_NAME },
+        { property: 'og:locale', content: 'ko_KR' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+      ],
+      links: [
+        { rel: 'canonical', href: url },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        {
+          rel: 'alternate',
+          type: 'application/rss+xml',
+          title: SITE_NAME,
+          href: absoluteUrl('/rss.xml'),
+        },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossOrigin: 'anonymous',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Gowun+Batang:wght@400;700&display=swap',
+        },
+        { rel: 'stylesheet', href: appCss },
+        { rel: 'stylesheet', href: editorCss },
+      ],
+      scripts: CF_BEACON_TOKEN
+        ? [
+            {
+              defer: true,
+              src: 'https://static.cloudflareinsights.com/beacon.min.js',
+              'data-cf-beacon': JSON.stringify({ token: CF_BEACON_TOKEN }),
+            },
+          ]
+        : [],
+    }
+  },
   shellComponent: RootDocument,
   component: RootLayout,
   notFoundComponent: () => (

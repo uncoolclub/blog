@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /write
+
+Sitemap: https://blog.th3shu.dev/sitemap.xml

@@ -4,6 +4,8 @@ import { getPublishedPost, listPublishedPosts } from '../server/posts'
 import { PostView } from '../components/post-view'
 import { Comments } from '../components/comments'
 import { ChevronIcon } from '../svgs'
+import { SITE_NAME, absoluteUrl, toDate } from '../lib/site'
+
 
 export const Route = createFileRoute('/posts/$slug')({
   loader: async ({ params }) => {
@@ -13,9 +15,37 @@ export const Route = createFileRoute('/posts/$slug')({
     ])
     return { post, list }
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: `${loaderData?.post.title ?? '글'} · 양수빈 블로그` }],
-  }),
+  head: ({ loaderData }) => {
+    const post = loaderData?.post
+    if (!post) return { meta: [{ title: `글 · ${SITE_NAME}` }] }
+    const title = `${post.title} · ${SITE_NAME}`
+    const description = post.book?.oneLiner || post.excerpt
+    const image = post.cover ?? post.book?.coverUrl
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:type', content: 'article' },
+        { property: 'og:title', content: post.title },
+        { property: 'og:description', content: description },
+        ...(image
+          ? [{ property: 'og:image', content: absoluteUrl(image) }]
+          : []),
+        ...(post.publishedAt
+          ? [
+              {
+                property: 'article:published_time',
+                content: toDate(post.publishedAt).toISOString(),
+              },
+            ]
+          : []),
+        {
+          property: 'article:modified_time',
+          content: toDate(post.updatedAt).toISOString(),
+        },
+      ],
+    }
+  },
   component: PostPage,
 })
 

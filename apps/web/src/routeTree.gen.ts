@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BooksRouteImport } from './routes/books'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ApiUnfurlRouteImport } from './routes/api.unfurl'
 import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as PostsSlugRouteImport } from './routes/posts.$slug'
@@ -33,6 +35,16 @@ const AboutRoute = AboutRouteImport.update({
 const BooksRoute = BooksRouteImport.update({
   id: '/books',
   path: '/books',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiUnfurlRoute = ApiUnfurlRouteImport.update({
@@ -75,6 +87,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/books': typeof BooksRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/unfurl': typeof ApiUnfurlRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
@@ -87,6 +101,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/books': typeof BooksRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/unfurl': typeof ApiUnfurlRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
@@ -100,6 +116,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/books': typeof BooksRoute
+  '/rss.xml': typeof RssDotxmlRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/unfurl': typeof ApiUnfurlRoute
   '/api/upload': typeof ApiUploadRoute
   '/posts/$slug': typeof PostsSlugRoute
@@ -114,6 +132,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/books'
+    | '/rss.xml'
+    | '/sitemap.xml'
     | '/api/unfurl'
     | '/api/upload'
     | '/posts/$slug'
@@ -126,6 +146,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/books'
+    | '/rss.xml'
+    | '/sitemap.xml'
     | '/api/unfurl'
     | '/api/upload'
     | '/posts/$slug'
@@ -138,6 +160,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/books'
+    | '/rss.xml'
+    | '/sitemap.xml'
     | '/api/unfurl'
     | '/api/upload'
     | '/posts/$slug'
@@ -151,6 +175,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BooksRoute: typeof BooksRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiUnfurlRoute: typeof ApiUnfurlRoute
   ApiUploadRoute: typeof ApiUploadRoute
   PostsSlugRoute: typeof PostsSlugRoute
@@ -181,6 +207,20 @@ declare module '@tanstack/react-router' {
       path: '/books'
       fullPath: '/books'
       preLoaderRoute: typeof BooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/unfurl': {
@@ -239,6 +279,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BooksRoute: BooksRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiUnfurlRoute: ApiUnfurlRoute,
   ApiUploadRoute: ApiUploadRoute,
   PostsSlugRoute: PostsSlugRoute,

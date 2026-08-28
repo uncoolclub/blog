@@ -127,7 +127,7 @@ function firstImage(node: JSONContent): string | null {
   return null
 }
 
-export const listPublishedPosts = createServerFn().handler(async () => {
+export const queryPublishedRows = createServerOnlyFn(async () => {
   const { results } = await db()
     .prepare(
       `SELECT id, slug, title, status, published_at, updated_at, content, book
@@ -135,6 +135,11 @@ export const listPublishedPosts = createServerFn().handler(async () => {
        ORDER BY published_at DESC`,
     )
     .all<PostListItem & { content: string; book: string | null }>()
+  return results
+})
+
+export const listPublishedPosts = createServerFn().handler(async () => {
+  const results = await queryPublishedRows()
   return results.map(({ content, book, ...post }) => {
     const doc = JSON.parse(content) as JSONContent
     return {
@@ -147,12 +152,16 @@ export const listPublishedPosts = createServerFn().handler(async () => {
 })
 
 function toPostDetail(row: PostRow) {
+  const doc = JSON.parse(row.content) as JSONContent
   return {
     id: row.id,
     slug: row.slug,
     title: row.title,
     publishedAt: row.published_at,
-    html: renderPostHTML(JSON.parse(row.content) as JSONContent),
+    updatedAt: row.updated_at,
+    excerpt: extractExcerpt(doc),
+    cover: firstImage(doc),
+    html: renderPostHTML(doc),
     book: parseBook(row.book),
   }
 }
