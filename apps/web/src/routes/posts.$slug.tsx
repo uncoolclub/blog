@@ -4,8 +4,7 @@ import { getPublishedPost, listPublishedPosts } from '../server/posts'
 import { PostView } from '../components/post-view'
 import { Comments } from '../components/comments'
 import { ChevronIcon } from '../svgs'
-import { SITE_NAME, absoluteUrl, toDate } from '../lib/site'
-
+import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl, toDate } from '../lib/site'
 
 export const Route = createFileRoute('/posts/$slug')({
   loader: async ({ params }) => {
@@ -15,13 +14,33 @@ export const Route = createFileRoute('/posts/$slug')({
     ])
     return { post, list }
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const post = loaderData?.post
     if (!post) return { meta: [{ title: `글 · ${SITE_NAME}` }] }
     const title = `${post.title} · ${SITE_NAME}`
     const description = post.book?.oneLiner || post.excerpt
     const image = post.cover ?? post.book?.coverUrl
+    const author = { '@type': 'Person', name: '양수빈', url: absoluteUrl('/about') }
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description,
+      image: absoluteUrl(image ?? DEFAULT_OG_IMAGE),
+      datePublished: post.publishedAt
+        ? toDate(post.publishedAt).toISOString()
+        : undefined,
+      dateModified: toDate(post.updatedAt).toISOString(),
+      author,
+      publisher: author,
+      mainEntityOfPage: absoluteUrl(`/posts/${params.slug}`),
+      inLanguage: 'ko',
+      ...(post.book && {
+        about: { '@type': 'Book', name: post.book.title, author: post.book.author },
+      }),
+    }
     return {
+      scripts: [{ type: 'application/ld+json', children: JSON.stringify(jsonLd) }],
       meta: [
         { title },
         { name: 'description', content: description },

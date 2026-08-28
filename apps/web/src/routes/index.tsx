@@ -28,6 +28,7 @@ function Home() {
 
   return (
     <>
+      <h1 className="sr-only">양수빈 블로그</h1>
       {featured && (
         <Link
           to="/posts/$slug"

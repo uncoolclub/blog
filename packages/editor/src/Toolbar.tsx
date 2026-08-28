@@ -116,6 +116,7 @@ export function Toolbar({
         ? {
             align: (editor.getAttributes('image').align as string | null) ?? null,
             width: (editor.getAttributes('image').width as number | null) ?? null,
+            alt: (editor.getAttributes('image').alt as string | null) ?? '',
           }
         : null,
     }),
@@ -206,6 +207,19 @@ export function Toolbar({
               {w.label}
             </button>
           ))}
+          <input
+            className="blog-editor-alt"
+            type="text"
+            placeholder="대체 텍스트"
+            title="대체 텍스트"
+            aria-label="대체 텍스트"
+            value={state.image.alt}
+            onChange={(e) =>
+              editor.commands.updateAttributes('image', {
+                alt: e.target.value || null,
+              })
+            }
+          />
         </>
       )}
     </div>

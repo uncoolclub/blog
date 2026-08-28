@@ -66,6 +66,22 @@
   color: var(--text);
 }
 
+.blog-editor-alt {
+  flex: 1 1 160px;
+  min-width: 120px;
+  height: 32px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 7px;
+  background: var(--hover);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.blog-editor-alt:focus {
+  outline: 2px solid var(--accent-soft);
+}
+
 .blog-editor-toolbar button:hover,
 .blog-editor-image-button:hover {
   background: var(--hover);
