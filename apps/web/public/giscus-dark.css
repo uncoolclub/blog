@@ -26,22 +26,20 @@ main {
   font-family: system-ui, 'Helvetica Neue', 'Apple SD Gothic Neo', 'Pretendard Variable', Pretendard, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  main {
-    --color-fg-default: #ececf0;
-    --color-fg-muted: #b6b6bf;
-    --color-fg-subtle: #8b8b94;
-    --color-canvas-inset: #1b1b1f;
-    --color-canvas-subtle: #1b1b1f;
-    --color-border-default: #26262b;
-    --color-border-muted: #1f1f24;
-    --color-accent-subtle: #1a2350;
-    --color-btn-primary-bg: #ececf0;
-    --color-btn-primary-text: #111113;
-    --color-btn-primary-hover-bg: #d6d6dc;
-    --color-btn-bg: #1b1b1f;
-    --color-btn-hover-bg: #232327;
-  }
+main {
+  --color-fg-default: #ececf0;
+  --color-fg-muted: #b6b6bf;
+  --color-fg-subtle: #8b8b94;
+  --color-canvas-inset: #1b1b1f;
+  --color-canvas-subtle: #1b1b1f;
+  --color-border-default: #26262b;
+  --color-border-muted: #1f1f24;
+  --color-accent-subtle: #1a2350;
+  --color-btn-primary-bg: #ececf0;
+  --color-btn-primary-text: #111113;
+  --color-btn-primary-hover-bg: #d6d6dc;
+  --color-btn-bg: #1b1b1f;
+  --color-btn-hover-bg: #232327;
 }
 
 /* 라운드•헤어라인 정리 */
