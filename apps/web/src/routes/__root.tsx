@@ -168,7 +168,7 @@ function RootLayout() {
             <a href="/rss.xml" aria-label="RSS">
               <RssIcon />
             </a>
-            <a href="mailto:marry@laftel.net" aria-label="메일">
+            <a href="mailto:azxq1000@gmail.com" aria-label="메일">
               <MailIcon />
             </a>
           </div>

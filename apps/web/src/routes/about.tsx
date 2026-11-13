@@ -13,10 +13,9 @@ const CAREER = [
     org: '라프텔',
     role: 'Frontend Engineer',
     start: '2024.01',
-    end: null,
+    end: '2026.11',
     color: '#8068f8',
     logo: '/logos/laftel.png',
-    bar: { left: '50%', right: '0%' },
   },
   {
     org: '반지하게임즈',
@@ -25,7 +24,6 @@ const CAREER = [
     end: '2023.11',
     color: '#2eb8d8',
     logo: '/logos/banjiha.png',
-    bar: { left: '9.7%', width: '37.5%' },
   },
   {
     org: '겟차',
@@ -34,19 +32,24 @@ const CAREER = [
     end: '2021.08',
     color: '#e0402e',
     logo: '/logos/getcha.png',
-    bar: { left: '0%', minWidth: '9.7%' },
   },
 ]
 
-const YEARS = ['2021', '2022', '2023', '2024', '2025', '2026']
+const AXIS_START_YEAR = 2021
+
+function toMonthIndex(ym: string): number {
+  const [y, m] = ym.split('.').map(Number)
+  return y * 12 + (m - 1)
+}
+
+function currentMonthIndex(): number {
+  const now = new Date()
+  return now.getFullYear() * 12 + now.getMonth()
+}
 
 function formatPeriod(start: string, end: string | null): string {
-  const [sy, sm] = start.split('.').map(Number)
-  const now = new Date()
-  const [ey, em] = end
-    ? end.split('.').map(Number)
-    : [now.getFullYear(), now.getMonth() + 1]
-  const months = (ey - sy) * 12 + (em - sm)
+  const months =
+    (end ? toMonthIndex(end) : currentMonthIndex()) - toMonthIndex(start)
   const y = Math.floor(months / 12)
   const m = months % 12
   const dur = [y > 0 && `${y}년`, m > 0 && `${m}개월`].filter(Boolean).join(' ')
@@ -54,6 +57,15 @@ function formatPeriod(start: string, end: string | null): string {
 }
 
 function About() {
+  const lastYear = new Date().getFullYear()
+  const years = Array.from(
+    { length: lastYear - AXIS_START_YEAR + 1 },
+    (_, i) => String(AXIS_START_YEAR + i),
+  )
+  const axisStart = AXIS_START_YEAR * 12
+  const axisMonths = years.length * 12
+  const pct = (months: number) => `${(months * 100) / axisMonths}%`
+
   return (
     <article>
       <div className="about-head">
@@ -101,18 +113,18 @@ function About() {
         <span className="section-label">Experience</span>
         <div>
           <div className="gantt-axis">
-            {YEARS.map((y, i) => (
-              <span key={y} style={{ left: `${(i * 100) / 6}%` }}>
+            {years.map((y, i) => (
+              <span key={y} style={{ left: pct(i * 12) }}>
                 {y}
               </span>
             ))}
           </div>
           <div className="gantt-chart">
-            {YEARS.slice(1).map((y, i) => (
+            {years.slice(1).map((y, i) => (
               <span
                 key={y}
                 className="gantt-grid"
-                style={{ left: `${((i + 1) * 100) / 6}%` }}
+                style={{ left: pct((i + 1) * 12) }}
               />
             ))}
             {CAREER.map((c) => (
@@ -122,7 +134,11 @@ function About() {
                   style={{
                     background: `color-mix(in srgb, ${c.color} 14%, var(--bg))`,
                     color: c.color,
-                    ...c.bar,
+                    left: pct(toMonthIndex(c.start) - axisStart),
+                    minWidth: pct(
+                      (c.end ? toMonthIndex(c.end) : currentMonthIndex()) -
+                        toMonthIndex(c.start),
+                    ),
                   }}
                 >
                   <img src={c.logo} alt="" />
