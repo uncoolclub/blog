@@ -1102,6 +1102,8 @@ img.book-cover,
   font-size: 16px;
   line-height: 1.85;
   color: var(--text-2);
+  word-break: keep-all;
+  overflow-wrap: break-word;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -1216,6 +1218,24 @@ img.book-cover,
   font-family: var(--font-label);
   font-size: 12px;
   color: var(--text-4);
+}
+
+.gantt-legend .org,
+.gantt-legend .role,
+.gantt-legend .period {
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .gantt-legend > div {
+    flex-wrap: wrap;
+    row-gap: 2px;
+  }
+
+  .gantt-legend .period {
+    flex-basis: 100%;
+    margin-left: 19px;
+  }
 }
 
 /* 연락 */

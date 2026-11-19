@@ -8,7 +8,22 @@ export const Route = createFileRoute('/about')({
   component: About,
 })
 
-const CAREER = [
+const CAREER: {
+  org: string
+  role: string
+  start: string
+  end: string | null
+  color: string
+  logo: string
+}[] = [
+  {
+    org: '네이버웹툰',
+    role: 'Frontend Engineer',
+    start: '2026.11',
+    end: null,
+    color: '#00dc64',
+    logo: '/logos/naverwebtoon.png',
+  },
   {
     org: '라프텔',
     role: 'Frontend Engineer',
@@ -53,7 +68,7 @@ function formatPeriod(start: string, end: string | null): string {
   const y = Math.floor(months / 12)
   const m = months % 12
   const dur = [y > 0 && `${y}년`, m > 0 && `${m}개월`].filter(Boolean).join(' ')
-  return `${start} — ${end ?? '현재'} (${dur})`
+  return `${start} — ${end ?? '현재'}${dur ? ` (${dur})` : ''}`
 }
 
 function About() {
@@ -127,25 +142,31 @@ function About() {
                 style={{ left: pct((i + 1) * 12) }}
               />
             ))}
-            {CAREER.map((c) => (
-              <div key={c.org} className="gantt-lane">
-                <span
-                  className="gantt-pill"
-                  style={{
-                    background: `color-mix(in srgb, ${c.color} 14%, var(--bg))`,
-                    color: c.color,
-                    left: pct(toMonthIndex(c.start) - axisStart),
-                    minWidth: pct(
-                      (c.end ? toMonthIndex(c.end) : currentMonthIndex()) -
-                        toMonthIndex(c.start),
-                    ),
-                  }}
-                >
-                  <img src={c.logo} alt="" />
-                  {c.org}
-                </span>
-              </div>
-            ))}
+            {CAREER.map((c) => {
+              const startAt = toMonthIndex(c.start) - axisStart
+              const endAt =
+                (c.end ? toMonthIndex(c.end) : currentMonthIndex()) - axisStart
+              const anchor =
+                startAt * 2 >= axisMonths
+                  ? { right: pct(axisMonths - endAt) }
+                  : { left: pct(startAt) }
+              return (
+                <div key={c.org} className="gantt-lane">
+                  <span
+                    className="gantt-pill"
+                    style={{
+                      background: `color-mix(in srgb, ${c.color} 14%, var(--bg))`,
+                      color: c.color,
+                      ...anchor,
+                      minWidth: pct(endAt - startAt),
+                    }}
+                  >
+                    <img src={c.logo} alt="" />
+                    {c.org}
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
         <div className="gantt-legend">
