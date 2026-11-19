@@ -1157,20 +1157,50 @@ img.book-cover,
   height: 38px;
 }
 
+.gantt-grid.minor {
+  background: none;
+  border-left: 1px dashed var(--border-soft);
+  opacity: 0.6;
+}
+
 .gantt-pill {
   position: absolute;
   top: 5px;
   height: 27px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 9px;
+  min-width: 4px;
+  box-sizing: border-box;
   border-radius: 8px;
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  overflow: hidden;
+}
+
+.gantt-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 9px;
+  box-sizing: border-box;
+}
+
+.gantt-pill[data-outside] {
+  border-radius: 4px;
+}
+
+.gantt-pill[data-outside='before'] .gantt-label {
+  left: auto;
+  right: 100%;
+  padding: 0 6px 0 0;
+}
+
+.gantt-pill[data-outside='after'] .gantt-label {
+  left: 100%;
+  padding: 0 0 0 6px;
 }
 
 .gantt-pill img {

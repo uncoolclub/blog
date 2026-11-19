@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { FaceSketch, GithubIcon, MailIcon } from '../svgs'
 
 export const Route = createFileRoute('/about')({
@@ -49,6 +50,59 @@ const CAREER: {
     logo: '/logos/getcha.png',
   },
 ]
+
+type Career = (typeof CAREER)[number]
+
+function GanttLane({
+  career: c,
+  left,
+  width,
+  labelSide,
+}: {
+  career: Career
+  left: string
+  width: string
+  labelSide: 'before' | 'after'
+}) {
+  const barRef = useRef<HTMLSpanElement>(null)
+  const labelRef = useRef<HTMLSpanElement>(null)
+  const [outside, setOutside] = useState(false)
+
+  useEffect(() => {
+    const bar = barRef.current
+    const label = labelRef.current
+    if (!bar || !label) return
+    const fit = () => {
+      const padding = bar.dataset.outside ? 12 : 0
+      setOutside(label.offsetWidth + padding > bar.offsetWidth)
+    }
+    fit()
+    const observer = new ResizeObserver(fit)
+    observer.observe(bar)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div className="gantt-lane">
+      <span
+        ref={barRef}
+        className="gantt-pill"
+        data-outside={outside ? labelSide : undefined}
+        style={{
+          background: `color-mix(in srgb, ${c.color} ${outside ? 45 : 14}%, var(--bg))`,
+          color: c.color,
+          left,
+          width,
+        }}
+      >
+        <span ref={labelRef} className="gantt-label">
+          <img src={c.logo} alt="" />
+          {c.org}
+        </span>
+      </span>
+    </div>
+  )
+}
 
 const AXIS_START_YEAR = 2021
 
@@ -135,36 +189,30 @@ function About() {
             ))}
           </div>
           <div className="gantt-chart">
-            {years.slice(1).map((y, i) => (
-              <span
-                key={y}
-                className="gantt-grid"
-                style={{ left: pct((i + 1) * 12) }}
-              />
+            {years.map((y, i) => (
+              <Fragment key={y}>
+                {i > 0 && (
+                  <span className="gantt-grid" style={{ left: pct(i * 12) }} />
+                )}
+                <span
+                  className="gantt-grid minor"
+                  style={{ left: pct(i * 12 + 6) }}
+                />
+              </Fragment>
             ))}
             {CAREER.map((c) => {
               const startAt = toMonthIndex(c.start) - axisStart
               const endAt =
-                (c.end ? toMonthIndex(c.end) : currentMonthIndex()) - axisStart
-              const anchor =
-                startAt * 2 >= axisMonths
-                  ? { right: pct(axisMonths - endAt) }
-                  : { left: pct(startAt) }
+                (c.end ? toMonthIndex(c.end) : currentMonthIndex() + 1) -
+                axisStart
               return (
-                <div key={c.org} className="gantt-lane">
-                  <span
-                    className="gantt-pill"
-                    style={{
-                      background: `color-mix(in srgb, ${c.color} 14%, var(--bg))`,
-                      color: c.color,
-                      ...anchor,
-                      minWidth: pct(endAt - startAt),
-                    }}
-                  >
-                    <img src={c.logo} alt="" />
-                    {c.org}
-                  </span>
-                </div>
+                <GanttLane
+                  key={c.org}
+                  career={c}
+                  left={pct(startAt)}
+                  width={pct(endAt - startAt)}
+                  labelSide={startAt * 2 >= axisMonths ? 'before' : 'after'}
+                />
               )
             })}
           </div>
