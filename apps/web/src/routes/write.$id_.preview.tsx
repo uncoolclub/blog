@@ -30,16 +30,6 @@ function PreviewPage() {
   )
 
   return (
-    <PostView
-      post={post}
-      shelf={shelf}
-      banner={
-        <div className="preview-banner">
-          <span className="chip">
-            {post.publishedAt ? '미리보기' : '미리보기 · 발행되지 않은 초안'}
-          </span>
-        </div>
-      }
-    />
+    <PostView post={post} shelf={shelf} preview />
   )
 }

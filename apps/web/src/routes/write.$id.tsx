@@ -11,7 +11,16 @@ import {
 } from '../server/posts'
 import type { Book } from '../server/posts'
 import { BookPicker } from '../components/book-picker'
+import {
+  DateField,
+  Modal,
+  QuoteSection,
+  StarInput,
+  TocSection,
+  growTextarea,
+} from '../components/review-fields'
 import { dominantColor } from '../lib/dominant-color'
+import { BackIcon, TrashIcon } from '../svgs'
 import { isKakaoCover } from '../lib/kakao-book'
 import type { BookSearchResult } from '../lib/kakao-book'
 
@@ -44,9 +53,7 @@ function WritePage() {
   const [status, setStatus] = useState(post.status)
   const [slug, setSlug] = useState(post.slug ?? '')
   const [book, setBookState] = useState<Book | null>(post.book)
-  const [biblioOpen, setBiblioOpen] = useState(
-    post.book !== null && !post.book.title,
-  )
+  const [biblioOpen, setBiblioOpen] = useState(false)
   const [saveState, setSaveState] = useState<SaveState>('saved')
 
   const latest = useRef({
@@ -112,9 +119,33 @@ function WritePage() {
     [patchBook],
   )
 
+  const loadToc = useCallback(
+    async (isbn: string | undefined, replace: boolean) => {
+      if (!isbn) return
+      const res = await fetch(`/api/books/toc?isbn=${isbn}`).catch(() => null)
+      if (!res?.ok) return
+      const { toc, itemId } = (await res.json()) as {
+        toc: Book['toc']
+        itemId?: number
+      }
+      const current = latest.current.book
+      if (current?.isbn !== isbn || toc.length === 0) return
+      if (replace || current.toc.length === 0) {
+        patchBook({ toc, yes24ItemId: itemId })
+      }
+    },
+    [patchBook],
+  )
+
+  useEffect(() => {
+    if (post.book?.toc.length === 0) void loadToc(post.book.isbn, false)
+  }, [post.book, loadToc])
+
   const selectBook = useCallback(
     (result: BookSearchResult) => {
+      const autoToc = latest.current.book?.yes24ItemId != null
       patchBook({
+        ...(autoToc ? { toc: [], yes24ItemId: undefined } : {}),
         translator: undefined,
         publisher: undefined,
         coverUrl: undefined,
@@ -125,8 +156,9 @@ function WritePage() {
       })
       setBiblioOpen(false)
       void pickCoverColor(result.coverUrl, result.coverFallbackUrl)
+      void loadToc(result.isbn, true)
     },
-    [patchBook, pickCoverColor],
+    [patchBook, pickCoverColor, loadToc],
   )
 
   const unlinkBook = useCallback(() => {
@@ -180,10 +212,11 @@ function WritePage() {
   }
 
   return (
-    <div className="write-page">
+    <div className="write-page" data-mode={book ? 'review' : undefined}>
       <div className="write-bar">
         <Link to="/write" className="back">
-          ← 목록
+          <BackIcon />
+          목록
         </Link>
         <span className="save-state" data-state={saveState}>
           {saveState === 'saved'
@@ -193,6 +226,15 @@ function WritePage() {
               : '작성 중'}
         </span>
         <div className="write-actions">
+          <button
+            type="button"
+            className="danger"
+            aria-label="삭제"
+            title="삭제"
+            onClick={onDelete}
+          >
+            <TrashIcon />
+          </button>
           <Link
             to="/write/$id/preview"
             params={{ id: post.id }}
@@ -218,13 +260,8 @@ function WritePage() {
               </button>
             </>
           ) : (
-            <button type="button" className="primary" onClick={onPublish}>
-              발행
-            </button>
+            <PublishMenu slug={slug} onSlugChange={setSlug} onPublish={onPublish} />
           )}
-          <button type="button" className="danger" onClick={onDelete}>
-            삭제
-          </button>
         </div>
       </div>
 
@@ -239,13 +276,6 @@ function WritePage() {
         }}
       />
 
-      <input
-        className="slug-input"
-        placeholder="slug (비우면 제목으로 생성)"
-        value={slug}
-        onChange={(e) => setSlug(e.target.value)}
-      />
-
       <BookPicker
         book={book}
         onSelect={selectBook}
@@ -253,44 +283,83 @@ function WritePage() {
           setBook(EMPTY_BOOK)
           setBiblioOpen(true)
         }}
+        onEdit={() => setBiblioOpen(true)}
         onUnlink={unlinkBook}
       >
         {book && (
+          <div className="review-meta">
+            <StarInput
+              value={book.rating}
+              onChange={(rating) => patchBook({ rating })}
+            />
+            <div className="review-period">
+              <DateField
+                label="읽기 시작"
+                value={book.readFrom}
+                max={book.readTo}
+                onChange={(readFrom) => patchBook({ readFrom })}
+              />
+              <span aria-hidden="true">~</span>
+              <DateField
+                label="완독"
+                value={book.readTo}
+                min={book.readFrom}
+                onChange={(readTo) => patchBook({ readTo })}
+              />
+            </div>
+            <textarea
+              ref={growTextarea}
+              className="review-oneliner"
+              rows={1}
+              aria-label="한 줄 평"
+              placeholder="한 줄 평"
+              value={book.oneLiner ?? ''}
+              onChange={(e) => patchBook({ oneLiner: e.target.value })}
+            />
+          </div>
+        )}
+      </BookPicker>
+
+      {book && biblioOpen && (
+        <Modal label="서지 수정" onClose={() => setBiblioOpen(false)}>
           <div className="book-form">
-            <details
-              className="book-biblio"
-              open={biblioOpen}
-              onToggle={(e) => setBiblioOpen(e.currentTarget.open)}
-            >
-              <summary>서지 직접 수정</summary>
-              <div className="book-biblio-body">
+            <h2 className="review-block-title">서지 수정</h2>
               <div className="book-form-row">
-                <input
-                  placeholder="책 제목"
+                <label className="biblio-field">
+                  <span>책 제목</span>
+                  <input
                   value={book.title}
                   onChange={(e) => patchBook({ title: e.target.value })}
-                />
-                <input
-                  placeholder="지은이"
+                                  />
+                </label>
+                <label className="biblio-field">
+                  <span>지은이</span>
+                  <input
                   value={book.author}
                   onChange={(e) => patchBook({ author: e.target.value })}
-                />
+                                  />
+                </label>
               </div>
               <div className="book-form-row">
-                <input
-                  placeholder="옮긴이"
+                <label className="biblio-field">
+                  <span>옮긴이</span>
+                  <input
                   value={book.translator ?? ''}
                   onChange={(e) => patchBook({ translator: e.target.value })}
-                />
-                <input
-                  placeholder="출판사"
+                                  />
+                </label>
+                <label className="biblio-field">
+                  <span>출판사</span>
+                  <input
                   value={book.publisher ?? ''}
                   onChange={(e) => patchBook({ publisher: e.target.value })}
-                />
+                                  />
+                </label>
               </div>
               <div className="book-form-row cover">
-                <input
-                  placeholder="표지 URL"
+                <label className="biblio-field">
+                  <span>표지 URL</span>
+                  <input
                   value={book.coverUrl ?? ''}
                   onChange={(e) =>
                     patchBook({
@@ -299,7 +368,8 @@ function WritePage() {
                     })
                   }
                   onBlur={(e) => void pickCoverColor(e.target.value)}
-                />
+                                  />
+                </label>
                 <label className="upload-btn">
                   업로드
                   <input
@@ -316,158 +386,119 @@ function WritePage() {
                     }}
                   />
                 </label>
-                <label
-                  className="color-field"
-                  title="타일 배경색 (표지에서 자동 추출)"
-                >
-                  <input
-                    type="color"
-                    value={book.coverColor ?? '#c9d6ff'}
-                    onChange={(e) => patchBook({ coverColor: e.target.value })}
-                  />
-                </label>
               </div>
-              </div>
-            </details>
-
-            <div className="book-group">
-              <span className="book-form-label">서평</span>
-              <div className="book-form-row">
-                <input
-                  className="narrow"
-                  type="number"
-                  min={0}
-                  max={5}
-                  step={0.5}
-                  placeholder="별점 0~5"
-                  value={book.rating ?? ''}
-                  onChange={(e) =>
-                    patchBook({
-                      rating:
-                        e.target.value === ''
-                          ? undefined
-                          : Number(e.target.value),
-                    })
-                  }
-                />
-                <input
-                  placeholder="읽기 시작 (2026.07)"
-                  value={book.readFrom ?? ''}
-                  onChange={(e) => patchBook({ readFrom: e.target.value })}
-                />
-                <input
-                  placeholder="완독 (2026.08)"
-                  value={book.readTo ?? ''}
-                  onChange={(e) => patchBook({ readTo: e.target.value })}
-                />
-              </div>
-              <div className="book-form-row">
-                <input
-                  placeholder="한 줄 평"
-                  value={book.oneLiner ?? ''}
-                  onChange={(e) => patchBook({ oneLiner: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <ListField
-              label="문장 수집"
-              rows={book.quotes}
-              blank={{ text: '' }}
-              onChange={(quotes) => patchBook({ quotes })}
-              render={(quote, patch) => (
-                <>
-                  <input
-                    placeholder="문장"
-                    value={quote.text}
-                    onChange={(e) => patch({ text: e.target.value })}
-                  />
-                  <input
-                    className="narrow"
-                    placeholder="쪽"
-                    value={quote.page ?? ''}
-                    onChange={(e) => patch({ page: e.target.value })}
-                  />
-                </>
-              )}
-            />
-
-            <ListField
-              label="목차"
-              rows={book.toc}
-              blank={{ title: '' }}
-              onChange={(toc) => patchBook({ toc })}
-              render={(entry, patch) => (
-                <>
-                  <input
-                    placeholder="장 제목"
-                    value={entry.title}
-                    onChange={(e) => patch({ title: e.target.value })}
-                  />
-                  <input
-                    className="narrow"
-                    placeholder="메모"
-                    value={entry.note ?? ''}
-                    onChange={(e) => patch({ note: e.target.value })}
-                  />
-                </>
-              )}
-            />
+            <button
+              type="button"
+              className="biblio-done"
+              onClick={() => setBiblioOpen(false)}
+            >
+              완료
+            </button>
           </div>
-        )}
-      </BookPicker>
+        </Modal>
+      )}
 
-      <Editor
-        initialContent={post.content as JSONContent}
-        onChange={(content) => {
-          latest.current.content = content
-          scheduleSave()
-        }}
-        uploadImage={uploadImage}
-        unfurl={unfurl}
-      />
+      {book && (
+        <>
+          <QuoteSection
+            quotes={book.quotes}
+            onChange={(quotes) => patchBook({ quotes })}
+          />
+          <TocSection toc={book.toc} onChange={(toc) => patchBook({ toc })} />
+        </>
+      )}
+
+      <section className="write-body">
+        {book && <h2 className="review-block-title">읽고 나서</h2>}
+        <Editor
+          initialContent={post.content as JSONContent}
+          onChange={(content) => {
+            latest.current.content = content
+            scheduleSave()
+          }}
+          uploadImage={uploadImage}
+          unfurl={unfurl}
+          compactToolbar={book !== null}
+        />
+      </section>
     </div>
   )
 }
 
-function ListField<T>({
-  label,
-  rows,
-  blank,
-  onChange,
-  render,
+function PublishMenu({
+  slug,
+  onSlugChange,
+  onPublish,
 }: {
-  label: string
-  rows: T[]
-  blank: T
-  onChange: (rows: T[]) => void
-  render: (row: T, patch: (patch: Partial<T>) => void) => React.ReactNode
+  slug: string
+  onSlugChange: (slug: string) => void
+  onPublish: () => Promise<void>
 }) {
+  const [open, setOpen] = useState(false)
+  const [publishing, setPublishing] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [open])
+
   return (
-    <div className="book-list-field">
-      <span className="book-form-label">{label}</span>
-      {rows.map((row, i) => (
-        <div key={i} className="book-form-row">
-          {render(row, (patch) =>
-            onChange(rows.map((r, j) => (i === j ? { ...r, ...patch } : r))),
-          )}
-          <button
-            type="button"
-            className="row-del"
-            aria-label={`${label} ${i + 1}번 삭제`}
-            onClick={() => onChange(rows.filter((_, j) => i !== j))}
-          >
-            −
-          </button>
-        </div>
-      ))}
+    <div ref={menuRef} className="publish-menu">
       <button
+        ref={triggerRef}
         type="button"
-        className="row-add"
-        onClick={() => onChange([...rows, blank])}
+        className="primary"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        onClick={() => setOpen((value) => !value)}
       >
-        + 추가
+        발행
       </button>
+      {open && (
+        <form
+          className="publish-panel"
+          role="dialog"
+          aria-label="발행 설정"
+          onKeyDown={(e) => {
+            if (e.key !== 'Escape') return
+            e.preventDefault()
+            setOpen(false)
+            triggerRef.current?.focus()
+          }}
+          onSubmit={async (e) => {
+            e.preventDefault()
+            if (publishing) return
+            setPublishing(true)
+            try {
+              await onPublish()
+            } finally {
+              setPublishing(false)
+            }
+          }}
+        >
+          <label>
+            <span>글 주소</span>
+            <span className="publish-slug">
+              <span aria-hidden="true">/posts/</span>
+              <input
+                autoFocus
+                placeholder="자동 생성"
+                value={slug}
+                onChange={(e) => onSlugChange(e.target.value)}
+              />
+            </span>
+          </label>
+          <button type="submit" className="primary" disabled={publishing}>
+            {publishing ? '발행 중…' : '발행하기'}
+          </button>
+        </form>
+      )}
     </div>
   )
 }

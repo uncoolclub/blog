@@ -60,7 +60,13 @@ function parseBook(json: string | null): Book | null {
   if (!json) return null
   try {
     const book = JSON.parse(json) as Book
-    return { ...book, quotes: book.quotes ?? [], toc: book.toc ?? [] }
+    return {
+      ...book,
+      quotes: (book.quotes ?? []).filter((quote) => quote.text?.trim()),
+      toc: (book.toc ?? []).filter(
+        (entry) => entry.title?.trim() || entry.note?.trim(),
+      ),
+    }
   } catch {
     return null
   }

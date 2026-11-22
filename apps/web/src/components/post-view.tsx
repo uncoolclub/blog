@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useEffect, useMemo, useRef } from 'react'
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { Book, BookSummary, PostDetail } from '../server/posts'
 import { BookCover, StarRating } from '../components/book'
 import { ChevronIcon } from '../svgs'
@@ -15,25 +15,34 @@ export interface ShelfItem {
 export function PostView({
   post,
   shelf,
-  banner,
+  preview = false,
   children,
 }: {
   post: PostDetail
   shelf: ShelfItem[]
-  banner?: ReactNode
+  preview?: boolean
   children?: ReactNode
 }) {
   const articleRef = useRef<HTMLDivElement>(null)
   const progressRef = useRef<HTMLDivElement>(null)
 
-  const words = useMemo(
-    () =>
-      post.html
-        .replace(/<[^>]*>/g, ' ')
-        .trim()
-        .split(/\s+/).length,
+  const text = useMemo(
+    () => post.html.replace(/<[^>]*>/g, ' ').trim(),
     [post.html],
   )
+  const words = text ? text.split(/\s+/).length : 0
+  const hasBody = Boolean(text) || /<(?:img|iframe|hr|video)\b/i.test(post.html)
+  const label = post.book
+    ? preview
+      ? '책장 • 미리보기'
+      : '책장'
+    : preview
+      ? '미리보기'
+      : null
+  const meta = [
+    post.publishedAt ? formatDate(post.publishedAt) : null,
+    !post.book && words > 0 ? `${words} words` : null,
+  ].filter(Boolean)
 
   useEffect(() => {
     if (!articleRef.current?.querySelector('pre > code, .embed-youtube')) return
@@ -66,14 +75,12 @@ export function PostView({
   return (
     <article className="post">
       <div className="post-progress" ref={progressRef} aria-hidden="true" />
-      {banner}
       <header className="post-header">
-        {post.book && <span className="post-label">책장</span>}
-        <h1>{post.title}</h1>
-        <p className="post-meta">
-          {post.publishedAt ? formatDate(post.publishedAt) : 'Draft'} · {words}{' '}
-          words
-        </p>
+        {label && <span className="post-label">{label}</span>}
+        <h1 data-empty={(preview && !post.title) || undefined}>
+          {post.title || (preview ? '제목 없음' : '')}
+        </h1>
+        {meta.length > 0 && <p className="post-meta">{meta.join(' · ')}</p>}
       </header>
 
       {post.book ? (
@@ -81,10 +88,12 @@ export function PostView({
           <BookInfo id={post.id} book={post.book} />
           <Quotes book={post.book} />
           <Toc book={post.book} />
-          <section className="review-body">
-            <h2 className="review-section">읽고 나서</h2>
-            {prose}
-          </section>
+          {hasBody && (
+            <section className="review-body">
+              <h2 className="review-section">읽고 나서</h2>
+              {prose}
+            </section>
+          )}
           {shelf.length > 0 && (
             <section className="read-books">
               <div className="review-section-head">
@@ -122,28 +131,20 @@ export function PostView({
   )
 }
 
+function readingPeriod(from?: string, to?: string) {
+  if (!from || !to) return from || to || ''
+  const sameYear = from.slice(0, 5) === to.slice(0, 5)
+  return `${from} ~ ${sameYear ? to.slice(5) : to}`
+}
+
 function BookInfo({ id, book }: { id: number; book: Book }) {
-  const period = [book.readFrom, book.readTo].filter(Boolean).join(' ~ ')
+  const period = readingPeriod(book.readFrom, book.readTo)
   return (
     <section className="book-info">
-      <div
-        className="book-tile"
-        data-cover-color={book.coverColor ? '' : undefined}
-        style={
-          book.coverColor
-            ? ({ '--cover-color': book.coverColor } as CSSProperties)
-            : undefined
-        }
-      >
+      <div className="book-info-cover">
         <BookCover id={id} book={book} />
       </div>
       <div className="book-meta">
-        {(book.readTo || period) && (
-          <div className="book-chips">
-            {book.readTo && <span className="chip done">완독</span>}
-            {period && <span className="chip">{period}</span>}
-          </div>
-        )}
         <span className="book-title">{book.title}</span>
         {book.rating != null && <StarRating rating={book.rating} />}
         <dl className="book-fields">
@@ -151,8 +152,14 @@ function BookInfo({ id, book }: { id: number; book: Book }) {
           <Field label="옮긴이" value={book.translator} />
           <Field label="출판사" value={book.publisher} />
         </dl>
-        {book.oneLiner && <p className="book-oneliner">{book.oneLiner}</p>}
+        {period && (
+          <p className="book-reading">
+            {book.readTo && <span>완독</span>}
+            {period}
+          </p>
+        )}
       </div>
+      {book.oneLiner && <p className="book-oneliner">{book.oneLiner}</p>}
     </section>
   )
 }
@@ -172,17 +179,17 @@ function Quotes({ book }: { book: Book }) {
   return (
     <section className="quotes">
       <h2 className="review-section">문장 수집</h2>
-      <div className="quote-rail">
+      <div className="quote-list">
         {book.quotes.map((quote, i) => (
-          <figure key={i} className="quote-card">
-            <span className="quote-mark" aria-hidden="true">
-              &#8220;
-            </span>
+          <figure key={i} className="quote-item">
             <blockquote>{quote.text}</blockquote>
-            <figcaption>
-              <span className="quote-book">{book.title}</span>
-              {quote.page && <span className="quote-page">P.{quote.page}</span>}
-            </figcaption>
+            {quote.page?.trim() && (
+              <figcaption>
+                {/^\d+$/.test(quote.page.trim())
+                  ? `${quote.page.trim()}쪽`
+                  : quote.page.trim()}
+              </figcaption>
+            )}
           </figure>
         ))}
       </div>
@@ -211,6 +218,16 @@ function Toc({ book }: { book: Book }) {
           </li>
         ))}
       </ol>
+      {Number.isSafeInteger(book.yes24ItemId) && (
+        <a
+          className="toc-source"
+          href={`https://www.yes24.com/product/goods/${book.yes24ItemId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          출처: 예스24
+        </a>
+      )}
     </section>
   )
 }

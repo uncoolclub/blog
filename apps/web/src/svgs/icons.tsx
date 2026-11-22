@@ -7,20 +7,66 @@ const stroked: CSSProperties = {
   strokeLinejoin: 'round',
 }
 
+const fine: CSSProperties = { ...stroked, strokeWidth: 0.95 }
+
 export function DocIcon() {
   return (
-    <svg viewBox="0 0 16 16" style={{ ...stroked, strokeWidth: 1.6 }}>
-      <path d="M4 1.8h6.2L13 4.6V14.2H4z" />
-      <path d="M6.2 7.4h3.6M6.2 10.2h3.6" />
+    <svg viewBox="0 0 16 16" style={fine}>
+      <path d="M4.6 1.9h4.7l3.1 3.1v8.1c0 .6-.4 1-1 1H4.6c-.6 0-1-.4-1-1V2.9c0-.6.4-1 1-1Z" />
+      <path d="M9.1 2v3.2h3.2M5.9 8.3h4.2M5.9 10.9h4.2" />
     </svg>
   )
 }
 
 export function UserIcon() {
   return (
-    <svg viewBox="0 0 16 16" style={{ ...stroked, strokeWidth: 1.6 }}>
-      <circle cx="8" cy="5.4" r="2.6" />
-      <path d="M2.8 14a5.4 5.4 0 0 1 10.4 0" />
+    <svg viewBox="0 0 16 16" style={fine}>
+      <circle cx="8" cy="5.2" r="2.7" />
+      <path d="M2.9 13.8c.5-2.6 2.6-4.2 5.1-4.2s4.6 1.6 5.1 4.2" />
+    </svg>
+  )
+}
+
+export function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 16 16" style={fine}>
+      <rect x="2.2" y="3.2" width="11.6" height="10.6" rx="1.8" />
+      <path d="M2.2 6.6h11.6M5.3 1.9v2.4M10.7 1.9v2.4" />
+    </svg>
+  )
+}
+
+export function EditIcon() {
+  return (
+    <svg viewBox="0 0 16 16" style={fine}>
+      <path d="M10.7 2.9a1.5 1.5 0 0 1 2.2 2.1l-7.6 7.6-3 .9.9-3Z" />
+      <path d="m9.5 4.1 2.2 2.2" />
+    </svg>
+  )
+}
+
+export function MoreIcon() {
+  return (
+    <svg viewBox="0 0 16 16" style={{ fill: 'currentColor', stroke: 'none' }}>
+      <circle cx="3.5" cy="8" r="1" />
+      <circle cx="8" cy="8" r="1" />
+      <circle cx="12.5" cy="8" r="1" />
+    </svg>
+  )
+}
+
+export function BackIcon() {
+  return (
+    <svg viewBox="0 0 16 16" style={fine}>
+      <path d="M9.8 3.5 5.3 8l4.5 4.5" />
+    </svg>
+  )
+}
+
+export function TrashIcon() {
+  return (
+    <svg viewBox="0 0 16 16" style={fine}>
+      <path d="M2.8 4.3h10.4M6.2 4.3V2.9c0-.4.3-.7.7-.7h2.2c.4 0 .7.3.7.7v1.4M4 4.3l.6 8.4c0 .6.5 1.1 1.1 1.1h4.6c.6 0 1.1-.5 1.1-1.1l.6-8.4M6.8 7v4M9.2 7v4" />
     </svg>
   )
 }
@@ -58,17 +104,17 @@ export function MailIcon() {
 
 export function SunIcon() {
   return (
-    <svg viewBox="0 0 16 16" className="sun" style={stroked}>
-      <circle cx="8" cy="8" r="3.1" />
-      <path d="M8 1.2v1.7M8 13.1v1.7M1.2 8h1.7M13.1 8h1.7M3.2 3.2l1.2 1.2M11.6 11.6l1.2 1.2M12.8 3.2l-1.2 1.2M4.4 11.6l-1.2 1.2" />
+    <svg viewBox="0 0 16 16" className="sun" style={fine}>
+      <circle cx="8" cy="8" r="2.8" />
+      <path d="M8 1.6v1.3M8 13.1v1.3M1.6 8h1.3M13.1 8h1.3M3.5 3.5l.9.9M11.6 11.6l.9.9M12.5 3.5l-.9.9M4.4 11.6l-.9.9" />
     </svg>
   )
 }
 
 export function MoonIcon() {
   return (
-    <svg viewBox="0 0 16 16" className="moon" style={stroked}>
-      <path d="M13.4 9.6a5.6 5.6 0 1 1-7-7 4.5 4.5 0 0 0 7 7Z" />
+    <svg viewBox="0 0 16 16" className="moon" style={fine}>
+      <path d="M13.5 9.7A5.8 5.8 0 1 1 6.3 2.5a4.7 4.7 0 0 0 7.2 7.2Z" />
     </svg>
   )
 }

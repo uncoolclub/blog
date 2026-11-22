@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { BOOK_COVERS } from '../svgs/covers'
 import type { BookSummary } from '../server/posts'
 
-const SOLID = 'M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z'
-const OUTLINE =
+export const STAR_SOLID = 'M8 1.6l1.9 3.9 4.3.6-3.1 3 .7 4.3L8 11.4l-3.8 2 .7-4.3-3.1-3 4.3-.6z'
+export const STAR_OUTLINE =
   'M8 2.4l1.7 3.4 3.8.5-2.7 2.7.6 3.8L8 11l-3.4 1.8.6-3.8-2.7-2.7 3.8-.5z'
 
 export function StarGlyph() {
   return (
     <svg viewBox="0 0 16 16" className="star-solid">
-      <path d={SOLID} />
+      <path d={STAR_SOLID} />
     </svg>
   )
 }
@@ -22,7 +22,7 @@ export function StarRating({ rating }: { rating: number }) {
         return (
           <span key={i} className="star">
             <svg viewBox="0 0 16 16" className="star-outline">
-              <path d={OUTLINE} />
+              <path d={STAR_OUTLINE} />
             </svg>
             {fill > 0 && (
               <span className="star-fill" style={{ width: `${fill * 100}%` }}>
