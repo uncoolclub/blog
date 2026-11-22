@@ -81,11 +81,23 @@ let jwks: ReturnType<typeof createRemoteJWKSet> | undefined
 
 export const assertAdmin = createServerOnlyFn(async () => {
   if (import.meta.env.DEV) return
+  const req = getRequest()
+  const fetchSite = req.headers.get('sec-fetch-site')
+  if (fetchSite === 'cross-site' || fetchSite === 'same-site') {
+    const isNavigation =
+      req.method === 'GET' && req.headers.get('sec-fetch-mode') === 'navigate'
+    if (!isNavigation) throw new Response('Forbidden', { status: 403 })
+  }
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    const origin = req.headers.get('origin')
+    if (origin !== null && origin !== new URL(req.url).origin) {
+      throw new Response('Forbidden', { status: 403 })
+    }
+  }
   const { ACCESS_TEAM_DOMAIN, ACCESS_AUD } = env
   if (!ACCESS_TEAM_DOMAIN || !ACCESS_AUD) {
     throw new Response('Forbidden', { status: 403 })
   }
-  const req = getRequest()
   const token =
     req.headers.get('cf-access-jwt-assertion') ??
     req.headers
