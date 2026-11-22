@@ -68,6 +68,11 @@
 }
 
 /* ── 베이스 ── */
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
