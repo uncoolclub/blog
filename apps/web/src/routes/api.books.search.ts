@@ -27,6 +27,7 @@ export const Route = createFileRoute('/api/books/search')({
         try {
           const res = await fetch(upstream, {
             headers: { authorization: `KakaoAK ${key}` },
+            redirect: 'manual',
             signal: AbortSignal.timeout(8000),
           })
           if (!res.ok) return failure('upstream', 502)

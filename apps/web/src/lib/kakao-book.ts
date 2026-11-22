@@ -36,10 +36,12 @@ export function pickIsbn(raw?: string): string | undefined {
 
 export function isKakaoCover(url: string): boolean {
   try {
-    const { protocol, hostname, pathname } = new URL(url)
-    if (protocol !== 'https:') return false
+    const { protocol, hostname, pathname, port, username, password } =
+      new URL(url)
+    if (protocol !== 'https:' || port || username || password) return false
     return (
-      /^search\d*\.kakaocdn\.net$/.test(hostname) ||
+      (/^search\d*\.kakaocdn\.net$/.test(hostname) &&
+        pathname.startsWith('/thumb/')) ||
       (hostname === 't1.daumcdn.net' && pathname.startsWith('/lbook/image/'))
     )
   } catch {
