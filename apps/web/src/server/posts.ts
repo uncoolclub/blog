@@ -73,6 +73,10 @@ function parseBook(json: string | null): Book | null {
   }
 }
 
+function resolveTitle(title: string, bookJson: string | null): string {
+  return title.trim() || parseBook(bookJson)?.title?.trim() || ''
+}
+
 function summarizeBook(json: string | null): BookSummary | null {
   const book = parseBook(json)
   if (!book) return null
@@ -157,7 +161,10 @@ export const queryPublishedRows = createServerOnlyFn(async () => {
        ORDER BY published_at DESC`,
     )
     .all<PostListItem & { content: string; book: string | null }>()
-  return results
+  return results.map((row) => ({
+    ...row,
+    title: resolveTitle(row.title, row.book),
+  }))
 })
 
 export const listPublishedPosts = createServerFn().handler(async () => {
@@ -178,7 +185,7 @@ function toPostDetail(row: PostRow) {
   return {
     id: row.id,
     slug: row.slug,
-    title: row.title,
+    title: resolveTitle(row.title, row.book),
     publishedAt: row.published_at,
     updatedAt: row.updated_at,
     excerpt: extractExcerpt(doc),
@@ -217,7 +224,9 @@ export const adminListPosts = createServerFn().handler(async () => {
   await assertAdmin()
   const { results } = await db()
     .prepare(
-      `SELECT id, slug, title, status, published_at, updated_at
+      `SELECT id, slug,
+              COALESCE(NULLIF(TRIM(title), ''), json_extract(book, '$.title'), '') AS title,
+              status, published_at, updated_at
        FROM posts ORDER BY updated_at DESC`,
     )
     .all<PostListItem>()
@@ -289,13 +298,16 @@ export const publishPost = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     await assertAdmin()
     const row = await db()
-      .prepare(`SELECT title, slug, published_at FROM posts WHERE id = ?`)
+      .prepare(`SELECT title, slug, published_at, book FROM posts WHERE id = ?`)
       .bind(data.id)
-      .first<Pick<PostRow, 'title' | 'slug' | 'published_at'>>()
+      .first<Pick<PostRow, 'title' | 'slug' | 'published_at' | 'book'>>()
     if (!row) throw notFound()
 
     const slug =
-      data.slug?.trim() || row.slug || slugify(row.title) || `post-${data.id}`
+      data.slug?.trim() ||
+      row.slug ||
+      slugify(resolveTitle(row.title, row.book)) ||
+      `post-${data.id}`
     try {
       await db()
         .prepare(

@@ -267,7 +267,7 @@ function WritePage() {
 
       <input
         className="title-input"
-        placeholder="제목"
+        placeholder={book?.title || '제목'}
         value={title}
         onChange={(e) => {
           setTitle(e.target.value)

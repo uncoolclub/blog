@@ -5,7 +5,7 @@ import type {
   MouseEvent,
   ReactNode,
 } from 'react'
-import { STAR_OUTLINE, STAR_SOLID } from './book'
+import { STAR_SOLID } from './book'
 import { QuoteRail } from './quote-rail'
 import { CalendarIcon, ChevronIcon } from '../svgs'
 import type { Book, BookQuote, BookTocEntry } from '../server/posts'
@@ -71,7 +71,7 @@ export function StarInput({
           return (
             <span key={i} className="star-input-star">
               <svg viewBox="0 0 16 16" className="star-input-empty">
-                <path d={STAR_OUTLINE} />
+                <path d={STAR_SOLID} />
               </svg>
               {fill > 0 && (
                 <span

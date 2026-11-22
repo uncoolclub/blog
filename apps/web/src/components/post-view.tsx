@@ -86,7 +86,11 @@ export function PostView({
 
       {post.book ? (
         <>
-          <BookInfo id={post.id} book={post.book} />
+          <BookInfo
+            id={post.id}
+            book={post.book}
+            showTitle={post.title.trim() !== post.book.title.trim()}
+          />
           <Quotes book={post.book} />
           <Toc book={post.book} />
           {hasBody && (
@@ -138,7 +142,15 @@ function readingPeriod(from?: string, to?: string) {
   return `${from} ~ ${sameYear ? to.slice(5) : to}`
 }
 
-function BookInfo({ id, book }: { id: number; book: Book }) {
+function BookInfo({
+  id,
+  book,
+  showTitle,
+}: {
+  id: number
+  book: Book
+  showTitle: boolean
+}) {
   const period = readingPeriod(book.readFrom, book.readTo)
   return (
     <section className="book-info">
@@ -146,19 +158,19 @@ function BookInfo({ id, book }: { id: number; book: Book }) {
         <BookCover id={id} book={book} />
       </div>
       <div className="book-meta">
-        <span className="book-title">{book.title}</span>
-        {book.rating != null && <StarRating rating={book.rating} />}
-        <dl className="book-fields">
-          <Field label="지은이" value={book.author} />
-          <Field label="옮긴이" value={book.translator} />
-          <Field label="출판사" value={book.publisher} />
-        </dl>
         {period && (
           <p className="book-reading">
             {book.readTo && <span>완독</span>}
             {period}
           </p>
         )}
+        {showTitle && <span className="book-title">{book.title}</span>}
+        {book.rating != null && <StarRating rating={book.rating} />}
+        <dl className="book-fields">
+          <Field label="지은이" value={book.author} />
+          <Field label="옮긴이" value={book.translator} />
+          <Field label="출판사" value={book.publisher} />
+        </dl>
       </div>
       {book.oneLiner && <p className="book-oneliner">{book.oneLiner}</p>}
     </section>
