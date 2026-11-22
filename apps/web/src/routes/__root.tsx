@@ -33,6 +33,11 @@ function toggleTheme() {
   } catch {}
   setTimeout(() => root.classList.remove('theme-switching'), 300)
 }
+
+const COPY_ALLOWED = 'pre, input, textarea, [contenteditable]'
+function blockCopy(e: React.ClipboardEvent) {
+  if (!(e.target as Element).closest?.(COPY_ALLOWED)) e.preventDefault()
+}
 import appCss from '../styles.css?url'
 import editorCss from '@blog/editor/styles.css?url'
 import {
@@ -111,7 +116,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         <HeadContent />
       </head>
-      <body>
+      <body onCopy={blockCopy}>
         {children}
         <Scripts />
       </body>
