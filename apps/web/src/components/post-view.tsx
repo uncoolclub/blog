@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Book, BookSummary, PostDetail } from '../server/posts'
 import { BookCover, StarRating } from '../components/book'
+import { QuoteRail } from '../components/quote-rail'
 import { ChevronIcon } from '../svgs'
 import { formatDate } from '../lib/date'
 
@@ -177,23 +178,26 @@ function Field({ label, value }: { label: string; value?: string }) {
 function Quotes({ book }: { book: Book }) {
   if (book.quotes.length === 0) return null
   return (
-    <section className="quotes">
-      <h2 className="review-section">문장 수집</h2>
-      <div className="quote-list">
-        {book.quotes.map((quote, i) => (
-          <figure key={i} className="quote-item">
+    <QuoteRail>
+      {book.quotes.map((quote, i) => {
+        const page = quote.page
+          ?.trim()
+          .replace(/^p\.?\s*/i, '')
+          .replace(/\s*쪽$/, '')
+        const chapter = quote.chapter?.trim()
+        return (
+          <figure key={i} className="quote-card">
+            {chapter && <span className="quote-chapter">{chapter}</span>}
             <blockquote>{quote.text}</blockquote>
-            {quote.page?.trim() && (
+            {page && (
               <figcaption>
-                {/^\d+$/.test(quote.page.trim())
-                  ? `${quote.page.trim()}쪽`
-                  : quote.page.trim()}
+                <b>p.{page}</b>
               </figcaption>
             )}
           </figure>
-        ))}
-      </div>
-    </section>
+        )
+      })}
+    </QuoteRail>
   )
 }
 

@@ -25,6 +25,7 @@ export type PostListItem = Pick<
 
 export interface BookQuote {
   text: string
+  chapter?: string
   page?: string
 }
 

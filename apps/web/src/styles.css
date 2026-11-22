@@ -13,6 +13,8 @@
   --accent: #1342ff;
   --accent-soft: rgba(19, 66, 255, 0.3);
   --accent-tint: rgba(19, 66, 255, 0.07);
+  --quote-border: #eaeaee;
+  --quote-meta: #6f6f77;
   --star-muted: #b0b0b8;
   --star: var(--accent);
   --star-empty: #e2e2e6;
@@ -42,6 +44,8 @@
   --text-4: #5b5b64;
   --hover: rgba(236, 236, 240, 0.07);
   --accent-tint: rgba(72, 110, 255, 0.18);
+  --quote-border: #2e2e34;
+  --quote-meta: #9a9aa3;
   --star-muted: #ffffff;
   --star-empty: #3a3a42;
   --danger: #ff453a;
@@ -62,6 +66,8 @@
     --text-4: #5b5b64;
     --hover: rgba(236, 236, 240, 0.07);
     --accent-tint: rgba(72, 110, 255, 0.18);
+    --quote-border: #2e2e34;
+    --quote-meta: #9a9aa3;
     --star-muted: #ffffff;
     --star-empty: #3a3a42;
     --danger: #ff453a;
@@ -769,33 +775,258 @@ img.book-cover,
   padding-top: 56px;
 }
 
-.quote-list {
+.quotes-head {
   display: flex;
-  flex-direction: column;
-  gap: 26px;
-  padding-top: 4px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.quote-item {
-  margin: 0;
-  border-left: 1px solid var(--accent);
-  padding-left: 20px;
+.quote-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-3);
 }
 
-.quote-item blockquote {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: 17px;
-  line-height: 1.85;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
+.quote-controls span {
+  margin-right: 6px;
+}
+
+.quote-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-2);
+  padding: 0;
+  cursor: pointer;
+}
+
+.quote-controls button:hover:not(:disabled) {
+  background: var(--hover);
   color: var(--text);
 }
 
-.quote-item figcaption {
-  margin-top: 10px;
-  font-size: 12px;
+.quote-controls button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.quote-controls button:focus-visible,
+.quote-rail:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.quote-controls svg {
+  width: 15px;
+  height: 15px;
+}
+
+.quote-rail {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  margin-inline: -20px;
+  padding-inline: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 20px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.quote-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.quote-card {
+  position: relative;
+  flex: 0 0 min(280px, calc(100vw - 64px));
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 320px;
+  margin: 0;
+  border: 1px solid var(--quote-border);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 26px 24px 22px;
+  scroll-snap-align: start;
+}
+
+.quote-chapter {
+  flex: none;
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 22px;
+  padding: 0;
+  word-break: keep-all;
+}
+
+input.quote-chapter {
+  padding-right: 24px;
+  text-overflow: ellipsis;
+}
+
+input.quote-chapter::placeholder {
+  color: var(--text-4);
+  font-weight: 400;
+}
+
+.quote-card blockquote {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 16.5px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.quote-card figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12.5px;
+  line-height: normal;
+  color: var(--quote-meta);
+}
+
+.quote-card figcaption b {
+  flex: none;
+  margin-left: auto;
+  font-family: var(--font-label);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.review-quotes {
+  padding-top: 36px;
+}
+
+.review-quotes .quotes-head .review-block-title {
+  margin: 0;
+}
+
+.review-quotes .quote-card {
+  gap: 24px;
+}
+
+.review-quotes .quote-card[data-ghost] {
+  background: transparent;
+}
+
+.quote-card textarea {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-size: 16.5px;
+  line-height: 1.8;
+  padding: 0;
+  overflow: hidden;
+  resize: none;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  field-sizing: content;
+}
+
+.quote-card textarea::placeholder,
+.quote-card-meta input::placeholder {
+  color: var(--text-4);
+}
+
+.quote-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.quote-card-meta input {
+  flex: 0 0 52px;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--quote-meta);
+  font-family: inherit;
+  font-size: 12.5px;
+  line-height: normal;
+  padding: 0;
+}
+
+.quote-page-field {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: baseline;
+  line-height: normal;
+  font-family: var(--font-label);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.quote-card-meta .quote-page-field input {
+  flex: none;
+  min-width: 0;
+  color: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
+.quote-card-del {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
   color: var(--text-3);
+  font-size: 15px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.quote-card:hover .quote-card-del,
+.quote-card:focus-within .quote-card-del {
+  opacity: 1;
+}
+
+.quote-card-del:hover {
+  background: var(--hover);
+  color: var(--danger);
+}
+
+@media (hover: none) {
+  .quote-card-del {
+    opacity: 1;
+  }
 }
 
 .book-toc ol {
@@ -2075,6 +2306,8 @@ img.book-cover,
 }
 
 .review-oneliner {
+  field-sizing: content;
+  word-break: keep-all;
   width: 100%;
   border: none;
   outline: none;
@@ -2116,29 +2349,12 @@ img.book-cover,
   gap: 4px;
 }
 
-.review-quote {
-  display: flex;
-  flex: 1;
-  align-items: flex-start;
-  gap: 10px;
-  min-width: 0;
-}
-
 .review-toc {
   display: grid;
   flex: 1;
   grid-template-columns: 22px minmax(0, 1fr);
   column-gap: 10px;
   min-width: 0;
-}
-
-.review-quote {
-  border-left: 2px solid var(--accent);
-  padding-left: 14px;
-}
-
-.review-row[data-ghost] .review-quote {
-  border-left-color: var(--border);
 }
 
 .review-row[data-ghost] .review-line-sub:not(:focus) {

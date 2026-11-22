@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import type {
   CSSProperties,
   KeyboardEvent,
@@ -6,6 +6,7 @@ import type {
   ReactNode,
 } from 'react'
 import { STAR_OUTLINE, STAR_SOLID } from './book'
+import { QuoteRail } from './quote-rail'
 import { CalendarIcon, ChevronIcon } from '../svgs'
 import type { Book, BookQuote, BookTocEntry } from '../server/posts'
 
@@ -319,7 +320,7 @@ export function DateField({
 }
 
 export function growTextarea(el: HTMLTextAreaElement | null) {
-  if (!el) return
+  if (!el || CSS.supports('field-sizing', 'content')) return
   el.style.height = 'auto'
   el.style.height = `${el.scrollHeight}px`
 }
@@ -484,41 +485,110 @@ function ReviewLines<T>({
   )
 }
 
+const pageOf = (quote: BookQuote) =>
+  (quote.page ?? '').replace(/^p\.?\s*/i, '').replace(/\s*쪽$/, '')
+
+const isBlankQuote = (quote: BookQuote) =>
+  !quote.text.trim() && !quote.chapter?.trim() && !quote.page?.trim()
+
 export function QuoteSection({
   quotes,
+  chapters,
   onChange,
 }: {
   quotes: Book['quotes']
+  chapters: string[]
   onChange: (quotes: BookQuote[]) => void
 }) {
+  const chapterListId = useId()
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const last = quotes[quotes.length - 1]
+  const shown =
+    last !== undefined && isBlankQuote(last) ? quotes : [...quotes, { text: '' }]
+
+  const patch = (index: number, next: Partial<BookQuote>) => {
+    const base = index < quotes.length ? quotes : [...quotes, { text: '' }]
+    onChange(base.map((q, i) => (i === index ? { ...q, ...next } : q)))
+  }
+
+  const focusCard = (index: number) =>
+    requestAnimationFrame(() => {
+      wrapRef.current
+        ?.querySelectorAll<HTMLTextAreaElement>('.quote-card textarea')
+        [index]?.focus()
+    })
+
   return (
-    <ReviewLines
-      title="문장 수집"
-      rows={quotes}
-      blank={{ text: '' }}
-      isBlank={(quote) => !quote.text.trim() && !quote.page?.trim()}
-      onChange={onChange}
-      render={(quote, i, patch, lineProps) => (
-        <div className="review-quote">
-          <textarea
-            {...lineProps}
-            ref={growTextarea}
-            rows={1}
-            aria-label={`문장 ${i + 1}`}
-            placeholder="마음에 남은 문장"
-            value={quote.text}
-            onChange={(e) => patch({ text: e.target.value })}
-          />
-          <input
-            className="review-line-sub"
-            aria-label={`문장 ${i + 1} 쪽수`}
-            placeholder="쪽"
-            value={quote.page ?? ''}
-            onChange={(e) => patch({ page: e.target.value })}
-          />
-        </div>
-      )}
-    />
+    <div ref={wrapRef}>
+      <datalist id={chapterListId}>
+        {[...new Set(chapters.filter(Boolean))].map((chapter) => (
+          <option key={chapter} value={chapter} />
+        ))}
+      </datalist>
+      <QuoteRail className="review-quotes" titleClassName="review-block-title">
+        {shown.map((quote, i) => {
+          const ghost = i >= quotes.length || isBlankQuote(quote)
+          return (
+            <div key={i} className="quote-card" data-ghost={ghost || undefined}>
+              {!ghost && (
+                <button
+                  type="button"
+                  className="quote-card-del"
+                  aria-label={`문장 ${i + 1}번 삭제`}
+                  onClick={() => onChange(quotes.filter((_, j) => j !== i))}
+                >
+                  ×
+                </button>
+              )}
+              <input
+                className="quote-chapter"
+                list={chapterListId}
+                aria-label={`문장 ${i + 1} 목차`}
+                placeholder="목차"
+                value={quote.chapter ?? ''}
+                onChange={(e) => patch(i, { chapter: e.target.value })}
+              />
+              <textarea
+                ref={growTextarea}
+                rows={2}
+                aria-label={`문장 ${i + 1}`}
+                placeholder="마음에 남은 문장"
+                value={quote.text}
+                onChange={(e) => patch(i, { text: e.target.value })}
+                onKeyDown={(e) => {
+                  if (
+                    e.key !== 'Backspace' ||
+                    e.nativeEvent.isComposing ||
+                    e.currentTarget.value !== '' ||
+                    i === 0 ||
+                    i >= quotes.length ||
+                    quote.chapter?.trim() ||
+                    quote.page?.trim()
+                  ) {
+                    return
+                  }
+                  e.preventDefault()
+                  onChange(quotes.filter((_, j) => j !== i))
+                  focusCard(i - 1)
+                }}
+              />
+              <div className="quote-card-meta">
+                <label className="quote-page-field">
+                  <span aria-hidden="true">p.</span>
+                  <input
+                    aria-label={`문장 ${i + 1} 쪽수`}
+                    inputMode="numeric"
+                    style={{ width: `${Math.max(pageOf(quote).length, 2)}ch` }}
+                    value={pageOf(quote)}
+                    onChange={(e) => patch(i, { page: e.target.value })}
+                  />
+                </label>
+              </div>
+            </div>
+          )
+        })}
+      </QuoteRail>
+    </div>
   )
 }
 

@@ -402,6 +402,7 @@ function WritePage() {
         <>
           <QuoteSection
             quotes={book.quotes}
+            chapters={book.toc.map((entry) => entry.title)}
             onChange={(quotes) => patchBook({ quotes })}
           />
           <TocSection toc={book.toc} onChange={(toc) => patchBook({ toc })} />
