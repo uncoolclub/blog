@@ -35,6 +35,13 @@ echo 'KAKAO_REST_API_KEY=발급받은_키' > .dev.vars   # 로컬 (git 제외)
 pnpm exec wrangler secret put KAKAO_REST_API_KEY    # 프로덕션
 ```
 
+책 목차는 [예스24 Open API](https://developers.yes24.com/api-doc/goods-content)로 가져온다. 목차가 노출되는 화면에는 예스24 출처와 상품 링크가 필요하다.
+
+```bash
+echo 'YES24_API_KEY=발급받은_키' >> .dev.vars        # 로컬 (git 제외)
+pnpm exec wrangler secret put YES24_API_KEY         # 프로덕션
+```
+
 ## 댓글 (giscus)
 
 public 레포에서만 동작한다. Discussions를 켜고 [giscus 앱](https://github.com/apps/giscus)을

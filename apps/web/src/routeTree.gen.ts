@@ -21,6 +21,7 @@ import { Route as WriteIndexRouteImport } from './routes/write.index'
 import { Route as WriteIdRouteImport } from './routes/write.$id'
 import { Route as ApiBooksCoverRouteImport } from './routes/api.books.cover'
 import { Route as ApiBooksSearchRouteImport } from './routes/api.books.search'
+import { Route as ApiBooksTocRouteImport } from './routes/api.books.toc'
 import { Route as ApiImagesKeyRouteImport } from './routes/api.images.$key'
 import { Route as WriteIdPreviewRouteImport } from './routes/write.$id_.preview'
 
@@ -84,6 +85,11 @@ const ApiBooksSearchRoute = ApiBooksSearchRouteImport.update({
   path: '/api/books/search',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiBooksTocRoute = ApiBooksTocRouteImport.update({
+  id: '/api/books/toc',
+  path: '/api/books/toc',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiImagesKeyRoute = ApiImagesKeyRouteImport.update({
   id: '/api/images/$key',
   path: '/api/images/$key',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/write/': typeof WriteIndexRoute
   '/api/books/cover': typeof ApiBooksCoverRoute
   '/api/books/search': typeof ApiBooksSearchRoute
+  '/api/books/toc': typeof ApiBooksTocRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
   '/write/$id/preview': typeof WriteIdPreviewRoute
 }
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/write': typeof WriteIndexRoute
   '/api/books/cover': typeof ApiBooksCoverRoute
   '/api/books/search': typeof ApiBooksSearchRoute
+  '/api/books/toc': typeof ApiBooksTocRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
   '/write/$id/preview': typeof WriteIdPreviewRoute
 }
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/write/': typeof WriteIndexRoute
   '/api/books/cover': typeof ApiBooksCoverRoute
   '/api/books/search': typeof ApiBooksSearchRoute
+  '/api/books/toc': typeof ApiBooksTocRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
   '/write/$id_/preview': typeof WriteIdPreviewRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/write/'
     | '/api/books/cover'
     | '/api/books/search'
+    | '/api/books/toc'
     | '/api/images/$key'
     | '/write/$id/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/write'
     | '/api/books/cover'
     | '/api/books/search'
+    | '/api/books/toc'
     | '/api/images/$key'
     | '/write/$id/preview'
   id:
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/write/'
     | '/api/books/cover'
     | '/api/books/search'
+    | '/api/books/toc'
     | '/api/images/$key'
     | '/write/$id_/preview'
   fileRoutesById: FileRoutesById
@@ -208,6 +220,7 @@ export interface RootRouteChildren {
   WriteIndexRoute: typeof WriteIndexRoute
   ApiBooksCoverRoute: typeof ApiBooksCoverRoute
   ApiBooksSearchRoute: typeof ApiBooksSearchRoute
+  ApiBooksTocRoute: typeof ApiBooksTocRoute
   ApiImagesKeyRoute: typeof ApiImagesKeyRoute
   WriteIdPreviewRoute: typeof WriteIdPreviewRoute
 }
@@ -298,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBooksSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/books/toc': {
+      id: '/api/books/toc'
+      path: '/api/books/toc'
+      fullPath: '/api/books/toc'
+      preLoaderRoute: typeof ApiBooksTocRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/images/$key': {
       id: '/api/images/$key'
       path: '/api/images/$key'
@@ -328,6 +348,7 @@ const rootRouteChildren: RootRouteChildren = {
   WriteIndexRoute: WriteIndexRoute,
   ApiBooksCoverRoute: ApiBooksCoverRoute,
   ApiBooksSearchRoute: ApiBooksSearchRoute,
+  ApiBooksTocRoute: ApiBooksTocRoute,
   ApiImagesKeyRoute: ApiImagesKeyRoute,
   WriteIdPreviewRoute: WriteIdPreviewRoute,
 }

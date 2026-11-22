@@ -39,6 +39,7 @@ export interface Book {
   translator?: string
   publisher?: string
   isbn?: string
+  yes24ItemId?: number
   coverUrl?: string
   coverFallbackUrl?: string
   coverColor?: string
