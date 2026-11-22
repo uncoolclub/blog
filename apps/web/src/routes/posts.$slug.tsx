@@ -20,6 +20,11 @@ export const Route = createFileRoute('/posts/$slug')({
     const title = `${post.title} · ${SITE_NAME}`
     const description = post.book?.oneLiner || post.excerpt
     const image = post.cover ?? post.book?.coverUrl
+    const ogImage =
+      post.slug === '운칠기삼' &&
+      image === '/api/images/4d072891-3c10-4653-8049-9ae255c16f4f.jpg'
+        ? '/og-unchilgissam.jpg'
+        : image ?? DEFAULT_OG_IMAGE
     const author = { '@type': 'Person', name: '양수빈', url: absoluteUrl('/about') }
     const jsonLd = {
       '@context': 'https://schema.org',
@@ -47,9 +52,7 @@ export const Route = createFileRoute('/posts/$slug')({
         { property: 'og:type', content: 'article' },
         { property: 'og:title', content: post.title },
         { property: 'og:description', content: description },
-        ...(image
-          ? [{ property: 'og:image', content: absoluteUrl(image) }]
-          : []),
+        { property: 'og:image', content: absoluteUrl(ogImage) },
         ...(post.publishedAt
           ? [
               {
