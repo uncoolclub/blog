@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Book, BookSummary, PostDetail } from '../server/posts'
 import { BookCover, StarRating } from '../components/book'
-import { QuoteRail } from '../components/quote-rail'
+import { QuoteRail, QuoteText } from '../components/quote-rail'
 import { ChevronIcon } from '../svgs'
 import { formatDate } from '../lib/date'
 
@@ -200,7 +200,7 @@ function Quotes({ book }: { book: Book }) {
         return (
           <figure key={i} className="quote-card">
             {chapter && <span className="quote-chapter">{chapter}</span>}
-            <blockquote>{quote.text}</blockquote>
+            <QuoteText text={quote.text} />
             {page && (
               <figcaption>
                 <b>p.{page}</b>

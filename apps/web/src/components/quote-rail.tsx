@@ -2,6 +2,34 @@ import { Children, useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { ChevronIcon } from '../svgs'
 
+const QUOTE_LIMIT = 150
+
+export function QuoteText({ text }: { text: string }) {
+  const [expanded, setExpanded] = useState(false)
+  const chars = Array.from(text)
+  const long = chars.length > QUOTE_LIMIT
+  const shown =
+    long && !expanded
+      ? `${chars.slice(0, QUOTE_LIMIT).join('').trimEnd()}…`
+      : text
+
+  return (
+    <blockquote>
+      {shown}
+      {long && (
+        <button
+          type="button"
+          className="quote-more"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? '접기' : '더 보기'}
+        </button>
+      )}
+    </blockquote>
+  )
+}
+
 export function QuoteRail({
   className = '',
   titleClassName = 'review-section',
