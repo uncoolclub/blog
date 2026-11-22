@@ -11,6 +11,7 @@ export interface EditorProps {
   onChange: (content: JSONContent) => void
   uploadImage?: (file: File) => Promise<string>
   unfurl?: (url: string) => Promise<Partial<EmbedMeta>>
+  compactToolbar?: boolean
 }
 
 const BARE_URL = /^https?:\/\/\S+$/
@@ -21,6 +22,7 @@ export function Editor({
   onChange,
   uploadImage,
   unfurl,
+  compactToolbar,
 }: EditorProps) {
   const editor = useEditor({
     extensions: editorExtensions({ placeholder }),
@@ -95,6 +97,7 @@ export function Editor({
         <Toolbar
           editor={editor}
           onPickImage={uploadImage ? insertImage : undefined}
+          compact={compactToolbar}
         />
       )}
       <EditorContent editor={editor} className="prose" />

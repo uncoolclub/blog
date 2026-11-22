@@ -93,6 +93,25 @@
   color: var(--accent);
 }
 
+.blog-editor-more {
+  position: relative;
+}
+
+.blog-editor-more-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 4px);
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 34px);
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  padding: 6px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
 .blog-editor .tiptap {
   outline: none;
   min-height: 55vh;

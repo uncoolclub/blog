@@ -1,5 +1,6 @@
 import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
+import { useEffect, useRef, useState } from 'react'
 import { lowlight } from './extensions'
 
 const LANGUAGES = lowlight.listLanguages().sort()
@@ -97,13 +98,36 @@ const BUTTONS: ToolbarButton[] = [
   },
 ]
 
+const COMPACT_TITLES = new Set(['제목 2', '굵게', '기울임', '글머리 목록', '인용'])
+
 export function Toolbar({
   editor,
   onPickImage,
+  compact = false,
 }: {
   editor: Editor
   onPickImage?: (file: File) => void
+  compact?: boolean
 }) {
+  const [moreOpen, setMoreOpen] = useState(false)
+  const moreRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!moreOpen) return
+    const onPointerDown = (e: PointerEvent) => {
+      if (!moreRef.current?.contains(e.target as Node)) setMoreOpen(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMoreOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [moreOpen])
+
   const state = useEditorState({
     editor,
     selector: ({ editor }) => ({
@@ -122,23 +146,70 @@ export function Toolbar({
     }),
   })
 
+  const items = BUTTONS.map((button, index) => ({ button, index }))
+  const primary = compact
+    ? items.filter(({ button }) => COMPACT_TITLES.has(button.title))
+    : items
+  const more = compact
+    ? items.filter(({ button }) => !COMPACT_TITLES.has(button.title))
+    : []
+
+  const renderButton = (
+    { button: b, index: i }: (typeof items)[number],
+    onDone?: () => void,
+  ) => (
+    <button
+      key={b.label}
+      type="button"
+      title={b.title}
+      aria-label={b.title}
+      aria-pressed={state.active[i]}
+      data-active={state.active[i] || undefined}
+      onMouseDown={(e) => e.preventDefault()}
+      onClick={() => {
+        b.toggle(editor)
+        onDone?.()
+      }}
+    >
+      {b.label}
+    </button>
+  )
+
   return (
-    <div className="blog-editor-toolbar" role="toolbar" aria-label="서식">
-      {BUTTONS.map((b, i) => (
-        <button
-          key={b.label}
-          type="button"
-          title={b.title}
-          aria-label={b.title}
-          aria-pressed={state.active[i]}
-          data-active={state.active[i] || undefined}
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => b.toggle(editor)}
-        >
-          {b.label}
-        </button>
-      ))}
+    <div
+      className="blog-editor-toolbar"
+      data-compact={compact || undefined}
+      role="toolbar"
+      aria-label="서식"
+    >
+      {primary.map((item) => renderButton(item))}
       {onPickImage && <ImagePicker onPick={onPickImage} />}
+      {more.length > 0 && (
+        <div ref={moreRef} className="blog-editor-more">
+          <button
+            type="button"
+            title="서식 더보기"
+            aria-label="서식 더보기"
+            aria-expanded={moreOpen}
+            data-active={
+              more.some(({ index }) => state.active[index]) || undefined
+            }
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => setMoreOpen((open) => !open)}
+          >
+            ⋯
+          </button>
+          {moreOpen && (
+            <div
+              className="blog-editor-more-menu"
+              role="group"
+              aria-label="추가 서식"
+            >
+              {more.map((item) => renderButton(item, () => setMoreOpen(false)))}
+            </div>
+          )}
+        </div>
+      )}
       {state.codeLang !== null && (
         <select
           className="blog-editor-lang"
