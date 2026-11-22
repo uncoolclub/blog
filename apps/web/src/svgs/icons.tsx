@@ -55,6 +55,14 @@ export function MoreIcon() {
   )
 }
 
+export function CloseIcon() {
+  return (
+    <svg viewBox="0 0 12 12" style={{ ...stroked, strokeWidth: 1.1 }}>
+      <path d="M1 1l10 10M11 1 1 11" />
+    </svg>
+  )
+}
+
 export function BackIcon() {
   return (
     <svg viewBox="0 0 16 16" style={fine}>

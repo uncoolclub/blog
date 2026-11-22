@@ -3,11 +3,12 @@ import type {
   CSSProperties,
   KeyboardEvent,
   MouseEvent,
+  PointerEvent as ReactPointerEvent,
   ReactNode,
 } from 'react'
 import { STAR_SOLID } from './book'
 import { QuoteRail } from './quote-rail'
-import { CalendarIcon, ChevronIcon } from '../svgs'
+import { CalendarIcon, ChevronIcon, CloseIcon } from '../svgs'
 import type { Book, BookQuote, BookTocEntry } from '../server/posts'
 
 const STARS = [0, 1, 2, 3, 4]
@@ -488,6 +489,30 @@ function ReviewLines<T>({
 const pageOf = (quote: BookQuote) =>
   (quote.page ?? '').replace(/^p\.?\s*/i, '').replace(/\s*쪽$/, '')
 
+const DRAG_EDGE = 48
+const DRAG_SPEED = 8
+const LONG_PRESS = 260
+const MOUSE_SLOP = 6
+const TOUCH_SLOP = 8
+
+interface QuoteDrag {
+  from: number
+  over: number
+  dx: number
+  step: number
+}
+
+interface QuoteDragSession {
+  from: number
+  over: number
+  startX: number
+  clientX: number
+  startScroll: number
+  step: number
+  rail: HTMLElement
+  frame: number
+}
+
 const isBlankQuote = (quote: BookQuote) =>
   !quote.text.trim() && !quote.chapter?.trim() && !quote.page?.trim()
 
@@ -518,6 +543,158 @@ export function QuoteSection({
         [index]?.focus()
     })
 
+  const [drag, setDrag] = useState<QuoteDrag | null>(null)
+  const dragRef = useRef<QuoteDragSession | null>(null)
+  const pressRef = useRef<(() => void) | null>(null)
+  const quotesRef = useRef(quotes)
+  quotesRef.current = quotes
+
+  const moveQuote = (from: number, to: number) => {
+    if (from === to) return
+    const next = [...quotesRef.current]
+    const [moved] = next.splice(from, 1)
+    next.splice(to, 0, moved)
+    onChange(next)
+  }
+
+  const endDrag = (commit: boolean) => {
+    const session = dragRef.current
+    if (!session) return
+    cancelAnimationFrame(session.frame)
+    dragRef.current = null
+    if (commit) moveQuote(session.from, session.over)
+    setDrag(null)
+  }
+
+  useEffect(() => {
+    if (!drag) return
+    const onKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      pressRef.current?.()
+      endDrag(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  })
+
+  useEffect(() => {
+    const wrap = wrapRef.current
+    const blockScroll = (e: TouchEvent) => {
+      if (dragRef.current) e.preventDefault()
+    }
+    wrap?.addEventListener('touchmove', blockScroll, { passive: false })
+    return () => {
+      wrap?.removeEventListener('touchmove', blockScroll)
+      pressRef.current?.()
+      if (dragRef.current) cancelAnimationFrame(dragRef.current.frame)
+    }
+  }, [])
+
+  const tickDrag = () => {
+    const session = dragRef.current
+    if (!session) return
+    const { rail } = session
+    const rect = rail.getBoundingClientRect()
+    if (session.clientX < rect.left + DRAG_EDGE) rail.scrollLeft -= DRAG_SPEED
+    else if (session.clientX > rect.right - DRAG_EDGE) {
+      rail.scrollLeft += DRAG_SPEED
+    }
+    const dx =
+      session.clientX - session.startX + rail.scrollLeft - session.startScroll
+    const last = quotesRef.current.length - 1
+    session.over = Math.min(
+      last,
+      Math.max(0, session.from + Math.round(dx / session.step)),
+    )
+    setDrag({ from: session.from, over: session.over, dx, step: session.step })
+    session.frame = requestAnimationFrame(tickDrag)
+  }
+
+  const beginDrag = (index: number, startX: number, clientX: number) => {
+    const rail = wrapRef.current?.querySelector<HTMLElement>('.quote-rail')
+    const cards = rail?.querySelectorAll<HTMLElement>('.quote-card')
+    if (!rail || !cards || cards.length < 2) return
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    window.getSelection()?.removeAllRanges()
+    const step = cards[1].offsetLeft - cards[0].offsetLeft
+    dragRef.current = {
+      from: index,
+      over: index,
+      startX,
+      clientX,
+      startScroll: rail.scrollLeft,
+      step,
+      rail,
+      frame: requestAnimationFrame(tickDrag),
+    }
+    setDrag({ from: index, over: index, dx: clientX - startX, step })
+  }
+
+  const pressCard = (
+    e: ReactPointerEvent<HTMLDivElement>,
+    index: number,
+  ) => {
+    if (e.button !== 0 || quotes.length < 2) return
+    const target = e.target as HTMLElement
+    if (target.closest('.quote-card-del')) return
+    const field = target.closest('textarea, input')
+    if (field && field === document.activeElement) return
+    const { pointerId, clientX: startX, clientY: startY } = e
+    const touch = e.pointerType !== 'mouse'
+    let lastX = startX
+    const timer = touch
+      ? window.setTimeout(() => beginDrag(index, startX, lastX), LONG_PRESS)
+      : 0
+    const release = () => {
+      window.clearTimeout(timer)
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      window.removeEventListener('pointercancel', onCancel)
+      pressRef.current = null
+    }
+    const onMove = (m: PointerEvent) => {
+      if (m.pointerId !== pointerId) return
+      lastX = m.clientX
+      if (dragRef.current) {
+        dragRef.current.clientX = m.clientX
+        return
+      }
+      const dx = m.clientX - startX
+      const dy = m.clientY - startY
+      if (touch) {
+        if (Math.hypot(dx, dy) > TOUCH_SLOP) release()
+      } else if (Math.abs(dx) > MOUSE_SLOP && Math.abs(dx) >= Math.abs(dy)) {
+        beginDrag(index, startX, m.clientX)
+      }
+    }
+    const onUp = (m: PointerEvent) => {
+      if (m.pointerId !== pointerId) return
+      release()
+      endDrag(true)
+    }
+    const onCancel = (m: PointerEvent) => {
+      if (m.pointerId !== pointerId) return
+      release()
+      endDrag(false)
+    }
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    window.addEventListener('pointercancel', onCancel)
+    pressRef.current = release
+  }
+
+  const cardOffset = (index: number) => {
+    if (!drag) return undefined
+    if (index === drag.from) return `translateX(${drag.dx}px)`
+    if (index > drag.from && index <= drag.over) {
+      return `translateX(${-drag.step}px)`
+    }
+    if (index < drag.from && index >= drag.over) {
+      return `translateX(${drag.step}px)`
+    }
+    return undefined
+  }
+
   return (
     <div ref={wrapRef}>
       <datalist id={chapterListId}>
@@ -525,11 +702,37 @@ export function QuoteSection({
           <option key={chapter} value={chapter} />
         ))}
       </datalist>
-      <QuoteRail className="review-quotes" titleClassName="review-block-title">
+      <QuoteRail
+        className={drag ? 'review-quotes is-dragging' : 'review-quotes'}
+        titleClassName="review-block-title"
+      >
         {shown.map((quote, i) => {
           const ghost = i >= quotes.length || isBlankQuote(quote)
           return (
-            <div key={i} className="quote-card" data-ghost={ghost || undefined}>
+            <div
+              key={i}
+              className="quote-card"
+              data-ghost={ghost || undefined}
+              data-dragged={drag?.from === i || undefined}
+              style={{ transform: cardOffset(i) }}
+              onPointerDown={ghost ? undefined : (e) => pressCard(e, i)}
+              onContextMenu={(e) => {
+                if (pressRef.current || dragRef.current) e.preventDefault()
+              }}
+              onKeyDown={(e) => {
+                if (!e.altKey || ghost) return
+                const to =
+                  e.key === 'ArrowLeft'
+                    ? i - 1
+                    : e.key === 'ArrowRight'
+                      ? i + 1
+                      : null
+                if (to === null || to < 0 || to >= quotes.length) return
+                e.preventDefault()
+                moveQuote(i, to)
+                focusCard(to)
+              }}
+            >
               {!ghost && (
                 <button
                   type="button"
@@ -537,7 +740,7 @@ export function QuoteSection({
                   aria-label={`문장 ${i + 1}번 삭제`}
                   onClick={() => onChange(quotes.filter((_, j) => j !== i))}
                 >
-                  ×
+                  <CloseIcon />
                 </button>
               )}
               <input

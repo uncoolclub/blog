@@ -4,6 +4,7 @@ export {
   BackIcon,
   CalendarIcon,
   ChevronIcon,
+  CloseIcon,
   DocIcon,
   EditIcon,
   FaceSketch,

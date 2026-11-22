@@ -882,7 +882,7 @@ img.book-cover,
 }
 
 input.quote-chapter {
-  padding-right: 24px;
+  padding-right: 28px;
   text-overflow: ellipsis;
 }
 
@@ -1026,22 +1026,62 @@ input.quote-chapter::placeholder {
 
 .quote-card-del {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 28px;
-  height: 28px;
+  top: 25px;
+  right: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   border: none;
-  border-radius: 7px;
+  border-radius: 6px;
   background: transparent;
   color: var(--text-3);
-  font-size: 15px;
+  padding: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+.quote-card-del svg {
+  display: block;
+  width: 12px;
+  height: 12px;
 }
 
 .quote-card:hover .quote-card-del,
 .quote-card:focus-within .quote-card-del {
   opacity: 1;
+}
+
+.review-quotes.is-dragging .quote-rail {
+  scroll-snap-type: none;
+}
+
+.review-quotes .quote-card:not([data-ghost]) {
+  cursor: grab;
+  -webkit-touch-callout: none;
+}
+
+.review-quotes.is-dragging,
+.review-quotes.is-dragging * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+.review-quotes.is-dragging .quote-card textarea,
+.review-quotes.is-dragging .quote-card input {
+  pointer-events: none;
+}
+
+.review-quotes.is-dragging .quote-card {
+  transition: transform 0.16s ease;
+}
+
+.review-quotes.is-dragging .quote-card[data-dragged] {
+  z-index: 5;
+  border-color: var(--accent);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  transition: none;
 }
 
 .quote-card-del:hover {
