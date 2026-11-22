@@ -36,6 +36,7 @@ function toggleTheme() {
 
 const COPY_ALLOWED = 'pre, input, textarea, [contenteditable]'
 function blockCopy(e: React.ClipboardEvent) {
+  if (/^\/write(\/|$)/.test(window.location.pathname)) return
   if (!(e.target as Element).closest?.(COPY_ALLOWED)) e.preventDefault()
 }
 import appCss from '../styles.css?url'
