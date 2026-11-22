@@ -1,7 +1,7 @@
 import { decodeEntities } from './html-entities'
 import type { BookTocEntry } from '../server/posts'
 
-const MAX_ENTRIES = 200
+const MAX_ENTRIES = 500
 const MAX_TITLE = 200
 const LINE_BREAK = /<br\s*\/?>|<\/(?:p|div|li|tr)>/gi
 const MARKUP =

@@ -372,10 +372,12 @@ function ReviewLines<T>({
   rows,
   blank,
   isBlank,
+  collapseAfter,
   onChange,
   render,
 }: {
   title: string
+  collapseAfter?: number
   rows: T[]
   blank: T
   isBlank: (row: T) => boolean
@@ -392,6 +394,10 @@ function ReviewLines<T>({
   const committedAtRef = useRef(0)
   const last = rows[rows.length - 1]
   const shown = last !== undefined && isBlank(last) ? rows : [...rows, blank]
+  const [expanded, setExpanded] = useState(false)
+  const collapsible = collapseAfter != null && rows.length > collapseAfter
+  const visible =
+    collapsible && !expanded ? shown.slice(0, collapseAfter) : shown
 
   const focusLine = (index: number) =>
     requestAnimationFrame(() => {
@@ -401,7 +407,9 @@ function ReviewLines<T>({
     })
 
   const moveNext = (index: number) => {
-    if (index < shown.length - 1) focusLine(index + 1)
+    if (index >= shown.length - 1) return
+    if (index + 1 >= visible.length) setExpanded(true)
+    focusLine(index + 1)
   }
 
   function onLineKeyDown(e: KeyboardEvent<LineElement>, index: number) {
@@ -427,7 +435,7 @@ function ReviewLines<T>({
   return (
     <section ref={containerRef} className="review-block" aria-label={title}>
       <h2 className="review-block-title">{title}</h2>
-      {shown.map((row, i) => {
+      {visible.map((row, i) => {
         const ghost = i >= rows.length || isBlank(row)
         return (
           <div key={i} className="review-row" data-ghost={ghost || undefined}>
@@ -462,6 +470,16 @@ function ReviewLines<T>({
           </div>
         )
       })}
+      {collapsible && (
+        <button
+          type="button"
+          className="toc-toggle"
+          aria-expanded={expanded}
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? '접기' : `전체 보기 (${rows.length})`}
+        </button>
+      )}
     </section>
   )
 }
@@ -514,6 +532,7 @@ export function TocSection({
   return (
     <ReviewLines
       title="목차"
+      collapseAfter={8}
       rows={toc}
       blank={{ title: '' }}
       isBlank={(entry) => !entry.title.trim() && !entry.note?.trim()}

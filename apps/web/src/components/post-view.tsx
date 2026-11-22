@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { Book, BookSummary, PostDetail } from '../server/posts'
 import { BookCover, StarRating } from '../components/book'
@@ -197,13 +197,20 @@ function Quotes({ book }: { book: Book }) {
   )
 }
 
+const TOC_PREVIEW = 8
+
 function Toc({ book }: { book: Book }) {
+  const [expanded, setExpanded] = useState(false)
   if (book.toc.length === 0) return null
+  const collapsible = book.toc.length > TOC_PREVIEW
+  const entries =
+    collapsible && !expanded ? book.toc.slice(0, TOC_PREVIEW) : book.toc
+  const hasSource = Number.isSafeInteger(book.yes24ItemId)
   return (
     <section className="book-toc">
       <h2 className="review-section">목차</h2>
       <ol>
-        {book.toc.map((entry, i) => (
+        {entries.map((entry, i) => (
           <li key={i}>
             <span className="toc-num" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
@@ -218,15 +225,29 @@ function Toc({ book }: { book: Book }) {
           </li>
         ))}
       </ol>
-      {Number.isSafeInteger(book.yes24ItemId) && (
-        <a
-          className="toc-source"
-          href={`https://www.yes24.com/product/goods/${book.yes24ItemId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          출처: 예스24
-        </a>
+      {(collapsible || hasSource) && (
+        <div className="toc-foot">
+          {collapsible && (
+            <button
+              type="button"
+              className="toc-toggle"
+              aria-expanded={expanded}
+              onClick={() => setExpanded((value) => !value)}
+            >
+              {expanded ? '접기' : `전체 보기 (${book.toc.length})`}
+            </button>
+          )}
+          {hasSource && (
+            <a
+              className="toc-source"
+              href={`https://www.yes24.com/product/goods/${book.yes24ItemId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              출처: 예스24
+            </a>
+          )}
+        </div>
       )}
     </section>
   )
