@@ -19,6 +19,8 @@ import { Route as ApiUploadRouteImport } from './routes/api.upload'
 import { Route as PostsSlugRouteImport } from './routes/posts.$slug'
 import { Route as WriteIndexRouteImport } from './routes/write.index'
 import { Route as WriteIdRouteImport } from './routes/write.$id'
+import { Route as ApiBooksCoverRouteImport } from './routes/api.books.cover'
+import { Route as ApiBooksSearchRouteImport } from './routes/api.books.search'
 import { Route as ApiImagesKeyRouteImport } from './routes/api.images.$key'
 import { Route as WriteIdPreviewRouteImport } from './routes/write.$id_.preview'
 
@@ -72,6 +74,16 @@ const WriteIdRoute = WriteIdRouteImport.update({
   path: '/write/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiBooksCoverRoute = ApiBooksCoverRouteImport.update({
+  id: '/api/books/cover',
+  path: '/api/books/cover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBooksSearchRoute = ApiBooksSearchRouteImport.update({
+  id: '/api/books/search',
+  path: '/api/books/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiImagesKeyRoute = ApiImagesKeyRouteImport.update({
   id: '/api/images/$key',
   path: '/api/images/$key',
@@ -94,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/posts/$slug': typeof PostsSlugRoute
   '/write/$id': typeof WriteIdRoute
   '/write/': typeof WriteIndexRoute
+  '/api/books/cover': typeof ApiBooksCoverRoute
+  '/api/books/search': typeof ApiBooksSearchRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
   '/write/$id/preview': typeof WriteIdPreviewRoute
 }
@@ -108,6 +122,8 @@ export interface FileRoutesByTo {
   '/posts/$slug': typeof PostsSlugRoute
   '/write/$id': typeof WriteIdRoute
   '/write': typeof WriteIndexRoute
+  '/api/books/cover': typeof ApiBooksCoverRoute
+  '/api/books/search': typeof ApiBooksSearchRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
   '/write/$id/preview': typeof WriteIdPreviewRoute
 }
@@ -123,6 +139,8 @@ export interface FileRoutesById {
   '/posts/$slug': typeof PostsSlugRoute
   '/write/$id': typeof WriteIdRoute
   '/write/': typeof WriteIndexRoute
+  '/api/books/cover': typeof ApiBooksCoverRoute
+  '/api/books/search': typeof ApiBooksSearchRoute
   '/api/images/$key': typeof ApiImagesKeyRoute
   '/write/$id_/preview': typeof WriteIdPreviewRoute
 }
@@ -139,6 +157,8 @@ export interface FileRouteTypes {
     | '/posts/$slug'
     | '/write/$id'
     | '/write/'
+    | '/api/books/cover'
+    | '/api/books/search'
     | '/api/images/$key'
     | '/write/$id/preview'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +173,8 @@ export interface FileRouteTypes {
     | '/posts/$slug'
     | '/write/$id'
     | '/write'
+    | '/api/books/cover'
+    | '/api/books/search'
     | '/api/images/$key'
     | '/write/$id/preview'
   id:
@@ -167,6 +189,8 @@ export interface FileRouteTypes {
     | '/posts/$slug'
     | '/write/$id'
     | '/write/'
+    | '/api/books/cover'
+    | '/api/books/search'
     | '/api/images/$key'
     | '/write/$id_/preview'
   fileRoutesById: FileRoutesById
@@ -182,6 +206,8 @@ export interface RootRouteChildren {
   PostsSlugRoute: typeof PostsSlugRoute
   WriteIdRoute: typeof WriteIdRoute
   WriteIndexRoute: typeof WriteIndexRoute
+  ApiBooksCoverRoute: typeof ApiBooksCoverRoute
+  ApiBooksSearchRoute: typeof ApiBooksSearchRoute
   ApiImagesKeyRoute: typeof ApiImagesKeyRoute
   WriteIdPreviewRoute: typeof WriteIdPreviewRoute
 }
@@ -258,6 +284,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WriteIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/books/cover': {
+      id: '/api/books/cover'
+      path: '/api/books/cover'
+      fullPath: '/api/books/cover'
+      preLoaderRoute: typeof ApiBooksCoverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/books/search': {
+      id: '/api/books/search'
+      path: '/api/books/search'
+      fullPath: '/api/books/search'
+      preLoaderRoute: typeof ApiBooksSearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/images/$key': {
       id: '/api/images/$key'
       path: '/api/images/$key'
@@ -286,6 +326,8 @@ const rootRouteChildren: RootRouteChildren = {
   PostsSlugRoute: PostsSlugRoute,
   WriteIdRoute: WriteIdRoute,
   WriteIndexRoute: WriteIndexRoute,
+  ApiBooksCoverRoute: ApiBooksCoverRoute,
+  ApiBooksSearchRoute: ApiBooksSearchRoute,
   ApiImagesKeyRoute: ApiImagesKeyRoute,
   WriteIdPreviewRoute: WriteIdPreviewRoute,
 }

@@ -24,6 +24,17 @@ cd apps/web && pnpm deploy
 `blog.th3shu.dev/write*`를 이메일 OTP로 보호하고 AUD•팀 도메인을 wrangler.jsonc에 넣는 것.
 AUD가 비어 있으면 어드민 API는 전부 403이다(fail-closed).
 
+## 책 검색 (카카오)
+
+`/write`의 책 연결은 [Daum 책 검색 API](https://developers.kakao.com/docs/ko/daum-search/dev-guide#search-book)를 쓴다.
+카카오 디벨로퍼스에서 앱을 만들고 REST API 키를 발급한 뒤 등록한다. 키가 없어도 서지는 직접 입력할 수 있다.
+
+```bash
+cd apps/web
+echo 'KAKAO_REST_API_KEY=발급받은_키' > .dev.vars   # 로컬 (git 제외)
+pnpm exec wrangler secret put KAKAO_REST_API_KEY    # 프로덕션
+```
+
 ## 댓글 (giscus)
 
 public 레포에서만 동작한다. Discussions를 켜고 [giscus 앱](https://github.com/apps/giscus)을

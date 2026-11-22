@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { youtubeIdOf } from '@blog/editor/html'
 import type { EmbedMeta } from '@blog/editor/html'
+import { decodeEntities } from '../lib/html-entities'
 import { assertAdmin } from '../server/posts'
 
 // OG 메타는 CORS 때문에 브라우저에서 못 가져오므로 여기서 대신 가져온다.
@@ -14,15 +15,6 @@ function metaContent(html: string, key: string): string | undefined {
   ).exec(html)?.[0]
   const content = tag && /content=["']([^"']*)["']/i.exec(tag)?.[1]
   return content ? decodeEntities(content) : undefined
-}
-
-function decodeEntities(s: string): string {
-  return s
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#0?39;|&apos;/g, "'")
 }
 
 async function unfurl(url: string): Promise<EmbedMeta> {

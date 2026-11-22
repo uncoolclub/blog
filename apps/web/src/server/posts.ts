@@ -38,7 +38,9 @@ export interface Book {
   author: string
   translator?: string
   publisher?: string
+  isbn?: string
   coverUrl?: string
+  coverFallbackUrl?: string
   coverColor?: string
   rating?: number
   readFrom?: string
@@ -50,7 +52,7 @@ export interface Book {
 
 export type BookSummary = Pick<
   Book,
-  'title' | 'author' | 'coverUrl' | 'rating'
+  'title' | 'author' | 'coverUrl' | 'coverFallbackUrl' | 'rating'
 >
 
 function parseBook(json: string | null): Book | null {
@@ -66,8 +68,8 @@ function parseBook(json: string | null): Book | null {
 function summarizeBook(json: string | null): BookSummary | null {
   const book = parseBook(json)
   if (!book) return null
-  const { title, author, coverUrl, rating } = book
-  return { title, author, coverUrl, rating }
+  const { title, author, coverUrl, coverFallbackUrl, rating } = book
+  return { title, author, coverUrl, coverFallbackUrl, rating }
 }
 
 const db = () => env.DB

@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { BOOK_COVERS } from '../svgs/covers'
 import type { BookSummary } from '../server/posts'
 
@@ -36,6 +37,38 @@ export function StarRating({ rating }: { rating: number }) {
   )
 }
 
+export function CoverImage({
+  src,
+  fallback,
+  className,
+  loading,
+}: {
+  src: string
+  fallback?: string
+  className: string
+  loading?: 'lazy' | 'eager'
+}) {
+  const ref = useRef<HTMLImageElement>(null)
+  const [failedSrc, setFailedSrc] = useState<string>()
+
+  useEffect(() => {
+    const img = ref.current
+    if (img?.complete && img.naturalWidth === 0) setFailedSrc(src)
+  }, [src])
+
+  return (
+    <img
+      ref={ref}
+      className={className}
+      src={failedSrc === src && fallback ? fallback : src}
+      alt=""
+      loading={loading}
+      referrerPolicy="no-referrer"
+      onError={() => setFailedSrc(src)}
+    />
+  )
+}
+
 export function BookCover({
   id,
   book,
@@ -46,7 +79,13 @@ export function BookCover({
   showAuthor?: boolean
 }) {
   if (book.coverUrl) {
-    return <img className="book-cover" src={book.coverUrl} alt="" />
+    return (
+      <CoverImage
+        className="book-cover"
+        src={book.coverUrl}
+        fallback={book.coverFallbackUrl}
+      />
+    )
   }
   return (
     <div

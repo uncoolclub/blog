@@ -10,7 +10,10 @@ import {
   unpublishPost,
 } from '../server/posts'
 import type { Book } from '../server/posts'
+import { BookPicker } from '../components/book-picker'
 import { dominantColor } from '../lib/dominant-color'
+import { isKakaoCover } from '../lib/kakao-book'
+import type { BookSearchResult } from '../lib/kakao-book'
 
 export const Route = createFileRoute('/write/$id')({
   params: {
@@ -25,6 +28,14 @@ type SaveState = 'saved' | 'saving' | 'dirty'
 
 const EMPTY_BOOK: Book = { title: '', author: '', quotes: [], toc: [] }
 
+const hasReviewContent = (book: Book) =>
+  book.rating != null ||
+  Boolean(book.readFrom?.trim()) ||
+  Boolean(book.readTo?.trim()) ||
+  Boolean(book.oneLiner?.trim()) ||
+  book.quotes.some((quote) => quote.text.trim() || quote.page?.trim()) ||
+  book.toc.some((entry) => entry.title.trim() || entry.note?.trim())
+
 function WritePage() {
   const post = Route.useLoaderData()
   const router = useRouter()
@@ -33,6 +44,9 @@ function WritePage() {
   const [status, setStatus] = useState(post.status)
   const [slug, setSlug] = useState(post.slug ?? '')
   const [book, setBookState] = useState<Book | null>(post.book)
+  const [biblioOpen, setBiblioOpen] = useState(
+    post.book !== null && !post.book.title,
+  )
   const [saveState, setSaveState] = useState<SaveState>('saved')
 
   const latest = useRef({
@@ -74,18 +88,61 @@ function WritePage() {
   )
 
   const patchBook = useCallback(
-    (patch: Partial<Book>) => setBook({ ...(book ?? EMPTY_BOOK), ...patch }),
-    [book, setBook],
+    (patch: Partial<Book>) =>
+      setBook({ ...(latest.current.book ?? EMPTY_BOOK), ...patch }),
+    [setBook],
   )
 
   const pickCoverColor = useCallback(
-    async (coverUrl: string) => {
+    async (coverUrl?: string, fallbackUrl?: string) => {
       if (!coverUrl) return
-      const coverColor = await dominantColor(coverUrl)
-      if (coverColor) patchBook({ coverUrl, coverColor })
+      const colorOf = (url: string) =>
+        dominantColor(
+          isKakaoCover(url)
+            ? `/api/books/cover?url=${encodeURIComponent(url)}`
+            : url,
+        )
+      const coverColor =
+        (await colorOf(coverUrl)) ??
+        (fallbackUrl ? await colorOf(fallbackUrl) : null)
+      if (coverColor && latest.current.book?.coverUrl === coverUrl) {
+        patchBook({ coverColor })
+      }
     },
     [patchBook],
   )
+
+  const selectBook = useCallback(
+    (result: BookSearchResult) => {
+      patchBook({
+        translator: undefined,
+        publisher: undefined,
+        coverUrl: undefined,
+        coverFallbackUrl: undefined,
+        isbn: undefined,
+        ...result,
+        coverColor: undefined,
+      })
+      setBiblioOpen(false)
+      void pickCoverColor(result.coverUrl, result.coverFallbackUrl)
+    },
+    [patchBook, pickCoverColor],
+  )
+
+  const unlinkBook = useCallback(() => {
+    const current = latest.current.book
+    if (
+      current &&
+      hasReviewContent(current) &&
+      !confirm(
+        '책 연결을 해제할까? 입력한 별점, 기간, 한 줄 평, 문장, 목차가 지워져.',
+      )
+    ) {
+      return
+    }
+    setBook(null)
+    setBiblioOpen(false)
+  }, [setBook])
 
   async function onPublish() {
     await flush()
@@ -189,165 +246,176 @@ function WritePage() {
         onChange={(e) => setSlug(e.target.value)}
       />
 
-      <label className="book-toggle">
-        <input
-          type="checkbox"
-          role="switch"
-          checked={book !== null}
-          onChange={(e) => setBook(e.target.checked ? EMPTY_BOOK : null)}
-        />
-        서평
-      </label>
-
-      {book && (
-        <div className="book-form">
-          <div className="book-group">
-            <span className="book-form-label">서지</span>
-            <div className="book-form-row">
-              <input
-                placeholder="책 제목"
-                value={book.title}
-                onChange={(e) => patchBook({ title: e.target.value })}
-              />
-              <input
-                placeholder="지은이"
-                value={book.author}
-                onChange={(e) => patchBook({ author: e.target.value })}
-              />
-            </div>
-            <div className="book-form-row">
-              <input
-                placeholder="옮긴이"
-                value={book.translator ?? ''}
-                onChange={(e) => patchBook({ translator: e.target.value })}
-              />
-              <input
-                placeholder="출판사"
-                value={book.publisher ?? ''}
-                onChange={(e) => patchBook({ publisher: e.target.value })}
-              />
-            </div>
-            <div className="book-form-row">
-              <input
-                className="narrow"
-                type="number"
-                min={0}
-                max={5}
-                step={0.5}
-                placeholder="별점 0~5"
-                value={book.rating ?? ''}
-                onChange={(e) =>
-                  patchBook({
-                    rating:
-                      e.target.value === ''
-                        ? undefined
-                        : Number(e.target.value),
-                  })
-                }
-              />
-              <input
-                placeholder="읽기 시작 (2026.07)"
-                value={book.readFrom ?? ''}
-                onChange={(e) => patchBook({ readFrom: e.target.value })}
-              />
-              <input
-                placeholder="완독 (2026.08)"
-                value={book.readTo ?? ''}
-                onChange={(e) => patchBook({ readTo: e.target.value })}
-              />
-            </div>
-            <div className="book-form-row">
-              <input
-                placeholder="한 줄 평"
-                value={book.oneLiner ?? ''}
-                onChange={(e) => patchBook({ oneLiner: e.target.value })}
-              />
-            </div>
-          </div>
-
-          <div className="book-group">
-            <span className="book-form-label">표지</span>
-            <div className="book-form-row cover">
-              <input
-                placeholder="표지 URL"
-                value={book.coverUrl ?? ''}
-                onChange={(e) => patchBook({ coverUrl: e.target.value })}
-                onBlur={(e) => void pickCoverColor(e.target.value)}
-              />
-              <label className="upload-btn">
-                업로드
+      <BookPicker
+        book={book}
+        onSelect={selectBook}
+        onManual={() => {
+          setBook(EMPTY_BOOK)
+          setBiblioOpen(true)
+        }}
+        onUnlink={unlinkBook}
+      >
+        {book && (
+          <div className="book-form">
+            <details
+              className="book-biblio"
+              open={biblioOpen}
+              onToggle={(e) => setBiblioOpen(e.currentTarget.open)}
+            >
+              <summary>서지 직접 수정</summary>
+              <div className="book-biblio-body">
+              <div className="book-form-row">
                 <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0]
-                    if (!file) return
-                    const coverUrl = await uploadImage(file)
-                    patchBook({ coverUrl })
-                    e.target.value = ''
-                    await pickCoverColor(coverUrl)
-                  }}
+                  placeholder="책 제목"
+                  value={book.title}
+                  onChange={(e) => patchBook({ title: e.target.value })}
                 />
-              </label>
-              <label
-                className="color-field"
-                title="타일 배경색 (표지에서 자동 추출)"
-              >
                 <input
-                  type="color"
-                  value={book.coverColor ?? '#c9d6ff'}
-                  onChange={(e) => patchBook({ coverColor: e.target.value })}
+                  placeholder="지은이"
+                  value={book.author}
+                  onChange={(e) => patchBook({ author: e.target.value })}
                 />
-              </label>
-            </div>
-          </div>
+              </div>
+              <div className="book-form-row">
+                <input
+                  placeholder="옮긴이"
+                  value={book.translator ?? ''}
+                  onChange={(e) => patchBook({ translator: e.target.value })}
+                />
+                <input
+                  placeholder="출판사"
+                  value={book.publisher ?? ''}
+                  onChange={(e) => patchBook({ publisher: e.target.value })}
+                />
+              </div>
+              <div className="book-form-row cover">
+                <input
+                  placeholder="표지 URL"
+                  value={book.coverUrl ?? ''}
+                  onChange={(e) =>
+                    patchBook({
+                      coverUrl: e.target.value,
+                      coverFallbackUrl: undefined,
+                    })
+                  }
+                  onBlur={(e) => void pickCoverColor(e.target.value)}
+                />
+                <label className="upload-btn">
+                  업로드
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0]
+                      if (!file) return
+                      const coverUrl = await uploadImage(file)
+                      patchBook({ coverUrl, coverFallbackUrl: undefined })
+                      e.target.value = ''
+                      await pickCoverColor(coverUrl)
+                    }}
+                  />
+                </label>
+                <label
+                  className="color-field"
+                  title="타일 배경색 (표지에서 자동 추출)"
+                >
+                  <input
+                    type="color"
+                    value={book.coverColor ?? '#c9d6ff'}
+                    onChange={(e) => patchBook({ coverColor: e.target.value })}
+                  />
+                </label>
+              </div>
+              </div>
+            </details>
 
-          <ListField
-            label="문장 수집"
-            rows={book.quotes}
-            blank={{ text: '' }}
-            onChange={(quotes) => patchBook({ quotes })}
-            render={(quote, patch) => (
-              <>
-                <input
-                  placeholder="문장"
-                  value={quote.text}
-                  onChange={(e) => patch({ text: e.target.value })}
-                />
+            <div className="book-group">
+              <span className="book-form-label">서평</span>
+              <div className="book-form-row">
                 <input
                   className="narrow"
-                  placeholder="쪽"
-                  value={quote.page ?? ''}
-                  onChange={(e) => patch({ page: e.target.value })}
+                  type="number"
+                  min={0}
+                  max={5}
+                  step={0.5}
+                  placeholder="별점 0~5"
+                  value={book.rating ?? ''}
+                  onChange={(e) =>
+                    patchBook({
+                      rating:
+                        e.target.value === ''
+                          ? undefined
+                          : Number(e.target.value),
+                    })
+                  }
                 />
-              </>
-            )}
-          />
+                <input
+                  placeholder="읽기 시작 (2026.07)"
+                  value={book.readFrom ?? ''}
+                  onChange={(e) => patchBook({ readFrom: e.target.value })}
+                />
+                <input
+                  placeholder="완독 (2026.08)"
+                  value={book.readTo ?? ''}
+                  onChange={(e) => patchBook({ readTo: e.target.value })}
+                />
+              </div>
+              <div className="book-form-row">
+                <input
+                  placeholder="한 줄 평"
+                  value={book.oneLiner ?? ''}
+                  onChange={(e) => patchBook({ oneLiner: e.target.value })}
+                />
+              </div>
+            </div>
 
-          <ListField
-            label="목차"
-            rows={book.toc}
-            blank={{ title: '' }}
-            onChange={(toc) => patchBook({ toc })}
-            render={(entry, patch) => (
-              <>
-                <input
-                  placeholder="장 제목"
-                  value={entry.title}
-                  onChange={(e) => patch({ title: e.target.value })}
-                />
-                <input
-                  className="narrow"
-                  placeholder="메모"
-                  value={entry.note ?? ''}
-                  onChange={(e) => patch({ note: e.target.value })}
-                />
-              </>
-            )}
-          />
-        </div>
-      )}
+            <ListField
+              label="문장 수집"
+              rows={book.quotes}
+              blank={{ text: '' }}
+              onChange={(quotes) => patchBook({ quotes })}
+              render={(quote, patch) => (
+                <>
+                  <input
+                    placeholder="문장"
+                    value={quote.text}
+                    onChange={(e) => patch({ text: e.target.value })}
+                  />
+                  <input
+                    className="narrow"
+                    placeholder="쪽"
+                    value={quote.page ?? ''}
+                    onChange={(e) => patch({ page: e.target.value })}
+                  />
+                </>
+              )}
+            />
+
+            <ListField
+              label="목차"
+              rows={book.toc}
+              blank={{ title: '' }}
+              onChange={(toc) => patchBook({ toc })}
+              render={(entry, patch) => (
+                <>
+                  <input
+                    placeholder="장 제목"
+                    value={entry.title}
+                    onChange={(e) => patch({ title: e.target.value })}
+                  />
+                  <input
+                    className="narrow"
+                    placeholder="메모"
+                    value={entry.note ?? ''}
+                    onChange={(e) => patch({ note: e.target.value })}
+                  />
+                </>
+              )}
+            />
+          </div>
+        )}
+      </BookPicker>
 
       <Editor
         initialContent={post.content as JSONContent}
