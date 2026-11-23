@@ -66,6 +66,22 @@ export function CoverImage({
   )
 }
 
+export function ShelfMeta({ book }: { book: BookSummary }) {
+  const read = (book.readTo?.trim() || book.readFrom?.trim())?.slice(0, 7)
+  return (
+    <span className="shelf-meta">
+      {book.rating != null && (
+        <>
+          <StarGlyph />
+          <span className="shelf-rating">{book.rating.toFixed(1)}</span>
+        </>
+      )}
+      {book.rating != null && read && <span aria-hidden="true">·</span>}
+      {read && <time dateTime={read.replace('.', '-')}>{read}</time>}
+    </span>
+  )
+}
+
 export function BookCover({
   id,
   book,

@@ -1258,6 +1258,61 @@ input.quote-chapter::placeholder {
   padding-top: 64px;
 }
 
+.shelf .book-grid {
+  display: flex;
+  gap: 16px;
+  margin: 0 -20px -12px;
+  padding: 2px 20px 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 20px;
+  scroll-snap-type: x proximity;
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+}
+
+.shelf .book-grid:hover,
+.shelf .book-grid:focus-visible {
+  scrollbar-color: var(--border) transparent;
+}
+
+.shelf .book-grid:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: -2px;
+}
+
+.shelf .shelf-item {
+  flex: 0 0 140px;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.shelf .shelf-item .book-cover {
+  width: 100%;
+}
+
+.shelf .shelf-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.shelf .shelf-meta {
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .shelf .book-grid {
+    gap: 12px;
+    scrollbar-width: none;
+  }
+
+  .shelf .shelf-item {
+    flex-basis: 132px;
+  }
+}
+
 .shelf-head {
   display: flex;
   align-items: baseline;

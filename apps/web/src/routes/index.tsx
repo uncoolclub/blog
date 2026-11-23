@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { BookCover, StarGlyph } from '../components/book'
+import { BookCover, ShelfMeta } from '../components/book'
 import { Cover } from '../components/cover'
 import { ChevronIcon } from '../svgs'
 import { formatDate } from '../lib/date'
@@ -108,8 +108,13 @@ function Home() {
               <ChevronIcon dir="right" />
             </Link>
           </div>
-          <div className="book-grid">
-            {shelf.map((post) => (
+          <div
+            className="book-grid"
+            role="region"
+            aria-label="책장"
+            tabIndex={0}
+          >
+            {shelf.slice(0, 10).map((post) => (
               <Link
                 key={post.id}
                 to="/posts/$slug"
@@ -119,24 +124,7 @@ function Home() {
                 <BookCover id={post.id} book={post.book!} showAuthor />
                 <div className="shelf-body">
                   <span className="shelf-title">{post.title}</span>
-                  <span className="shelf-meta">
-                    {post.book!.rating != null && (
-                      <>
-                        <StarGlyph />
-                        <span className="shelf-rating">
-                          {post.book!.rating.toFixed(1)}
-                        </span>
-                      </>
-                    )}
-                    {post.book!.rating != null && post.published_at && (
-                      <span aria-hidden="true">·</span>
-                    )}
-                    {post.published_at && (
-                      <time dateTime={post.published_at}>
-                        {formatDate(post.published_at).slice(0, 7)}
-                      </time>
-                    )}
-                  </span>
+                  <ShelfMeta book={post.book!} />
                 </div>
               </Link>
             ))}
