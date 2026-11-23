@@ -9,6 +9,7 @@ export {
   EditIcon,
   FaceSketch,
   GithubIcon,
+  GridIcon,
   MailIcon,
   MoonIcon,
   MoreIcon,

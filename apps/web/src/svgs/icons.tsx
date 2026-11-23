@@ -63,6 +63,17 @@ export function CloseIcon() {
   )
 }
 
+export function GridIcon() {
+  return (
+    <svg viewBox="0 0 16 16" style={fine}>
+      <rect x="2.2" y="2.2" width="4.6" height="4.6" rx="1" />
+      <rect x="9.2" y="2.2" width="4.6" height="4.6" rx="1" />
+      <rect x="2.2" y="9.2" width="4.6" height="4.6" rx="1" />
+      <rect x="9.2" y="9.2" width="4.6" height="4.6" rx="1" />
+    </svg>
+  )
+}
+
 export function BackIcon() {
   return (
     <svg viewBox="0 0 16 16" style={fine}>
