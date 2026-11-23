@@ -22,6 +22,14 @@ export interface CalendarDay {
 
 const MAX_RANGE_DAYS = 1100
 
+export const READING_START = { y: 2025, m: 11 }
+
+export const isBeforeReadingStart = (y: number, m: number) =>
+  y * 12 + m < READING_START.y * 12 + READING_START.m
+
+export const clampReadingMonth = (y: number, m: number) =>
+  isBeforeReadingStart(y, m) ? READING_START : { y, m }
+
 const pad = (n: number) => String(n).padStart(2, '0')
 
 export const dayKey = (y: number, m: number, d: number) =>

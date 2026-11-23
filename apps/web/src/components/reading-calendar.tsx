@@ -3,9 +3,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { CoverImage, StarGlyph } from './book'
 import { ChevronIcon } from '../svgs'
 import {
+  READING_START,
   booksInMonth,
   buildReadingDays,
+  clampReadingMonth,
   dayKey,
+  isBeforeReadingStart,
   monthKey,
   sortShelf,
 } from '../lib/reading'
@@ -236,6 +239,7 @@ function YearCalendar({
             type="button"
             className="reading-mini"
             aria-label={`${y}년 ${m + 1}월 보기`}
+            disabled={isBeforeReadingStart(y, m)}
             onClick={() => onMonth(m)}
           >
             <span>{m + 1}월</span>
@@ -284,12 +288,20 @@ export function ReadingCalendar({
 
   const shift = (delta: number) => {
     if (scale === 'year') {
-      onChange({ scale, y: y + delta, m })
+      onChange({ scale, ...clampReadingMonth(y + delta, m) })
       return
     }
     const next = new Date(y, m + delta, 1)
-    onChange({ scale, y: next.getFullYear(), m: next.getMonth() })
+    onChange({
+      scale,
+      ...clampReadingMonth(next.getFullYear(), next.getMonth()),
+    })
   }
+
+  const atStart =
+    scale === 'year'
+      ? y <= READING_START.y
+      : y === READING_START.y && m === READING_START.m
 
   return (
     <div className="reading-calendar">
@@ -298,6 +310,7 @@ export function ReadingCalendar({
           <button
             type="button"
             aria-label={scale === 'year' ? '이전 해' : '이전 달'}
+            disabled={atStart}
             onClick={() => shift(-1)}
           >
             <ChevronIcon dir="left" />

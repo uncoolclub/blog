@@ -4,7 +4,7 @@ import { BookCover, ShelfMeta } from '../components/book'
 import { ReadingCalendar } from '../components/reading-calendar'
 import { SortMenu } from '../components/sort-menu'
 import type { CalendarScale } from '../components/reading-calendar'
-import { latestReadMonth, sortShelf } from '../lib/reading'
+import { clampReadingMonth, latestReadMonth, sortShelf } from '../lib/reading'
 import type { ShelfSort } from '../lib/reading'
 import { listPublishedPosts } from '../server/posts'
 import { CalendarIcon, GridIcon } from '../svgs'
@@ -57,8 +57,9 @@ function BooksPage() {
   const sorted = useMemo(() => sortShelf(shelf, sort), [shelf, sort])
   const scale: CalendarScale = search.scale ?? 'month'
   const fallback = useMemo(() => latestReadMonth(shelf), [shelf])
-  const period = parsePeriod(search.period) ??
+  const requested = parsePeriod(search.period) ??
     fallback ?? { y: new Date().getFullYear(), m: new Date().getMonth() }
+  const period = clampReadingMonth(requested.y, requested.m)
 
   const update = (patch: Partial<BooksSearch>) =>
     void navigate({
